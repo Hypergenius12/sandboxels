@@ -1,0 +1,86 @@
+// == Functional Weapons Mod ==
+// Built strictly using verified Sandboxels API methods.
+
+// 1. ANNIHILATOR RAY (Tool)
+// Based on the sand_exploder example. This is a tool you click with.
+// It instantly turns whatever pixel you touch into a massive explosion.
+elements.annihilator = {
+    color: "#ff0055",
+    category: "tools",
+    tool: function(pixel) {
+        // changePixel is the safe way to transform elements
+        changePixel(pixel, "explosion");
+    }
+};
+
+// 2. MIDAS TOUCH (Tool)
+// Instantly transmutes whatever it touches into solid gold.
+elements.midas_touch = {
+    color: "#ffd700",
+    category: "tools",
+    tool: function(pixel) {
+        if (pixel.element !== "gold") {
+            changePixel(pixel, "gold");
+        }
+    }
+};
+
+// 3. NAPALM (Liquid Element)
+// Heavy, sticky liquid that is highly reactive and burns intensely.
+elements.napalm = {
+    color: "#ff4400",
+    behavior: behaviors.LIQUID,
+    category: "liquids",
+    state: "liquid",
+    density: 1200,
+    viscosity: 50000,
+    reactions: {
+        "fire": { elem1: "explosion", elem2: "fire", chance: 0.5 },
+        "magma": { elem1: "explosion", elem2: "fire", chance: 0.8 }
+    }
+};
+
+// 4. ACIDIC GAS (Gas Element)
+// Uses a safe tick function to move and conditionally delete blocks.
+elements.acid_gas = {
+    color: "#aeff00",
+    behavior: behaviors.GAS,
+    category: "gases",
+    state: "gas",
+    density: 0.5,
+    tick: function(pixel) {
+        // Safe check for the pixel directly above
+        let upX = pixel.x;
+        let upY = pixel.y - 1;
+
+        if (!outOfBounds(upX, upY) && !isEmpty(upX, upY)) {
+            let neighbor = pixelMap[upX][upY];
+            // If the neighbor is a solid and isn't glass or wall, dissolve it
+            if (elements[neighbor.element].state === "solid" && neighbor.element !== "glass" && neighbor.element !== "wall") {
+                if (Math.random() < 0.1) {
+                    deletePixel(upX, upY); // Destroy the block
+                    
+                    // Gas consumes itself slowly as it eats blocks
+                    if (Math.random() < 0.2) {
+                        deletePixel(pixel.x, pixel.y);
+                    }
+                }
+            }
+        }
+    }
+};
+
+// 5. C4 EXPLOSIVE (Solid Element)
+// A sturdy powder that sits still until it touches fire or plasma, then detonates.
+elements.c4 = {
+    color: "#d1d1d1",
+    behavior: behaviors.STURDYPOWDER,
+    category: "powders",
+    state: "solid",
+    density: 1600,
+    reactions: {
+        "fire": { elem1: "explosion", chance: 1.0 },
+        "plasma": { elem1: "explosion", chance: 1.0 },
+        "lightning": { elem1: "explosion", chance: 1.0 }
+    }
+};
