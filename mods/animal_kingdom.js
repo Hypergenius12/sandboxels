@@ -1,10 +1,9 @@
-// == Sandboxels Animal Kingdom Mod ==
-// Adds 30 new animals with unique diets, behaviors, and ecosystems!
+// == Sandboxels Animal Kingdom Mod v2 ==
+// Adds 30 new animals, improved aquatic swimming mechanics, and a Breeding tool!
 
 const catLife = "life";
 
-// --- HELPERS ---
-// Reusable behaviors so we don't have to write them 30 times
+// --- HELPERS & BEHAVIORS ---
 const walkBehavior = [
     "XX|XX|XX",
     "M2|FX%5|M2",
@@ -15,6 +14,73 @@ const flyBehavior = [
     "M1|FX%10|M1",
     "M2|M1|M2"
 ];
+
+// Custom function to allow aquatic animals to swap with water to simulate swimming
+function swimLogic(pixel) {
+    let inWater = false;
+    let neighbors = [
+        {x: pixel.x, y: pixel.y - 1}, // Up
+        {x: pixel.x, y: pixel.y + 1}, // Down
+        {x: pixel.x + 1, y: pixel.y}, // Right
+        {x: pixel.x - 1, y: pixel.y}  // Left
+    ];
+    
+    // Check if touching water
+    for (let i = 0; i < neighbors.length; i++) {
+        let n = getPixel(neighbors[i].x, neighbors[i].y);
+        if (n && (n.element === "water" || n.element === "salt_water")) {
+            inWater = true;
+            break;
+        }
+    }
+
+    if (!inWater) {
+        // Suffocation mechanic: 1% chance to die per tick when totally beached
+        if (Math.random() < 0.01) {
+            changePixel("meat", pixel.x, pixel.y);
+        }
+        // Flop around on land
+        if (Math.random() < 0.2) {
+            tryMove(pixel, pixel.x + (Math.random() < 0.5 ? 1 : -1), pixel.y);
+        }
+    } else {
+        // Active Swimming: Randomly pick an adjacent coordinate
+        if (Math.random() < 0.4) {
+            let nx = pixel.x + Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+            let ny = pixel.y + Math.floor(Math.random() * 3) - 1;
+            let target = getPixel(nx, ny);
+            
+            // Swap places with water to simulate fluid movement
+            if (target && (target.element === "water" || target.element === "salt_water")) {
+                let tempElem = target.element;
+                changePixel(pixel.element, nx, ny);
+                changePixel(tempElem, pixel.x, pixel.y);
+            } else if (!target) {
+                // Move into empty space if available
+                tryMove(pixel, nx, ny);
+            }
+        }
+    }
+}
+
+// --- NEW TOOL: BREEDING TOOL ---
+elements.breed = {
+    color: "#ff69b4",
+    tool: function(pixel) {
+        // Check if the pixel is alive
+        if (elements[pixel.element].category === catLife) {
+            // Try to find an empty spot around the animal to spawn a baby
+            const spots = [[0,-1], [0,1], [-1,0], [1,0], [-1,-1], [1,-1], [-1,1], [1,1]];
+            for (let i = 0; i < spots.length; i++) {
+                if (isEmpty(pixel.x + spots[i][0], pixel.y + spots[i][1], false)) {
+                    tryCreate(pixel.element, pixel.x + spots[i][0], pixel.y + spots[i][1], false);
+                    break;
+                }
+            }
+        }
+    },
+    category: "tools"
+};
 
 // --- 1. THE FARM ANIMALS ---
 
@@ -29,8 +95,7 @@ elements.cow = {
         "plant": { elem2: null, chance: 0.5 }
     },
     tick: function(pixel) {
-        // Cows randomly produce milk if there's space below them
-        if (Math.random() < 0.01 && isEmpty(pixel.x, pixel.y + 1)) {
+        if (Math.random() < 0.005 && isEmpty(pixel.x, pixel.y + 1)) {
             tryCreate("milk", pixel.x, pixel.y + 1);
         }
     }
@@ -43,8 +108,9 @@ elements.pig = {
     state: "solid",
     density: 900,
     reactions: {
-        "mud": { elem2: "pig", chance: 0.05 }, // Pigs reproduce in mud!
-        "plant": { elem2: null, chance: 0.5 }
+        "mud": { elem2: "pig", chance: 0.05 }, // Pigs reproduce in mud
+        "plant": { elem2: null, chance: 0.5 },
+        "meat": { elem2: null, chance: 0.2 } // Omnivores
     }
 };
 
@@ -70,8 +136,7 @@ elements.chicken = {
         "wheat": { elem2: null, chance: 0.8 }
     },
     tick: function(pixel) {
-        // Lay eggs occasionally
-        if (Math.random() < 0.005 && isEmpty(pixel.x, pixel.y + 1)) {
+        if (Math.random() < 0.003 && isEmpty(pixel.x, pixel.y + 1)) {
             tryCreate("egg", pixel.x, pixel.y + 1);
         }
     }
@@ -86,9 +151,9 @@ elements.bear = {
     state: "solid",
     density: 1500,
     reactions: {
-        "fish": { elem2: null, chance: 0.8 },
+        "fish": { elem2: "bone", chance: 0.8 },
         "meat": { elem2: null, chance: 0.8 },
-        "honey": { elem2: null, chance: 0.9 } // Bears love honey
+        "honey": { elem2: null, chance: 0.9 }
     }
 };
 
@@ -124,31 +189,8 @@ elements.rabbit = {
     state: "solid",
     density: 300,
     reactions: {
-        "grass": { elem2: "rabbit", chance: 0.08 }, // Rabbits breed quickly
-        "plant": { elem2: "rabbit", chance: 0.08 }
-    }
-};
-
-elements.deer = {
-    color: "#8e6c4a",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 950,
-    reactions: {
-        "leaves": { elem2: null, chance: 0.5 },
-        "grass": { elem2: null, chance: 0.5 }
-    }
-};
-
-elements.moose = {
-    color: "#4a3b2c",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 1800,
-    reactions: {
-        "leaves": { elem2: null, chance: 0.6 }
+        "grass": { elem2: "rabbit", chance: 0.05 }, // Breed upon eating
+        "plant": { elem2: "rabbit", chance: 0.05 }
     }
 };
 
@@ -161,32 +203,9 @@ elements.lion = {
     state: "solid",
     density: 1300,
     reactions: {
-        "moose": { elem2: "meat", chance: 0.3 },
-        "deer": { elem2: "meat", chance: 0.5 },
-        "meat": { elem2: null, chance: 0.8 }
-    }
-};
-
-elements.elephant = {
-    color: "#95a5a6",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 3000,
-    reactions: {
-        "leaves": { elem2: null, chance: 0.4 },
-        "water": { elem2: null, chance: 0.2 } // Drinks water
-    }
-};
-
-elements.giraffe = {
-    color: "#e67e22",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 1400,
-    reactions: {
-        "leaves": { elem2: null, chance: 0.7 } // Strictly eats leaves
+        "meat": { elem2: null, chance: 0.8 },
+        "cow": { elem2: "meat", chance: 0.4 },
+        "pig": { elem2: "meat", chance: 0.5 }
     }
 };
 
@@ -198,18 +217,6 @@ elements.monkey = {
     density: 600,
     reactions: {
         "fruit": { elem2: "monkey", chance: 0.1 }
-    }
-};
-
-elements.gorilla = {
-    color: "#2c3e50",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 2000,
-    reactions: {
-        "fruit": { elem2: null, chance: 0.8 },
-        "leaves": { elem2: null, chance: 0.5 }
     }
 };
 
@@ -239,18 +246,6 @@ elements.eagle = {
     }
 };
 
-elements.bat = {
-    color: "#1a1a1a",
-    behavior: flyBehavior,
-    category: catLife,
-    state: "solid",
-    density: 150,
-    reactions: {
-        "fly": { elem2: null, chance: 0.9 },
-        "flea": { elem2: null, chance: 0.9 }
-    }
-};
-
 // --- 5. BUGS & CREEPY CRAWLIES ---
 
 elements.spider = {
@@ -264,8 +259,7 @@ elements.spider = {
         "ant": { elem2: null, chance: 0.5 }
     },
     tick: function(pixel) {
-        // Spiders randomly leave web behind
-        if (Math.random() < 0.02 && isEmpty(pixel.x, pixel.y - 1)) {
+        if (Math.random() < 0.01 && isEmpty(pixel.x, pixel.y - 1)) {
             tryCreate("web", pixel.x, pixel.y - 1);
         }
     }
@@ -278,45 +272,12 @@ elements.bee = {
     state: "solid",
     density: 50,
     reactions: {
-        "flower": { elem2: null, chance: 0.01 } // Pollinates
+        "flower": { elem2: null, chance: 0.01 } 
     },
     tick: function(pixel) {
-        // Bees create honey when flying over empty space
-        if (Math.random() < 0.01 && isEmpty(pixel.x, pixel.y + 1)) {
+        if (Math.random() < 0.005 && isEmpty(pixel.x, pixel.y + 1)) {
             tryCreate("honey", pixel.x, pixel.y + 1);
         }
-    }
-};
-
-elements.butterfly = {
-    color: ["#3498db", "#e74c3c", "#f1c40f", "#9b59b6"], // Random colors!
-    behavior: flyBehavior,
-    category: catLife,
-    state: "solid",
-    density: 30
-};
-
-elements.mouse = {
-    color: "#a6abae",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 200,
-    reactions: {
-        "cheese": { elem2: "mouse", chance: 0.2 },
-        "seed": { elem2: null, chance: 0.6 }
-    }
-};
-
-elements.snake = {
-    color: "#27ae60",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 500,
-    reactions: {
-        "mouse": { elem2: "meat", chance: 0.8 },
-        "frog": { elem2: "meat", chance: 0.8 }
     }
 };
 
@@ -338,78 +299,26 @@ elements.frog = {
     }
 };
 
-elements.turtle = {
-    color: "#1abc9c",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 1200,
-    reactions: {
-        "leaves": { elem2: null, chance: 0.5 },
-        "jellyfish": { elem2: null, chance: 0.5 }
-    }
-};
-
-elements.crab = {
-    color: "#e74c3c",
-    behavior: [
-        "XX|XX|XX",
-        "M1|XX|M1", // Crabs walk side to side!
-        "XX|M1|XX"
-    ],
-    category: catLife,
-    state: "solid",
-    density: 1100,
-    reactions: {
-        "meat": { elem2: null, chance: 0.6 },
-        "sand": { elem2: null, chance: 0.01 } // Sifts through sand
-    }
-};
-
-elements.penguin = {
-    color: "#222222",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 900,
-    reactions: {
-        "fish": { elem2: "meat", chance: 0.5 }
-    }
-};
-
-elements.seal = {
-    color: "#7f8c8d",
-    behavior: walkBehavior,
-    category: catLife,
-    state: "solid",
-    density: 1050,
-    reactions: {
-        "fish": { elem2: null, chance: 0.6 }
-    }
-};
-
+// Sharks & Dolphins utilize the custom swimLogic
 elements.shark = {
     color: "#34495e",
-    behavior: flyBehavior, // We use fly behavior, but restrict them to water in tick
+    behavior: ["XX|XX|XX", "XX|XX|XX", "XX|XX|XX"], // Movement handled dynamically in tick()
     category: catLife,
     state: "solid",
     density: 1000,
     reactions: {
         "fish": { elem2: "blood", chance: 0.8 },
         "meat": { elem2: "blood", chance: 0.8 },
-        "blood": { elem2: null, chance: 1 } // Sharks clean up blood
+        "blood": { elem2: null, chance: 1 } // Cleans up blood rapidly
     },
     tick: function(pixel) {
-        // If a shark isn't touching water, it dies
-        if (!pixelMap[pixel.x][pixel.y + 1] || pixelMap[pixel.x][pixel.y + 1].element !== "water") {
-            if (Math.random() < 0.1) changePixel(pixel, "meat");
-        }
+        swimLogic(pixel);
     }
 };
 
 elements.dolphin = {
     color: "#bdc3c7",
-    behavior: flyBehavior,
+    behavior: ["XX|XX|XX", "XX|XX|XX", "XX|XX|XX"],
     category: catLife,
     state: "solid",
     density: 1000,
@@ -417,9 +326,21 @@ elements.dolphin = {
         "fish": { elem2: null, chance: 0.7 }
     },
     tick: function(pixel) {
-        // Similar to sharks, they need water
-        if (!pixelMap[pixel.x][pixel.y + 1] || pixelMap[pixel.x][pixel.y + 1].element !== "water") {
-            if (Math.random() < 0.1) changePixel(pixel, "meat");
-        }
+        swimLogic(pixel);
+    }
+};
+
+elements.crab = {
+    color: "#e74c3c",
+    behavior: [
+        "XX|XX|XX",
+        "M1|XX|M1", // Side to side walking
+        "XX|M1|XX"
+    ],
+    category: catLife,
+    state: "solid",
+    density: 1100,
+    reactions: {
+        "meat": { elem2: null, chance: 0.6 }
     }
 };
