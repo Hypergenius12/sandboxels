@@ -169,7 +169,7 @@ elements.pixel_counter = {
     }
 };
 
-// --- 9 & 10. COPY & PASTE (Deep State Cloning & Air-Only Pasting) ---
+// --- 9 & 10. COPY & PASTE (Deep State Cloning & Forceful Pasting) ---
 let copyStartX = null;
 let copyStartY = null;
 
@@ -250,9 +250,11 @@ elements.paste = {
             let targetX = pixel.x + pData.dx;
             let targetY = pixel.y + pData.dy;
             
-            // STRICT AIR CHECK: Only paste if the coordinate is entirely empty
-            if (isEmpty(targetX, targetY, false)) {
-                tryCreate(pData.e, targetX, targetY, false);
+            // Safe bounds check to prevent game crashes at the edge of the screen
+            if (targetX >= 1 && targetX < width && targetY >= 1 && targetY < height) {
+                
+                // FORCE OVERWRITE: The 'true' parameter tells the engine to delete whatever is there
+                tryCreate(pData.e, targetX, targetY, true);
                 let newP = getPixel(targetX, targetY);
                 
                 // DEEP PASTE: Restore all the copied states to the new pixel
@@ -273,6 +275,6 @@ elements.paste = {
                 pastedCount++;
             }
         }
-        logMessage(`[PASTE] Pasted ${pastedCount} pixels!`);
+        logMessage(`[PASTE] Pasted ${pastedCount} pixels successfully!`);
     }
 };
