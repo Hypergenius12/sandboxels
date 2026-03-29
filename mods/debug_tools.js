@@ -1,130 +1,123 @@
-// == Sandboxels Debugging & Inspection Tool Set ==
-// A suite of advanced developer tools to pause, track, and analyze your simulation.
+// == Sandboxels Pro Debugger Toolkit ==
+// Rebuilt for perfect visual feedback using alpha transparency and engine-level skipping.
 
-// --- 1. THE DATA PROBE ---
-// Clicks a pixel to log its exact variables to the UI and browser console.
-elements.data_probe = {
-    color: "#00ff00",
-    category: "tools",
+const catDebug = "tools";
+
+// 1. INSPECTOR: Logs details and flashes the pixel white.
+elements.tool_inspect = {
+    color: "#00ff00", 
+    category: catDebug,
     tool: function(pixel) {
-        // Log the full JSON object to the browser console (F12) for deep inspection
-        console.log("🔍 PROBE DATA:", pixel);
-        
-        // Show a quick summary in the game's native log (Top Left)
+        console.log("🔍 INSPECT:", pixel);
         let chargeText = pixel.charge ? ` | Charge: ${Math.round(pixel.charge * 100)}%` : "";
-        logMessage(`Probed ${pixel.element.toUpperCase()} | Temp: ${Math.round(pixel.temp)}°C | X:${pixel.x}, Y:${pixel.y}${chargeText}`);
-        
-        // Briefly flash the pixel white so you know you clicked it
-        pixel.color = "#ffffff";
+        logMessage(`[${pixel.element.toUpperCase()}] Temp: ${Math.round(pixel.temp)}°C | X:${pixel.x} Y:${pixel.y}${chargeText}`);
+        pixel.color = "#ffffff"; 
     }
 };
 
-// --- 2 & 3. STASIS AND AWAKEN (The Freeze-Frame System) ---
-// Stasis physically freezes a pixel in place, storing its properties. Awaken restores it.
-elements.stasis_block = {
+// 2. FREEZE: Pauses the pixel's physics and makes it 50% transparent.
+elements.tool_freeze = {
     color: "#00ffff", 
-    behavior: behaviors.WALL, // Cannot move or fall
-    category: "special", 
-    hidden: true,
-    insulate: true // Prevents temperature from changing while frozen
-};
-
-elements.stasis_brush = {
-    color: "#00ffff",
-    category: "tools",
+    category: catDebug,
     tool: function(pixel) {
-        if (pixel.element === "stasis_block") return; // Already frozen
-        
-        // Save the old data before changing it
-        let oldElem = pixel.element;
-        let oldTemp = pixel.temp;
-        
-        // Turn it into a frozen wall
-        changePixel(pixel, "stasis_block");
-        
-        // Store the original data inside the new pixel object
-        pixel.storedElement = oldElem;
-        pixel.storedTemp = oldTemp;
-        pixel.color = "rgba(0, 255, 255, 0.8)"; // Give it a cyan frozen tint
-    }
-};
-
-elements.awaken_brush = {
-    color: "#ffaa00",
-    category: "tools",
-    tool: function(pixel) {
-        if (pixel.element === "stasis_block" && pixel.storedElement) {
-            // Restore the original element and temperature
-            changePixel(pixel, pixel.storedElement);
-            pixel.temp = pixel.storedTemp;
+        if (!pixel.frozen) {
+            pixel.frozen = true;
+            pixel.skip = true; // Engine natively stops updating this pixel
+            pixel.alpha = 0.5; // Makes it slightly see-through!
         }
     }
 };
 
-// --- 4. THE PATH TRACER ---
-// Paints a tracker onto a pixel. As it moves, it leaves a fading ghost trail behind.
-elements.path_tracer = {
-    color: "#ff00ff",
-    category: "tools",
+// 3. UNFREEZE: Restores physics and turns opacity back to 100%.
+elements.tool_unfreeze = {
+    color: "#ffaa00", 
+    category: catDebug,
+    tool: function(pixel) {
+        if (pixel.frozen) {
+            delete pixel.frozen;
+            delete pixel.skip;
+            pixel.alpha = 1.0; // Solid again
+        }
+    }
+};
+
+// 4. TICK STEPPER (NEW): Forces a frozen pixel to simulate exactly 1 frame.
+elements.tool_step = {
+    color: "#ffffff", 
+    category: catDebug,
+    tool: function(pixel) {
+        if (pixel.frozen && elements[pixel.element].tick) {
+            pixel.skip = false;
+            elements[pixel.element].tick(pixel); // Run physics manually
+            pixel.skip = true;
+            
+            // Blink effect to show it stepped
+            pixel.alpha = 0.8; 
+            setTimeout(() => { if(pixel) pixel.alpha = 0.5; }, 50);
+        }
+    }
+};
+
+// 5. MOTION TRACER: Highlights the pixel and leaves a fading translucent trail.
+elements.tool_tracer = {
+    color: "#ff00ff", 
+    category: catDebug,
     tool: function(pixel) {
         pixel.isBeingTraced = true;
-        pixel.color = "#ff00ff"; // Highlight the traced pixel
+        pixel.color = "#ff00ff";
     }
 };
 
-// The ghost pixel that gets left behind (fades away automatically)
+// The fading trail left behind by the Tracer
 elements.ghost_trail = {
-    color: "rgba(255, 0, 255, 0.3)",
-    behavior: behaviors.GAS,
-    category: "special",
-    hidden: true,
+    color: "#ff00ff", 
+    behavior: behaviors.GAS, 
+    category: "special", 
+    hidden: true, 
     density: 0,
     tick: function(pixel) {
-        // 10% chance to delete itself every frame to create a fading effect
-        if (Math.random() < 0.10) {
-            tryDelete(pixel.x, pixel.y);
-        }
+        pixel.alpha = (pixel.alpha || 1) - 0.05; // Fade out smoothly via opacity
+        if (pixel.alpha <= 0) tryDelete(pixel.x, pixel.y); // Delete when invisible
     }
 };
 
-// Global hook to track movement for the Path Tracer
+// Global hook for the Tracer
 runPerPixel(function(pixel) {
     if (pixel.isBeingTraced) {
-        // If the pixel has moved since the last frame
         if (pixel.lastX !== undefined && (pixel.lastX !== pixel.x || pixel.lastY !== pixel.y)) {
-            // Spawn a ghost trail in the old coordinate
             if (isEmpty(pixel.lastX, pixel.lastY, false)) {
                 tryCreate("ghost_trail", pixel.lastX, pixel.lastY, false);
+                let trail = getPixel(pixel.lastX, pixel.lastY);
+                if (trail) trail.alpha = 0.5; // Start trail at 50% opacity
             }
         }
-        // Update the last known coordinates
-        pixel.lastX = pixel.x;
+        pixel.lastX = pixel.x; 
         pixel.lastY = pixel.y;
     }
 });
 
-// --- 5. THE HEAT MAPPER ---
-// Visually colors pixels strictly based on their temperature, ignoring their default color.
-elements.heat_mapper = {
-    color: "#ff4500",
-    category: "tools",
+// 6. ISOLATOR (NEW): Erases everything in a 5x5 grid EXCEPT the element you click.
+elements.tool_isolate = {
+    color: "#ff0000", 
+    category: catDebug,
     tool: function(pixel) {
-        let t = pixel.temp;
-        if (t > 200) pixel.color = "#ff0000";       // Boiling hot = Red
-        else if (t > 50) pixel.color = "#ff8800";   // Warm = Orange
-        else if (t > 0) pixel.color = "#00ff00";    // Room Temp = Green
-        else if (t > -50) pixel.color = "#00ffff";  // Cold = Cyan
-        else pixel.color = "#0000ff";               // Freezing = Deep Blue
+        for (let i = -2; i <= 2; i++) {
+            for (let j = -2; j <= 2; j++) {
+                let target = getPixel(pixel.x + i, pixel.y + j);
+                if (target && target.element !== pixel.element) {
+                    tryDelete(target.x, target.y);
+                }
+            }
+        }
     }
 };
 
-// --- 6. THE ENERGIZER ---
-// Instantly forces maximum electrical charge into a pixel, bypassing standard circuitry limits.
-elements.energizer = {
-    color: "#ffff00",
-    category: "tools",
+// 7. MAX CHARGE: Instantly electrifies the pixel.
+elements.tool_charge = {
+    color: "#ffff00", 
+    category: catDebug,
     tool: function(pixel) {
-        pixel.charge = 1;      // Max out the charge parameter
-        pixel.color = "#ffffff"; // Flash bright white
+        pixel.charge = 1;
+        pixel.color = "#ffffaa"; // Bright yellow flash
     }
 };
