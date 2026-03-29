@@ -85,36 +85,7 @@ elements.isolate = {
     }
 };
 
-// --- 6. CATALYST BRUSH (Forces chemical reactions instantly) ---
-elements.catalyst_brush = {
-    color: "#ff0088",
-    category: catDebug,
-    tool: function(pixel) {
-        let reactions = elements[pixel.element].reactions;
-        if (!reactions) return; 
-        
-        let neighbors = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-        for (let i = 0; i < neighbors.length; i++) {
-            let target = getPixel(pixel.x + neighbors[i][0], pixel.y + neighbors[i][1]);
-            
-            if (target && reactions[target.element]) {
-                let result = reactions[target.element];
-                // Sandboxels reactions can be arrays, default to the first one if so
-                if (Array.isArray(result)) result = result[0];
-                
-                if (result.elem1 === null) tryDelete(pixel.x, pixel.y);
-                else if (result.elem1 !== undefined) changePixel(pixel, result.elem1);
-                
-                if (result.elem2 === null) tryDelete(target.x, target.y);
-                else if (result.elem2 !== undefined) changePixel(target, result.elem2);
-                
-                break; // Only force one reaction per click
-            }
-        }
-    }
-};
-
-// --- 7. TRACER & GHOST TRAIL (Motion tracking) ---
+// --- 6. TRACER & GHOST TRAIL (Motion tracking) ---
 elements.tracer = {
     color: "#ff00ff", 
     category: catDebug,
@@ -152,10 +123,10 @@ runPerPixel(function(pixel) {
     }
 });
 
-// --- 8. SIGNAL LOGGER (Machine block that monitors electricity) ---
+// --- 7. SIGNAL LOGGER (Machine block that monitors electricity) ---
 elements.signal_logger = {
     color: "#33ff33",
-    category: "machines", // Moved to machines so it acts like a block
+    category: "machines", 
     state: "solid",
     behavior: behaviors.WALL,
     tick: function(pixel) {
@@ -169,11 +140,15 @@ elements.signal_logger = {
     }
 };
 
-// --- 9. PIXEL COUNTER (Scans map for element quantities) ---
+// --- 8. PIXEL COUNTER (Scans map for element quantities) ---
 elements.pixel_counter = {
     color: "#4444ff",
     category: catDebug,
     tool: function() {
+        // Prevent spam clicking from lagging the game
+        if (window.lastCountTick && pixelTicks - window.lastCountTick < 30) return;
+        window.lastCountTick = pixelTicks;
+
         let counts = {};
         for (let x = 1; x < width; x++) {
             for (let y = 1; y < height; y++) {
@@ -194,64 +169,82 @@ elements.pixel_counter = {
     }
 };
 
-// --- 10 & 11. SCHEMATIC COPY & PASTE (Structure exporter/importer) ---
-let schStartX = null;
-let schStartY = null;
+// --- 9 & 10. COPY & PASTE (Box Selection and Cursor-Centered Pasting) ---
+let copyStartX = null;
+let copyStartY = null;
 
-elements.schematic_copy = {
+elements.copy = {
     color: "#bbbbff",
     category: catDebug,
     tool: function(pixel) {
-        if (schStartX === null) {
-            schStartX = pixel.x;
-            schStartY = pixel.y;
-            logMessage(`[SCHEMATIC] Point 1 set at X:${pixel.x} Y:${pixel.y}. Click the opposite corner.`);
+        // 15-tick cooldown prevents accidental double-clicks when dragging the mouse
+        if (window.lastCopyTick && pixelTicks - window.lastCopyTick < 15) return;
+        window.lastCopyTick = pixelTicks;
+
+        if (copyStartX === null) {
+            copyStartX = pixel.x;
+            copyStartY = pixel.y;
+            logMessage(`[COPY] Corner 1 set at X:${pixel.x} Y:${pixel.y}. Click the opposite corner.`);
         } else {
-            let minX = Math.min(schStartX, pixel.x);
-            let maxX = Math.max(schStartX, pixel.x);
-            let minY = Math.min(schStartY, pixel.y);
-            let maxY = Math.max(schStartY, pixel.y);
+            let minX = Math.min(copyStartX, pixel.x);
+            let maxX = Math.max(copyStartX, pixel.x);
+            let minY = Math.min(copyStartY, pixel.y);
+            let maxY = Math.max(copyStartY, pixel.y);
             
-            let schematic = { pixels: [] };
+            // Calculate the absolute center of the bounding box
+            let centerX = Math.floor((minX + maxX) / 2);
+            let centerY = Math.floor((minY + maxY) / 2);
+            
+            let clipboard = [];
             for (let x = minX; x <= maxX; x++) {
                 for (let y = minY; y <= maxY; y++) {
                     let p = getPixel(x, y);
-                    if (p) schematic.pixels.push({ dx: x - minX, dy: y - minY, e: p.element });
+                    if (p) {
+                        // Store coordinates relative to the CENTER so pasting feels natural
+                        clipboard.push({ dx: x - centerX, dy: y - centerY, e: p.element, color: p.color });
+                        
+                        // Briefly flash the copied area to confirm the selection visually
+                        let origAlpha = p.alpha || 1;
+                        p.alpha = 0.2;
+                        setTimeout(() => { if (pixelMap[x] && pixelMap[x][y]) pixelMap[x][y].alpha = origAlpha; }, 200);
+                    }
                 }
             }
             
-            console.log("\n💾 === COPY YOUR SCHEMATIC DATA BELOW ===");
-            console.log(JSON.stringify(schematic));
-            logMessage(`[SCHEMATIC] Copied ${schematic.pixels.length} pixels! Check F12 Console.`);
-            
-            window.clipboardSchematic = schematic; 
-            schStartX = null; 
+            logMessage(`[COPY] Selection copied! (${clipboard.length} pixels)`);
+            window.selectionClipboard = clipboard; 
+            copyStartX = null; // Reset for the next use
         }
     }
 };
 
-elements.schematic_paste = {
+elements.paste = {
     color: "#ffbbbb",
     category: catDebug,
     tool: function(pixel) {
-        if (!window.clipboardSchematic) {
-            logMessage("[SCHEMATIC] Error: No schematic copied yet.");
+        if (!window.selectionClipboard) {
+            logMessage("[PASTE] Error: Nothing copied yet.");
             return;
         }
         
-        let sch = window.clipboardSchematic;
-        let pastedCount = 0;
+        // Cooldown prevents massive frame drops if the user holds down the mouse button
+        if (window.lastPasteTick && pixelTicks - window.lastPasteTick < 5) return;
+        window.lastPasteTick = pixelTicks;
+
+        let clip = window.selectionClipboard;
         
-        for (let i = 0; i < sch.pixels.length; i++) {
-            let pData = sch.pixels[i];
+        for (let i = 0; i < clip.length; i++) {
+            let pData = clip[i];
             let targetX = pixel.x + pData.dx;
             let targetY = pixel.y + pData.dy;
             
+            // Only paste into empty space to prevent deleting the existing world
             if (isEmpty(targetX, targetY, false)) {
                 tryCreate(pData.e, targetX, targetY, false);
-                pastedCount++;
+                // Retain custom colors if the copied structure had them
+                let newP = getPixel(targetX, targetY);
+                if (newP && pData.color) newP.color = pData.color;
             }
         }
-        logMessage(`[SCHEMATIC] Pasted ${pastedCount} pixels!`);
     }
 };
