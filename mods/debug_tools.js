@@ -169,7 +169,7 @@ elements.pixel_counter = {
     }
 };
 
-// --- 9 & 10. COPY & PASTE (Box Selection and Cursor-Centered Pasting) ---
+// --- 9 & 10. COPY & PASTE (Deep State Cloning & Air-Only Pasting) ---
 let copyStartX = null;
 let copyStartY = null;
 
@@ -177,7 +177,7 @@ elements.copy = {
     color: "#bbbbff",
     category: catDebug,
     tool: function(pixel) {
-        // 15-tick cooldown prevents accidental double-clicks when dragging the mouse
+        // Cooldown prevents accidental double-clicks when dragging
         if (window.lastCopyTick && pixelTicks - window.lastCopyTick < 15) return;
         window.lastCopyTick = pixelTicks;
 
@@ -200,11 +200,22 @@ elements.copy = {
                 for (let y = minY; y <= maxY; y++) {
                     let p = getPixel(x, y);
                     if (p) {
-                        // Store coordinates relative to the CENTER so pasting feels natural
-                        clipboard.push({ dx: x - centerX, dy: y - centerY, e: p.element, color: p.color });
-                        
-                        // Briefly flash the copied area to confirm the selection visually
+                        // DEEP COPY: Grab all important states alongside the element
                         let origAlpha = p.alpha || 1;
+                        clipboard.push({ 
+                            dx: x - centerX, 
+                            dy: y - centerY, 
+                            e: p.element, 
+                            color: p.color,
+                            temp: p.temp,
+                            charge: p.charge,
+                            burning: p.burning,
+                            burnStart: p.burnStart,
+                            frozen: p.frozen,
+                            alpha: origAlpha
+                        });
+                        
+                        // Briefly flash the copied area to confirm the selection
                         p.alpha = 0.2;
                         setTimeout(() => { if (pixelMap[x] && pixelMap[x][y]) pixelMap[x][y].alpha = origAlpha; }, 200);
                     }
@@ -227,24 +238,41 @@ elements.paste = {
             return;
         }
         
-        // Cooldown prevents massive frame drops if the user holds down the mouse button
+        // Cooldown prevents massive frame drops if held down
         if (window.lastPasteTick && pixelTicks - window.lastPasteTick < 5) return;
         window.lastPasteTick = pixelTicks;
 
         let clip = window.selectionClipboard;
+        let pastedCount = 0;
         
         for (let i = 0; i < clip.length; i++) {
             let pData = clip[i];
             let targetX = pixel.x + pData.dx;
             let targetY = pixel.y + pData.dy;
             
-            // Only paste into empty space to prevent deleting the existing world
+            // STRICT AIR CHECK: Only paste if the coordinate is entirely empty
             if (isEmpty(targetX, targetY, false)) {
                 tryCreate(pData.e, targetX, targetY, false);
-                // Retain custom colors if the copied structure had them
                 let newP = getPixel(targetX, targetY);
-                if (newP && pData.color) newP.color = pData.color;
+                
+                // DEEP PASTE: Restore all the copied states to the new pixel
+                if (newP) {
+                    newP.color = pData.color;
+                    newP.temp = pData.temp;
+                    if (pData.charge) newP.charge = pData.charge;
+                    if (pData.burning) {
+                        newP.burning = pData.burning;
+                        newP.burnStart = pData.burnStart || pixelTicks;
+                    }
+                    if (pData.frozen) {
+                        newP.frozen = true;
+                        newP.skip = true;
+                    }
+                    if (pData.alpha !== undefined) newP.alpha = pData.alpha;
+                }
+                pastedCount++;
             }
         }
+        logMessage(`[PASTE] Pasted ${pastedCount} pixels!`);
     }
 };
