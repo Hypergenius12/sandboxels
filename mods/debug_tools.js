@@ -1,4 +1,4 @@
-// == Sandboxels Pro Debugger Toolkit ==
+// == Sandboxels Pro Debugger Toolkit v4 ==
 // A highly polished suite of developer tools for testing, tracking, and manipulating the simulation.
 
 const catDebug = "tools";
@@ -166,28 +166,33 @@ elements.pixel_counter = {
     }
 };
 
-// --- 9 & 10. COPY & PASTE (True Area Overwrite) ---
-let copyStartX = null;
-let copyStartY = null;
+// --- 9 & 10. PHYSICAL MARKER COPY & PASTE (Works in empty air) ---
+window.copyStartX = null;
+window.copyStartY = null;
 
-elements.copy = {
+elements.copy_marker = {
     color: "#bbbbff",
     category: catDebug,
-    tool: function(pixel) {
-        if (window.lastCopyTick && pixelTicks - window.lastCopyTick < 15) return;
+    state: "solid",
+    behavior: behaviors.WALL, // Prevents physics from moving it before the tick runs
+    tick: function(pixel) {
+        // Cooldown prevents glitching if you drag the mouse
+        if (window.lastCopyTick && pixelTicks - window.lastCopyTick < 10) {
+            tryDelete(pixel.x, pixel.y);
+            return;
+        }
         window.lastCopyTick = pixelTicks;
 
-        if (copyStartX === null) {
-            copyStartX = pixel.x;
-            copyStartY = pixel.y;
-            logMessage(`[COPY] Corner 1 set at X:${pixel.x} Y:${pixel.y}. Click the opposite corner.`);
+        if (window.copyStartX === null) {
+            window.copyStartX = pixel.x;
+            window.copyStartY = pixel.y;
+            logMessage(`[COPY] Corner 1 set at X:${pixel.x} Y:${pixel.y}. Place Corner 2.`);
         } else {
-            let minX = Math.min(copyStartX, pixel.x);
-            let maxX = Math.max(copyStartX, pixel.x);
-            let minY = Math.min(copyStartY, pixel.y);
-            let maxY = Math.max(copyStartY, pixel.y);
+            let minX = Math.min(window.copyStartX, pixel.x);
+            let maxX = Math.max(window.copyStartX, pixel.x);
+            let minY = Math.min(window.copyStartY, pixel.y);
+            let maxY = Math.max(window.copyStartY, pixel.y);
             
-            // Save the exact dimensions of the bounding box
             let clipWidth = maxX - minX;
             let clipHeight = maxY - minY;
             
@@ -196,10 +201,12 @@ elements.copy = {
             for (let x = minX; x <= maxX; x++) {
                 for (let y = minY; y <= maxY; y++) {
                     let p = getPixel(x, y);
-                    if (p) {
+                    
+                    // If it's a real pixel (and not the marker itself), save its deep data
+                    if (p && p.element !== "copy_marker") {
                         let origAlpha = p.alpha || 1;
                         clipboard.pixels.push({ 
-                            dx: x - minX, // Anchor to top-left for precision pasting
+                            dx: x - minX, 
                             dy: y - minY, 
                             e: p.element, 
                             color: p.color,
@@ -211,72 +218,81 @@ elements.copy = {
                             alpha: origAlpha
                         });
                         
+                        // Visual flash
                         p.alpha = 0.2;
                         setTimeout(() => { if (pixelMap[x] && pixelMap[x][y]) pixelMap[x][y].alpha = origAlpha; }, 200);
+                    } else {
+                        // explicitly record the empty space (air)
+                        clipboard.pixels.push({ dx: x - minX, dy: y - minY, e: null });
                     }
                 }
             }
             
             logMessage(`[COPY] ${clipWidth+1}x${clipHeight+1} area copied!`);
             window.selectionClipboard = clipboard; 
-            copyStartX = null; 
+            window.copyStartX = null; 
         }
+        // Self-destruct the marker instantly
+        tryDelete(pixel.x, pixel.y);
     }
 };
 
-elements.paste = {
+elements.paste_marker = {
     color: "#ffbbbb",
     category: catDebug,
-    tool: function(pixel) {
+    state: "solid",
+    behavior: behaviors.WALL,
+    tick: function(pixel) {
         if (!window.selectionClipboard) {
             logMessage("[PASTE] Error: Nothing copied yet.");
+            tryDelete(pixel.x, pixel.y);
             return;
         }
         
-        if (window.lastPasteTick && pixelTicks - window.lastPasteTick < 5) return;
+        if (window.lastPasteTick && pixelTicks - window.lastPasteTick < 10) {
+            tryDelete(pixel.x, pixel.y);
+            return;
+        }
         window.lastPasteTick = pixelTicks;
 
         let clip = window.selectionClipboard;
-        
-        // STEP 1: Clear the exact destination bounding box (Pasting the "Air")
-        for (let dx = 0; dx <= clip.w; dx++) {
-            for (let dy = 0; dy <= clip.h; dy++) {
-                let targetX = pixel.x + dx;
-                let targetY = pixel.y + dy;
-                if (targetX > 0 && targetX < width && targetY > 0 && targetY < height) {
-                    tryDelete(targetX, targetY);
-                }
-            }
-        }
-        
-        // STEP 2: Paste the copied solid pixels into the newly cleared box
         let pastedCount = 0;
+        
+        // Loop through everything in the clipboard
         for (let i = 0; i < clip.pixels.length; i++) {
             let pData = clip.pixels[i];
             let targetX = pixel.x + pData.dx;
             let targetY = pixel.y + pData.dy;
             
             if (targetX > 0 && targetX < width && targetY > 0 && targetY < height) {
-                tryCreate(pData.e, targetX, targetY, true);
-                let newP = getPixel(targetX, targetY);
+                // Delete whatever is currently there (this clears the air properly)
+                tryDelete(targetX, targetY);
                 
-                if (newP) {
-                    newP.color = pData.color;
-                    newP.temp = pData.temp;
-                    if (pData.charge) newP.charge = pData.charge;
-                    if (pData.burning) {
-                        newP.burning = pData.burning;
-                        newP.burnStart = pData.burnStart || pixelTicks;
+                // If the copied data was a physical element, spawn it and restore memory
+                if (pData.e !== null) {
+                    tryCreate(pData.e, targetX, targetY, true);
+                    let newP = getPixel(targetX, targetY);
+                    
+                    if (newP) {
+                        newP.color = pData.color;
+                        newP.temp = pData.temp;
+                        if (pData.charge) newP.charge = pData.charge;
+                        if (pData.burning) {
+                            newP.burning = pData.burning;
+                            newP.burnStart = pData.burnStart || pixelTicks;
+                        }
+                        if (pData.frozen) {
+                            newP.frozen = true;
+                            newP.skip = true;
+                        }
+                        if (pData.alpha !== undefined) newP.alpha = pData.alpha;
                     }
-                    if (pData.frozen) {
-                        newP.frozen = true;
-                        newP.skip = true;
-                    }
-                    if (pData.alpha !== undefined) newP.alpha = pData.alpha;
+                    pastedCount++;
                 }
-                pastedCount++;
             }
         }
         logMessage(`[PASTE] Pasted ${clip.w+1}x${clip.h+1} area successfully!`);
+        // Self-destruct the marker instantly
+        tryDelete(pixel.x, pixel.y);
     }
 };
