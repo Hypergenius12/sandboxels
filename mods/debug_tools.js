@@ -11,11 +11,9 @@ elements.inspect = {
         let age = pixelTicks - pixel.start; 
         let state = elements[pixel.element].state || "unknown";
         
-        // Deep F12 Console Logging
         console.log(`\n--- INSPECT: ${pixel.element.toUpperCase()} ---`);
         console.log("Memory:", pixel);
         
-        // UI Logging
         let msg = `[${pixel.element.toUpperCase()}] Temp: ${Math.round(pixel.temp)}°C | Age: ${age}t | X:${pixel.x} Y:${pixel.y} | State: ${state}`;
         if (pixel.charge) msg += ` | Charge: ${Math.round(pixel.charge * 100)}%`;
         if (pixel.burning) msg += ` | BURNING`;
@@ -33,7 +31,7 @@ elements.freeze = {
         if (!pixel.frozen) {
             pixel.frozen = true;
             pixel.skip = true; 
-            pixel.alpha = 0.5; // Visual indicator that it is paused
+            pixel.alpha = 0.5; 
         }
     }
 };
@@ -145,7 +143,6 @@ elements.pixel_counter = {
     color: "#4444ff",
     category: catDebug,
     tool: function() {
-        // Prevent spam clicking from lagging the game
         if (window.lastCountTick && pixelTicks - window.lastCountTick < 30) return;
         window.lastCountTick = pixelTicks;
 
@@ -169,7 +166,7 @@ elements.pixel_counter = {
     }
 };
 
-// --- 9 & 10. COPY & PASTE (Deep State Cloning & Forceful Pasting) ---
+// --- 9 & 10. COPY & PASTE (True Area Overwrite) ---
 let copyStartX = null;
 let copyStartY = null;
 
@@ -177,7 +174,6 @@ elements.copy = {
     color: "#bbbbff",
     category: catDebug,
     tool: function(pixel) {
-        // Cooldown prevents accidental double-clicks when dragging
         if (window.lastCopyTick && pixelTicks - window.lastCopyTick < 15) return;
         window.lastCopyTick = pixelTicks;
 
@@ -191,20 +187,20 @@ elements.copy = {
             let minY = Math.min(copyStartY, pixel.y);
             let maxY = Math.max(copyStartY, pixel.y);
             
-            // Calculate the absolute center of the bounding box
-            let centerX = Math.floor((minX + maxX) / 2);
-            let centerY = Math.floor((minY + maxY) / 2);
+            // Save the exact dimensions of the bounding box
+            let clipWidth = maxX - minX;
+            let clipHeight = maxY - minY;
             
-            let clipboard = [];
+            let clipboard = { w: clipWidth, h: clipHeight, pixels: [] };
+            
             for (let x = minX; x <= maxX; x++) {
                 for (let y = minY; y <= maxY; y++) {
                     let p = getPixel(x, y);
                     if (p) {
-                        // DEEP COPY: Grab all important states alongside the element
                         let origAlpha = p.alpha || 1;
-                        clipboard.push({ 
-                            dx: x - centerX, 
-                            dy: y - centerY, 
+                        clipboard.pixels.push({ 
+                            dx: x - minX, // Anchor to top-left for precision pasting
+                            dy: y - minY, 
                             e: p.element, 
                             color: p.color,
                             temp: p.temp,
@@ -215,16 +211,15 @@ elements.copy = {
                             alpha: origAlpha
                         });
                         
-                        // Briefly flash the copied area to confirm the selection
                         p.alpha = 0.2;
                         setTimeout(() => { if (pixelMap[x] && pixelMap[x][y]) pixelMap[x][y].alpha = origAlpha; }, 200);
                     }
                 }
             }
             
-            logMessage(`[COPY] Selection copied! (${clipboard.length} pixels)`);
+            logMessage(`[COPY] ${clipWidth+1}x${clipHeight+1} area copied!`);
             window.selectionClipboard = clipboard; 
-            copyStartX = null; // Reset for the next use
+            copyStartX = null; 
         }
     }
 };
@@ -238,26 +233,33 @@ elements.paste = {
             return;
         }
         
-        // Cooldown prevents massive frame drops if held down
         if (window.lastPasteTick && pixelTicks - window.lastPasteTick < 5) return;
         window.lastPasteTick = pixelTicks;
 
         let clip = window.selectionClipboard;
-        let pastedCount = 0;
         
-        for (let i = 0; i < clip.length; i++) {
-            let pData = clip[i];
+        // STEP 1: Clear the exact destination bounding box (Pasting the "Air")
+        for (let dx = 0; dx <= clip.w; dx++) {
+            for (let dy = 0; dy <= clip.h; dy++) {
+                let targetX = pixel.x + dx;
+                let targetY = pixel.y + dy;
+                if (targetX > 0 && targetX < width && targetY > 0 && targetY < height) {
+                    tryDelete(targetX, targetY);
+                }
+            }
+        }
+        
+        // STEP 2: Paste the copied solid pixels into the newly cleared box
+        let pastedCount = 0;
+        for (let i = 0; i < clip.pixels.length; i++) {
+            let pData = clip.pixels[i];
             let targetX = pixel.x + pData.dx;
             let targetY = pixel.y + pData.dy;
             
-            // Safe bounds check to prevent game crashes at the edge of the screen
-            if (targetX >= 1 && targetX < width && targetY >= 1 && targetY < height) {
-                
-                // FORCE OVERWRITE: The 'true' parameter tells the engine to delete whatever is there
+            if (targetX > 0 && targetX < width && targetY > 0 && targetY < height) {
                 tryCreate(pData.e, targetX, targetY, true);
                 let newP = getPixel(targetX, targetY);
                 
-                // DEEP PASTE: Restore all the copied states to the new pixel
                 if (newP) {
                     newP.color = pData.color;
                     newP.temp = pData.temp;
@@ -275,6 +277,6 @@ elements.paste = {
                 pastedCount++;
             }
         }
-        logMessage(`[PASTE] Pasted ${pastedCount} pixels successfully!`);
+        logMessage(`[PASTE] Pasted ${clip.w+1}x${clip.h+1} area successfully!`);
     }
 };
