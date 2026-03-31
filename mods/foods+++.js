@@ -126,7 +126,44 @@ elements.ribs = {color:"#A0522D", behavior:W, category:F, state:"solid", density
 elements.frozen_ribs = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1150, tempHigh:10, stateHigh:"ribs"};
 elements.cooked_ribs = {color:"#8B4513", behavior:W, category:F, state:"solid", density:1000, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_ribs"};
 elements.frozen_cooked_ribs = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"cooked_ribs"};
+elements.raw_salmon = {color:"#fa8072", behavior:W, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"cooked_salmon", tempLow:-5, stateLow:"frozen_raw_salmon"};
+elements.frozen_raw_salmon = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_salmon"};
+elements.cooked_salmon = {color:"#e9967a", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_salmon"};
+elements.frozen_cooked_salmon = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_salmon"};
 
+elements.raw_tuna = {color:"#ff6347", behavior:W, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"cooked_tuna", tempLow:-5, stateLow:"frozen_raw_tuna"};
+elements.frozen_raw_tuna = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_tuna"};
+elements.cooked_tuna = {color:"#cd5c5c", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_tuna"};
+elements.frozen_cooked_tuna = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_tuna"};
+
+elements.raw_cod = {color:"#f5fffa", behavior:W, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"cooked_cod", tempLow:-5, stateLow:"frozen_raw_cod"};
+elements.frozen_raw_cod = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_cod"};
+elements.cooked_cod = {color:"#fff8dc", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_cod"};
+elements.frozen_cooked_cod = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_cod"};
+
+elements.raw_squid = {color:"#e6e6fa", behavior:SP, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"calamari", tempLow:-5, stateLow:"frozen_raw_squid"};
+elements.frozen_raw_squid = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_squid"};
+elements.calamari = {color:"#deb887", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_calamari"};
+elements.frozen_calamari = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"calamari"};
+
+elements.raw_octopus = {color:"#d8bfd8", behavior:SP, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"cooked_octopus", tempLow:-5, stateLow:"frozen_raw_octopus"};
+elements.frozen_raw_octopus = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_octopus"};
+elements.cooked_octopus = {color:"#cd853f", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_octopus"};
+elements.frozen_cooked_octopus = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_octopus"};
+
+elements.raw_egg = {color:"#ffefd5", behavior:L, category:F, state:"liquid", density:1030, tempHigh:80, stateHigh:"fried_egg", tempLow:-5, stateLow:"frozen_raw_egg"};
+elements.frozen_raw_egg = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1030, tempHigh:10, stateHigh:"raw_egg"};
+elements.fried_egg = {color:"#ffd700", behavior:W, category:F, state:"solid", density:1000, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_fried_egg"};
+elements.frozen_fried_egg = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"fried_egg"};
+elements.boiled_egg = {color:"#ffffff", behavior:SP, category:F, state:"solid", density:1050, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_boiled_egg"};
+elements.frozen_boiled_egg = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"boiled_egg"};
+elements.omelette = {color:"#ffdab9", behavior:W, category:F, state:"solid", density:900, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_omelette"};
+elements.frozen_omelette = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"omelette"};
+
+elements.raw_oyster = {color:"#d3d3d3", behavior:SP, category:F, state:"solid", density:1000, tempHigh:100, stateHigh:"cooked_oyster", tempLow:-5, stateLow:"frozen_raw_oyster"};
+elements.frozen_raw_oyster = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"raw_oyster"};
+elements.cooked_oyster = {color:"#a9a9a9", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_oyster"};
+elements.frozen_cooked_oyster = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_oyster"};
 // ==========================================
 // 2. FRUITS, VEGGIES & SOLIDS (Equipped with BreakInto!)
 // ==========================================
@@ -258,7 +295,75 @@ elements.black_bean = {color:"#1A1110", behavior:P, category:F, breakInto:"water
 elements.frozen_black_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:970, tempHigh:10, stateHigh:"black_bean"};
 elements.kidney_bean = {color:"#8B0000", behavior:P, category:F, breakInto:"water", state:"solid", density:920, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_kidney_bean"};
 elements.frozen_kidney_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:970, tempHigh:10, stateHigh:"kidney_bean"};
+elements.button_mushroom = {color:"#f5deb3", behavior:P, category:F, state:"solid", density:300, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_button_mushroom"};
+elements.frozen_button_mushroom = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:350, tempHigh:10, stateHigh:"button_mushroom"};
+elements.portobello = {color:"#8b4513", behavior:P, category:F, state:"solid", density:400, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_portobello"};
+elements.frozen_portobello = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:450, tempHigh:10, stateHigh:"portobello"};
+elements.shiitake = {color:"#a0522d", behavior:P, category:F, state:"solid", density:350, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_shiitake"};
+elements.frozen_shiitake = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:400, tempHigh:10, stateHigh:"shiitake"};
+elements.truffle_fungus = {color:"#2b1b10", behavior:P, category:F, breakInto:"truffle_oil", state:"solid", density:600, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_truffle_fungus"};
+elements.frozen_truffle_fungus = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:650, tempHigh:10, stateHigh:"truffle_fungus"};
 
+elements.cacao_bean = {color:"#3e1e04", behavior:P, category:F, state:"solid", density:800, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cacao_bean"};
+elements.frozen_cacao_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"cacao_bean"};
+elements.vanilla_bean = {color:"#1a1110", behavior:P, category:F, state:"solid", density:600, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_vanilla_bean"};
+elements.frozen_vanilla_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:650, tempHigh:10, stateHigh:"vanilla_bean"};
+elements.coffee_bean = {color:"#4b3621", behavior:P, category:F, state:"solid", density:700, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_coffee_bean"};
+elements.frozen_coffee_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:750, tempHigh:10, stateHigh:"coffee_bean"};
+elements.tea_leaf = {color:"#2e8b57", behavior:P, category:F, state:"solid", density:200, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_tea_leaf"};
+elements.frozen_tea_leaf = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:250, tempHigh:10, stateHigh:"tea_leaf"};
+
+elements.parsley = {color:"#228b22", behavior:P, category:F, state:"solid", density:150, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_parsley"};
+elements.frozen_parsley = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:200, tempHigh:10, stateHigh:"parsley"};
+elements.cilantro = {color:"#32cd32", behavior:P, category:F, state:"solid", density:150, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cilantro"};
+elements.frozen_cilantro = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:200, tempHigh:10, stateHigh:"cilantro"};
+elements.dill = {color:"#00fa9a", behavior:P, category:F, state:"solid", density:100, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_dill"};
+elements.frozen_dill = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:150, tempHigh:10, stateHigh:"dill"};
+elements.mint_leaf = {color:"#00ff7f", behavior:P, category:F, state:"solid", density:150, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_mint_leaf"};
+elements.frozen_mint_leaf = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:200, tempHigh:10, stateHigh:"mint_leaf"};
+
+elements.blue_cheese = {color:"#add8e6", behavior:W, category:F, state:"solid", density:950, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_blue_cheese"};
+elements.frozen_blue_cheese = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"blue_cheese"};
+elements.swiss_cheese = {color:"#fffacd", behavior:W, category:F, state:"solid", density:950, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_swiss_cheese"};
+elements.frozen_swiss_cheese = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"swiss_cheese"};
+elements.feta_cheese = {color:"#f8f8ff", behavior:SP, category:F, state:"solid", density:900, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_feta_cheese"};
+elements.frozen_feta_cheese = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"feta_cheese"};
+
+elements.lasagna = {color:"#cd5c5c", behavior:W, category:F, state:"solid", density:1100, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_lasagna"};
+elements.frozen_lasagna = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1100, tempHigh:10, stateHigh:"lasagna"};
+elements.ravioli = {color:"#f5deb3", behavior:SP, category:F, state:"solid", density:1050, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_ravioli"};
+elements.frozen_ravioli = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"ravioli"};
+elements.pad_thai = {color:"#d2b48c", behavior:SP, category:F, state:"solid", density:900, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_pad_thai"};
+elements.frozen_pad_thai = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"pad_thai"};
+elements.pho = {color:"#deb887", behavior:L, category:F, state:"liquid", density:1050, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_pho"};
+elements.frozen_pho = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"pho"};
+elements.chili_stew = {color:"#8b0000", behavior:L, category:F, state:"liquid", density:1100, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_chili_stew"};
+elements.frozen_chili_stew = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1100, tempHigh:10, stateHigh:"chili_stew"};
+
+elements.white_chocolate = {color:"#fff8dc", behavior:W, category:F, state:"solid", density:1200, tempHigh:45, stateHigh:"melted_white_chocolate", tempLow:-5, stateLow:"frozen_white_chocolate"};
+elements.frozen_white_chocolate = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1250, tempHigh:10, stateHigh:"white_chocolate"};
+elements.dark_chocolate = {color:"#3b2f2f", behavior:W, category:F, state:"solid", density:1300, tempHigh:45, stateHigh:"melted_dark_chocolate", tempLow:-5, stateLow:"frozen_dark_chocolate"};
+elements.frozen_dark_chocolate = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1350, tempHigh:10, stateHigh:"dark_chocolate"};
+elements.candy_cane = {color:"#ff0000", behavior:W, category:F, state:"solid", density:1000, tempHigh:150, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_candy_cane"};
+elements.frozen_candy_cane = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"candy_cane"};
+elements.caramel_apple = {color:"#c68e17", behavior:W, category:F, state:"solid", density:950, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_caramel_apple"};
+elements.frozen_caramel_apple = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"caramel_apple"};
+elements.gummy_worm = {color:"#32cd32", behavior:W, category:F, state:"solid", density:900, tempHigh:150, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_gummy_worm"};
+elements.frozen_gummy_worm = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"gummy_worm"};
+
+elements.sourdough = {color:"#f5deb3", behavior:W, category:F, state:"solid", density:600, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sourdough"};
+elements.frozen_sourdough = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:650, tempHigh:10, stateHigh:"sourdough"};
+elements.rye_bread = {color:"#8b4513", behavior:W, category:F, state:"solid", density:650, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_rye_bread"};
+elements.frozen_rye_bread = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:700, tempHigh:10, stateHigh:"rye_bread"};
+elements.cornbread = {color:"#ffd700", behavior:W, category:F, state:"solid", density:700, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cornbread"};
+elements.frozen_cornbread = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:750, tempHigh:10, stateHigh:"cornbread"};
+
+elements.pumpkin = {color:"#ff8c00", behavior:W, category:F, breakInto:"pumpkin_puree", state:"solid", density:800, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_pumpkin"};
+elements.frozen_pumpkin = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"pumpkin"};
+elements.cucumber = {color:"#006400", behavior:P, category:F, breakInto:"cucumber_juice", state:"solid", density:650, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cucumber"};
+elements.frozen_cucumber = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:700, tempHigh:10, stateHigh:"cucumber"};
+elements.green_bean = {color:"#228b22", behavior:P, category:F, state:"solid", density:700, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_green_bean"};
+elements.frozen_green_bean = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:750, tempHigh:10, stateHigh:"green_bean"};
 // ==========================================
 // 3. BREADS, PASTRIES & SWEETS
 // ==========================================
@@ -428,6 +533,103 @@ elements.frozen_pudding = {color:"#e0f7fa", behavior:W, category:S, state:"solid
 elements.almond_butter = {color:"#C4A484", behavior:L, category:F, state:"liquid", density:1060, tempHigh:120, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_almond_butter"};
 elements.frozen_almond_butter = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1060, tempHigh:10, stateHigh:"almond_butter"};
 
+elements.cucumber_juice = {color:"#90ee90", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_cucumber_juice"};
+elements.frozen_cucumber_juice = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"cucumber_juice"};
+elements.pumpkin_puree = {color:"#ff7f50", behavior:L, category:F, state:"liquid", density:1100, viscosity: 60000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_pumpkin_puree"};
+elements.frozen_pumpkin_puree = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1100, tempHigh:10, stateHigh:"pumpkin_puree"};
+
+elements.coffee_liquid = {color:"#3b2f2f", behavior:L, category:F, state:"liquid", density:1000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_coffee_liquid"};
+elements.frozen_coffee_liquid = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"coffee_liquid"};
+elements.tea_liquid = {color:"#cd853f", behavior:L, category:F, state:"liquid", density:1000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_tea_liquid"};
+elements.frozen_tea_liquid = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"tea_liquid"};
+
+elements.chili_oil = {color:"#b22222", behavior:L, category:F, state:"liquid", density:920, tempHigh:250, stateHigh:"fire", tempLow:-5, stateLow:"frozen_chili_oil"};
+elements.frozen_chili_oil = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:5, stateHigh:"chili_oil"};
+elements.truffle_oil = {color:"#8b4513", behavior:L, category:F, state:"liquid", density:920, tempHigh:250, stateHigh:"fire", tempLow:-5, stateLow:"frozen_truffle_oil"};
+elements.frozen_truffle_oil = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:5, stateHigh:"truffle_oil"};
+
+elements.melted_white_chocolate = {color:"#fff8dc", behavior:L, category:F, state:"liquid", density:1150, viscosity: 40000, tempHigh:150, stateHigh:"burnt", tempLow:30, stateLow:"white_chocolate"};
+elements.melted_dark_chocolate = {color:"#3b2f2f", behavior:L, category:F, state:"liquid", density:1250, viscosity: 45000, tempHigh:150, stateHigh:"burnt", tempLow:30, stateLow:"dark_chocolate"};
+
+elements.corn_syrup = {color:"#f5deb3", behavior:L, category:F, state:"liquid", density:1350, viscosity: 80000, tempHigh:120, stateHigh:"burnt", tempLow:-10, stateLow:"frozen_corn_syrup"};
+elements.frozen_corn_syrup = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1400, tempHigh:5, stateHigh:"corn_syrup"};
+elements.chocolate_syrup = {color:"#4b3621", behavior:L, category:F, state:"liquid", density:1300, viscosity: 60000, tempHigh:120, stateHigh:"burnt", tempLow:-10, stateLow:"frozen_chocolate_syrup"};
+elements.frozen_chocolate_syrup = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1350, tempHigh:5, stateHigh:"chocolate_syrup"};
+
+// ==========================================
+// 4.5 BREAKINTO PROPERTIES (NATIVE SMASH TOOL FIX)
+// ==========================================
+// This makes the native Smash tool, explosions, and heavy physics natively pop these into liquid!
+
+// Fruits -> Juices & Oils
+elements.avocado.breakInto = "avocado_oil";
+elements.guacamole.breakInto = "avocado_oil";
+elements.strawberry.breakInto = "strawberry_juice";
+elements.banana.breakInto = "banana_puree";
+elements.blueberry.breakInto = "blueberry_juice";
+elements.blackberry.breakInto = "blackberry_juice";
+elements.raspberry.breakInto = "raspberry_juice";
+elements.peach.breakInto = "peach_juice";
+elements.pear.breakInto = "pear_juice";
+elements.cherry.breakInto = "cherry_juice";
+elements.plum.breakInto = "plum_juice";
+elements.watermelon.breakInto = "watermelon_juice";
+elements.mango.breakInto = "mango_juice";
+elements.pineapple.breakInto = "pineapple_juice";
+elements.coconut.breakInto = ["coconut_water", "coconut_water", "wood"]; // Pops open shell
+elements.kiwi.breakInto = "kiwi_juice";
+elements.pomegranate.breakInto = "pomegranate_juice";
+elements.cranberry.breakInto = "cranberry_juice";
+elements.tomato.breakInto = "tomato_juice";
+elements.fig.breakInto = "plum_juice";
+elements.date.breakInto = "plum_juice";
+elements.papaya.breakInto = "mango_juice";
+elements.cantaloupe.breakInto = "watermelon_juice";
+elements.honeydew.breakInto = "watermelon_juice";
+elements.starfruit.breakInto = "pineapple_juice";
+elements.dragonfruit.breakInto = "strawberry_juice";
+elements.passionfruit.breakInto = "mango_juice";
+elements.guava.breakInto = "strawberry_juice";
+elements.lychee.breakInto = "cherry_juice";
+elements.persimmon.breakInto = "peach_juice";
+elements.rhubarb.breakInto = "strawberry_juice";
+elements.boysenberry.breakInto = "blackberry_juice";
+elements.mulberry.breakInto = "blackberry_juice";
+elements.elderberry.breakInto = "blueberry_juice";
+elements.gooseberry.breakInto = "kiwi_juice";
+elements.acai.breakInto = "blueberry_juice";
+
+// Veggies & Beans -> Water, Purees, or Oils
+elements.carrot.breakInto = "water";
+elements.celery.breakInto = "water";
+elements.broccoli.breakInto = "water";
+elements.spinach.breakInto = "water";
+elements.cabbage.breakInto = "water";
+elements.cauliflower.breakInto = "water";
+elements.pea.breakInto = "water";
+elements.bell_pepper.breakInto = "water";
+elements.chili_pepper.breakInto = "hot_sauce";
+elements.onion.breakInto = "water";
+elements.garlic.breakInto = "water";
+elements.olive.breakInto = "olive_oil";
+elements.leek.breakInto = "water";
+elements.scallion.breakInto = "water";
+elements.shallot.breakInto = "water";
+elements.horseradish.breakInto = "water";
+elements.wasabi.breakInto = "water";
+elements.watercress.breakInto = "water";
+elements.arugula.breakInto = "water";
+elements.kale.breakInto = "water";
+elements.bok_choy.breakInto = "water";
+elements.okra.breakInto = "water";
+elements.plantain.breakInto = "banana_puree";
+elements.yam.breakInto = "water";
+elements.taro.breakInto = "water";
+elements.cassava.breakInto = "water";
+elements.lentil.breakInto = "water";
+elements.chickpea.breakInto = "water";
+elements.black_bean.breakInto = "water";
+elements.kidney_bean.breakInto = "water";
 
 // ==========================================
 // 5. EXPLICIT CHEMISTRY & REACTIONS
@@ -621,3 +823,39 @@ elements.meat.reactions["smoke"] = { elem1: "cooked_steak", elem2: null };
 elements.meat.reactions["salt"] = { elem1: "cooked_steak", elem2: null };
 elements.bird.reactions["nut_oil"] = { elem1: "fried_chicken", elem2: null };
 elements.fish.reactions["sand"] = { elem1: "raw_shrimp", elem2: null };
+
+// Ensure base structures are loaded
+if (!elements.water) elements.water = { reactions: {} };
+if (!elements.water.reactions) elements.water.reactions = {};
+
+// Brewing Drinks
+elements.coffee_bean.reactions["water"] = { elem1: "coffee_liquid", elem2: null };
+elements.coffee_bean.reactions["steam"] = { elem1: "coffee_liquid", elem2: null };
+elements.tea_leaf.reactions["water"] = { elem1: "tea_liquid", elem2: null };
+elements.tea_leaf.reactions["steam"] = { elem1: "tea_liquid", elem2: null };
+
+// Cooking the New Eggs & Seafood
+elements.raw_salmon.reactions["fire"] = { elem1: "cooked_salmon", elem2: null };
+elements.raw_tuna.reactions["fire"] = { elem1: "cooked_tuna", elem2: null };
+elements.raw_cod.reactions["fire"] = { elem1: "cooked_cod", elem2: null };
+elements.raw_squid.reactions["nut_oil"] = { elem1: "calamari", elem2: null };
+elements.raw_octopus.reactions["fire"] = { elem1: "cooked_octopus", elem2: null };
+elements.raw_clam.reactions["steam"] = { elem1: "cooked_clam", elem2: null };
+elements.raw_oyster.reactions["steam"] = { elem1: "cooked_oyster", elem2: null };
+elements.raw_egg.reactions["fire"] = { elem1: "fried_egg", elem2: null };
+elements.raw_egg.reactions["water"] = { elem1: "boiled_egg", elem2: null };
+elements.raw_egg.reactions["butter"] = { elem1: "omelette", elem2: null };
+
+// Chocolate Making
+elements.cacao_bean.reactions["milk"] = { elem1: "melted_dark_chocolate", elem2: null };
+elements.cacao_bean.reactions["sugar"] = { elem1: "melted_dark_chocolate", elem2: null };
+elements.melted_white_chocolate.reactions["ice"] = { elem1: "white_chocolate", elem2: null };
+elements.melted_dark_chocolate.reactions["ice"] = { elem1: "dark_chocolate", elem2: null };
+
+// Freezing the new juices
+if (!elements.cucumber_juice.reactions) elements.cucumber_juice.reactions = {};
+elements.cucumber_juice.reactions["ice"] = { elem1: "frozen_cucumber_juice", elem2: null };
+if (!elements.pumpkin_puree.reactions) elements.pumpkin_puree.reactions = {};
+elements.pumpkin_puree.reactions["ice"] = { elem1: "frozen_pumpkin_puree", elem2: null };
+
+
