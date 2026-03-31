@@ -13,733 +13,6 @@ const SP = behaviors.STURDYPOWDER;
 
 // --- UNIVERSAL BURNT ELEMENT ---
 elements.burnt = { color: ["#2b1d14", "#1a110c", "#000000"], behavior: SP, category: S, state: "solid", density: 500, tempHigh: 600, stateHigh: "ash" };
-// ==========================================
-// 150 MORE FOODS: THE MASTER CHEF EXPANSION
-// 600 New Elements (Raw, Cooked, and Frozen States) + Full Chemistry
-// ==========================================
-
-// --- 1. MEATS & SEAFOOD (Raw -> Cooked) ---
-elements.raw_turkey = {color:"#ffccbb", behavior:behaviors.WALL, category:"food", state:"solid", density:1020, tempHigh:110, stateHigh:"cooked_turkey", tempLow:-5, stateLow:"frozen_raw_turkey", breakInto:"blood"};
-elements.frozen_raw_turkey = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1020, tempHigh:10, stateHigh:"raw_turkey"};
-elements.cooked_turkey = {color:"#d2691e", behavior:behaviors.WALL, category:"food", state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_turkey"};
-elements.frozen_cooked_turkey = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"cooked_turkey"};
-
-elements.raw_quail = {color:"#e8bba8", behavior:behaviors.WALL, category:"food", state:"solid", density:1010, tempHigh:110, stateHigh:"cooked_quail", tempLow:-5, stateLow:"frozen_raw_quail", breakInto:"blood"};
-elements.frozen_raw_quail = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"raw_quail"};
-elements.cooked_quail = {color:"#b85d19", behavior:behaviors.WALL, category:"food", state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_quail"};
-elements.frozen_cooked_quail = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"cooked_quail"};
-
-elements.raw_pheasant = {color:"#d9a089", behavior:behaviors.WALL, category:"food", state:"solid", density:1015, tempHigh:110, stateHigh:"cooked_pheasant", tempLow:-5, stateLow:"frozen_raw_pheasant", breakInto:"blood"};
-elements.frozen_raw_pheasant = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1015, tempHigh:10, stateHigh:"raw_pheasant"};
-elements.cooked_pheasant = {color:"#a64b12", behavior:behaviors.WALL, category:"food", state:"solid", density:945, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_pheasant"};
-elements.frozen_cooked_pheasant = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:945, tempHigh:10, stateHigh:"cooked_pheasant"};
-
-elements.raw_goose = {color:"#ffb3a1", behavior:behaviors.WALL, category:"food", state:"solid", density:1030, tempHigh:110, stateHigh:"cooked_goose", tempLow:-5, stateLow:"frozen_raw_goose", breakInto:"blood"};
-elements.frozen_raw_goose = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1030, tempHigh:10, stateHigh:"raw_goose"};
-elements.cooked_goose = {color:"#8b3a0a", behavior:behaviors.WALL, category:"food", state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_goose"};
-elements.frozen_cooked_goose = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"cooked_goose"};
-
-elements.raw_rabbit = {color:"#ffcccc", behavior:behaviors.WALL, category:"food", state:"solid", density:1000, tempHigh:110, stateHigh:"cooked_rabbit", tempLow:-5, stateLow:"frozen_raw_rabbit", breakInto:"blood"};
-elements.frozen_raw_rabbit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1000, tempHigh:10, stateHigh:"raw_rabbit"};
-elements.cooked_rabbit = {color:"#e6a87c", behavior:behaviors.WALL, category:"food", state:"solid", density:930, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_rabbit"};
-elements.frozen_cooked_rabbit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"cooked_rabbit"};
-
-elements.raw_veal = {color:"#f0a8a8", behavior:behaviors.WALL, category:"food", state:"solid", density:1040, tempHigh:110, stateHigh:"cooked_veal", tempLow:-5, stateLow:"frozen_raw_veal", breakInto:"blood"};
-elements.frozen_raw_veal = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1040, tempHigh:10, stateHigh:"raw_veal"};
-elements.cooked_veal = {color:"#c27a7a", behavior:behaviors.WALL, category:"food", state:"solid", density:970, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_veal"};
-elements.frozen_cooked_veal = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:970, tempHigh:10, stateHigh:"cooked_veal"};
-
-elements.raw_boar = {color:"#a84848", behavior:behaviors.WALL, category:"food", state:"solid", density:1060, tempHigh:110, stateHigh:"cooked_boar", tempLow:-5, stateLow:"frozen_raw_boar", breakInto:"blood"};
-elements.frozen_raw_boar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1060, tempHigh:10, stateHigh:"raw_boar"};
-elements.cooked_boar = {color:"#6b2a2a", behavior:behaviors.WALL, category:"food", state:"solid", density:990, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_boar"};
-elements.frozen_cooked_boar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:990, tempHigh:10, stateHigh:"cooked_boar"};
-
-elements.raw_bison = {color:"#8b2222", behavior:behaviors.WALL, category:"food", state:"solid", density:1070, tempHigh:110, stateHigh:"cooked_bison", tempLow:-5, stateLow:"frozen_raw_bison", breakInto:"blood"};
-elements.frozen_raw_bison = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1070, tempHigh:10, stateHigh:"raw_bison"};
-elements.cooked_bison = {color:"#4a1111", behavior:behaviors.WALL, category:"food", state:"solid", density:1000, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_bison"};
-elements.frozen_cooked_bison = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1000, tempHigh:10, stateHigh:"cooked_bison"};
-
-elements.raw_trout = {color:"#f08080", behavior:behaviors.WALL, category:"food", state:"solid", density:990, tempHigh:110, stateHigh:"cooked_trout", tempLow:-5, stateLow:"frozen_raw_trout", breakInto:"water"};
-elements.frozen_raw_trout = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:990, tempHigh:10, stateHigh:"raw_trout"};
-elements.cooked_trout = {color:"#ffb6c1", behavior:behaviors.WALL, category:"food", state:"solid", density:920, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_trout"};
-elements.frozen_cooked_trout = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"cooked_trout"};
-
-elements.raw_halibut = {color:"#fff5ee", behavior:behaviors.WALL, category:"food", state:"solid", density:995, tempHigh:110, stateHigh:"cooked_halibut", tempLow:-5, stateLow:"frozen_raw_halibut", breakInto:"water"};
-elements.frozen_raw_halibut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:995, tempHigh:10, stateHigh:"raw_halibut"};
-elements.cooked_halibut = {color:"#fdf5e6", behavior:behaviors.WALL, category:"food", state:"solid", density:925, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_halibut"};
-elements.frozen_cooked_halibut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:925, tempHigh:10, stateHigh:"cooked_halibut"};
-
-elements.raw_mahi_mahi = {color:"#ffdab9", behavior:behaviors.WALL, category:"food", state:"solid", density:985, tempHigh:110, stateHigh:"cooked_mahi_mahi", tempLow:-5, stateLow:"frozen_raw_mahi_mahi", breakInto:"water"};
-elements.frozen_raw_mahi_mahi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:985, tempHigh:10, stateHigh:"raw_mahi_mahi"};
-elements.cooked_mahi_mahi = {color:"#ffe4b5", behavior:behaviors.WALL, category:"food", state:"solid", density:915, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_mahi_mahi"};
-elements.frozen_cooked_mahi_mahi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:915, tempHigh:10, stateHigh:"cooked_mahi_mahi"};
-
-elements.raw_mackerel = {color:"#b0c4de", behavior:behaviors.WALL, category:"food", state:"solid", density:990, tempHigh:110, stateHigh:"cooked_mackerel", tempLow:-5, stateLow:"frozen_raw_mackerel", breakInto:"water"};
-elements.frozen_raw_mackerel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:990, tempHigh:10, stateHigh:"raw_mackerel"};
-elements.cooked_mackerel = {color:"#778899", behavior:behaviors.WALL, category:"food", state:"solid", density:920, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_mackerel"};
-elements.frozen_cooked_mackerel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"cooked_mackerel"};
-
-elements.raw_sardine = {color:"#c0c0c0", behavior:behaviors.WALL, category:"food", state:"solid", density:980, tempHigh:110, stateHigh:"cooked_sardine", tempLow:-5, stateLow:"frozen_raw_sardine", breakInto:"water"};
-elements.frozen_raw_sardine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:980, tempHigh:10, stateHigh:"raw_sardine"};
-elements.cooked_sardine = {color:"#808080", behavior:behaviors.WALL, category:"food", state:"solid", density:910, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_sardine"};
-elements.frozen_cooked_sardine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"cooked_sardine"};
-
-elements.raw_anchovy = {color:"#dcdcdc", behavior:behaviors.WALL, category:"food", state:"solid", density:980, tempHigh:110, stateHigh:"cooked_anchovy", tempLow:-5, stateLow:"frozen_raw_anchovy", breakInto:"water"};
-elements.frozen_raw_anchovy = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:980, tempHigh:10, stateHigh:"raw_anchovy"};
-elements.cooked_anchovy = {color:"#a9a9a9", behavior:behaviors.WALL, category:"food", state:"solid", density:910, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_anchovy"};
-elements.frozen_cooked_anchovy = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"cooked_anchovy"};
-
-elements.raw_scallop = {color:"#fffaf0", behavior:behaviors.WALL, category:"food", state:"solid", density:1010, tempHigh:110, stateHigh:"cooked_scallop", tempLow:-5, stateLow:"frozen_raw_scallop", breakInto:"water"};
-elements.frozen_raw_scallop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"raw_scallop"};
-elements.cooked_scallop = {color:"#ffe4c4", behavior:behaviors.WALL, category:"food", state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_scallop"};
-elements.frozen_cooked_scallop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"cooked_scallop"};
-
-elements.raw_mussel = {color:"#ffa07a", behavior:behaviors.WALL, category:"food", state:"solid", density:1010, tempHigh:110, stateHigh:"cooked_mussel", tempLow:-5, stateLow:"frozen_raw_mussel", breakInto:"water"};
-elements.frozen_raw_mussel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"raw_mussel"};
-elements.cooked_mussel = {color:"#ff7f50", behavior:behaviors.WALL, category:"food", state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_mussel"};
-elements.frozen_cooked_mussel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"cooked_mussel"};
-
-elements.raw_crayfish = {color:"#cd5c5c", behavior:behaviors.WALL, category:"food", state:"solid", density:1020, tempHigh:110, stateHigh:"cooked_crayfish", tempLow:-5, stateLow:"frozen_raw_crayfish", breakInto:"water"};
-elements.frozen_raw_crayfish = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1020, tempHigh:10, stateHigh:"raw_crayfish"};
-elements.cooked_crayfish = {color:"#ff0000", behavior:behaviors.WALL, category:"food", state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_crayfish"};
-elements.frozen_cooked_crayfish = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"cooked_crayfish"};
-
-elements.raw_eel = {color:"#a9a9a9", behavior:behaviors.WALL, category:"food", state:"solid", density:1000, tempHigh:110, stateHigh:"cooked_eel", tempLow:-5, stateLow:"frozen_raw_eel", breakInto:"blood"};
-elements.frozen_raw_eel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1000, tempHigh:10, stateHigh:"raw_eel"};
-elements.cooked_eel = {color:"#fff8dc", behavior:behaviors.WALL, category:"food", state:"solid", density:930, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_eel"};
-elements.frozen_cooked_eel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"cooked_eel"};
-
-elements.raw_urchin = {color:"#ffa500", behavior:behaviors.WALL, category:"food", state:"solid", density:1030, tempHigh:110, stateHigh:"cooked_urchin", tempLow:-5, stateLow:"frozen_raw_urchin", breakInto:"water"};
-elements.frozen_raw_urchin = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1030, tempHigh:10, stateHigh:"raw_urchin"};
-elements.cooked_urchin = {color:"#ff8c00", behavior:behaviors.WALL, category:"food", state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_urchin"};
-elements.frozen_cooked_urchin = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"cooked_urchin"};
-
-elements.raw_escargot = {color:"#8b4513", behavior:behaviors.WALL, category:"food", state:"solid", density:1040, tempHigh:110, stateHigh:"cooked_escargot", tempLow:-5, stateLow:"frozen_raw_escargot", breakInto:"water"};
-elements.frozen_raw_escargot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1040, tempHigh:10, stateHigh:"raw_escargot"};
-elements.cooked_escargot = {color:"#a0522d", behavior:behaviors.WALL, category:"food", state:"solid", density:970, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_escargot"};
-elements.frozen_cooked_escargot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:970, tempHigh:10, stateHigh:"cooked_escargot"};
-
-// --- 2. DOUGHS & BATTERS (Raw -> Baked) ---
-elements.raw_churro_dough = {color:"#f5deb3", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:900, tempHigh:120, stateHigh:"baked_churro", tempLow:-5, stateLow:"frozen_raw_churro_dough", breakInto:"water"};
-elements.frozen_raw_churro_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:900, tempHigh:10, stateHigh:"raw_churro_dough"};
-elements.baked_churro = {color:"#d2691e", behavior:behaviors.WALL, category:"food", state:"solid", density:800, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_churro"};
-elements.frozen_baked_churro = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:800, tempHigh:10, stateHigh:"baked_churro"};
-
-elements.raw_pretzel_dough = {color:"#f5f5dc", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:910, tempHigh:120, stateHigh:"baked_pretzel", tempLow:-5, stateLow:"frozen_raw_pretzel_dough", breakInto:"water"};
-elements.frozen_raw_pretzel_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"raw_pretzel_dough"};
-elements.baked_pretzel = {color:"#8b4513", behavior:behaviors.WALL, category:"food", state:"solid", density:810, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_pretzel"};
-elements.frozen_baked_pretzel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:810, tempHigh:10, stateHigh:"baked_pretzel"};
-
-elements.raw_eclair_paste = {color:"#ffefd5", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:890, tempHigh:120, stateHigh:"baked_eclair", tempLow:-5, stateLow:"frozen_raw_eclair_paste", breakInto:"water"};
-elements.frozen_raw_eclair_paste = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:890, tempHigh:10, stateHigh:"raw_eclair_paste"};
-elements.baked_eclair = {color:"#cd853f", behavior:behaviors.WALL, category:"food", state:"solid", density:790, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_eclair"};
-elements.frozen_baked_eclair = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:790, tempHigh:10, stateHigh:"baked_eclair"};
-
-elements.raw_brioche_dough = {color:"#fff8dc", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:920, tempHigh:120, stateHigh:"baked_brioche", tempLow:-5, stateLow:"frozen_raw_brioche_dough", breakInto:"water"};
-elements.frozen_raw_brioche_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"raw_brioche_dough"};
-elements.baked_brioche = {color:"#daa520", behavior:behaviors.WALL, category:"food", state:"solid", density:820, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_brioche"};
-elements.frozen_baked_brioche = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:820, tempHigh:10, stateHigh:"baked_brioche"};
-
-elements.raw_focaccia_dough = {color:"#fdf5e6", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:930, tempHigh:120, stateHigh:"baked_focaccia", tempLow:-5, stateLow:"frozen_raw_focaccia_dough", breakInto:"water"};
-elements.frozen_raw_focaccia_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"raw_focaccia_dough"};
-elements.baked_focaccia = {color:"#f4a460", behavior:behaviors.WALL, category:"food", state:"solid", density:830, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_focaccia"};
-elements.frozen_baked_focaccia = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:830, tempHigh:10, stateHigh:"baked_focaccia"};
-
-elements.raw_ciabatta_dough = {color:"#faf0e6", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:915, tempHigh:120, stateHigh:"baked_ciabatta", tempLow:-5, stateLow:"frozen_raw_ciabatta_dough", breakInto:"water"};
-elements.frozen_raw_ciabatta_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:915, tempHigh:10, stateHigh:"raw_ciabatta_dough"};
-elements.baked_ciabatta = {color:"#deb887", behavior:behaviors.WALL, category:"food", state:"solid", density:815, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_ciabatta"};
-elements.frozen_baked_ciabatta = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:815, tempHigh:10, stateHigh:"baked_ciabatta"};
-
-elements.raw_sourdough_starter = {color:"#fffacd", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:950, tempHigh:120, stateHigh:"baked_sourdough", tempLow:-5, stateLow:"frozen_raw_sourdough_starter", breakInto:"water"};
-elements.frozen_raw_sourdough_starter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"raw_sourdough_starter"};
-elements.baked_sourdough = {color:"#cd853f", behavior:behaviors.WALL, category:"food", state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_sourdough"};
-elements.frozen_baked_sourdough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:850, tempHigh:10, stateHigh:"baked_sourdough"};
-
-elements.raw_pancake_batter = {color:"#ffe4b5", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1020, tempHigh:120, stateHigh:"baked_pancake", tempLow:-5, stateLow:"frozen_raw_pancake_batter", breakInto:"water"};
-elements.frozen_raw_pancake_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1020, tempHigh:10, stateHigh:"raw_pancake_batter"};
-elements.baked_pancake = {color:"#f4a460", behavior:behaviors.WALL, category:"food", state:"solid", density:920, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_pancake"};
-elements.frozen_baked_pancake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"baked_pancake"};
-
-elements.raw_crepe_batter = {color:"#ffefd5", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1010, tempHigh:120, stateHigh:"baked_crepe", tempLow:-5, stateLow:"frozen_raw_crepe_batter", breakInto:"water"};
-elements.frozen_raw_crepe_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"raw_crepe_batter"};
-elements.baked_crepe = {color:"#e6c280", behavior:behaviors.WALL, category:"food", state:"solid", density:910, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_crepe"};
-elements.frozen_baked_crepe = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"baked_crepe"};
-
-elements.raw_blini_batter = {color:"#ffebcd", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1015, tempHigh:120, stateHigh:"baked_blini", tempLow:-5, stateLow:"frozen_raw_blini_batter", breakInto:"water"};
-elements.frozen_raw_blini_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1015, tempHigh:10, stateHigh:"raw_blini_batter"};
-elements.baked_blini = {color:"#d2b48c", behavior:behaviors.WALL, category:"food", state:"solid", density:915, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_blini"};
-elements.frozen_baked_blini = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:915, tempHigh:10, stateHigh:"baked_blini"};
-
-elements.raw_muffin_batter = {color:"#ffdead", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1050, tempHigh:120, stateHigh:"baked_muffin", tempLow:-5, stateLow:"frozen_raw_muffin_batter", breakInto:"water"};
-elements.frozen_raw_muffin_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1050, tempHigh:10, stateHigh:"raw_muffin_batter"};
-elements.baked_muffin = {color:"#8b4513", behavior:behaviors.WALL, category:"food", state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_muffin"};
-elements.frozen_baked_muffin = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"baked_muffin"};
-
-elements.raw_cupcake_batter = {color:"#ffe4e1", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1060, tempHigh:120, stateHigh:"baked_cupcake", tempLow:-5, stateLow:"frozen_raw_cupcake_batter", breakInto:"water"};
-elements.frozen_raw_cupcake_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1060, tempHigh:10, stateHigh:"raw_cupcake_batter"};
-elements.baked_cupcake = {color:"#ffb6c1", behavior:behaviors.WALL, category:"food", state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_cupcake"};
-elements.frozen_baked_cupcake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"baked_cupcake"};
-
-elements.raw_brownie_batter = {color:"#5c4033", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1080, tempHigh:120, stateHigh:"baked_brownie", tempLow:-5, stateLow:"frozen_raw_brownie_batter", breakInto:"water"};
-elements.frozen_raw_brownie_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1080, tempHigh:10, stateHigh:"raw_brownie_batter"};
-elements.baked_brownie = {color:"#3e2723", behavior:behaviors.WALL, category:"food", state:"solid", density:980, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_brownie"};
-elements.frozen_baked_brownie = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:980, tempHigh:10, stateHigh:"baked_brownie"};
-
-elements.raw_blondie_batter = {color:"#f5deb3", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1070, tempHigh:120, stateHigh:"baked_blondie", tempLow:-5, stateLow:"frozen_raw_blondie_batter", breakInto:"water"};
-elements.frozen_raw_blondie_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1070, tempHigh:10, stateHigh:"raw_blondie_batter"};
-elements.baked_blondie = {color:"#d2b48c", behavior:behaviors.WALL, category:"food", state:"solid", density:970, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_blondie"};
-elements.frozen_baked_blondie = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:970, tempHigh:10, stateHigh:"baked_blondie"};
-
-elements.raw_cornbread_batter = {color:"#fff8dc", behavior:behaviors.LIQUID, category:"food", state:"liquid", density:1040, tempHigh:120, stateHigh:"baked_cornbread", tempLow:-5, stateLow:"frozen_raw_cornbread_batter", breakInto:"water"};
-elements.frozen_raw_cornbread_batter = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1040, tempHigh:10, stateHigh:"raw_cornbread_batter"};
-elements.baked_cornbread = {color:"#ffd700", behavior:behaviors.WALL, category:"food", state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_cornbread"};
-elements.frozen_baked_cornbread = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"baked_cornbread"};
-
-elements.raw_biscuit_dough = {color:"#ffefd5", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:930, tempHigh:120, stateHigh:"baked_biscuit", tempLow:-5, stateLow:"frozen_raw_biscuit_dough", breakInto:"water"};
-elements.frozen_raw_biscuit_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"raw_biscuit_dough"};
-elements.baked_biscuit = {color:"#deb887", behavior:behaviors.WALL, category:"food", state:"solid", density:830, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_biscuit"};
-elements.frozen_baked_biscuit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:830, tempHigh:10, stateHigh:"baked_biscuit"};
-
-elements.raw_scone_dough = {color:"#faebd7", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:940, tempHigh:120, stateHigh:"baked_scone", tempLow:-5, stateLow:"frozen_raw_scone_dough", breakInto:"water"};
-elements.frozen_raw_scone_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"raw_scone_dough"};
-elements.baked_scone = {color:"#cd853f", behavior:behaviors.WALL, category:"food", state:"solid", density:840, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_scone"};
-elements.frozen_baked_scone = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:840, tempHigh:10, stateHigh:"baked_scone"};
-
-elements.raw_tart_dough = {color:"#fff5ee", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:950, tempHigh:120, stateHigh:"baked_tart", tempLow:-5, stateLow:"frozen_raw_tart_dough", breakInto:"water"};
-elements.frozen_raw_tart_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"raw_tart_dough"};
-elements.baked_tart = {color:"#f4a460", behavior:behaviors.WALL, category:"food", state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_tart"};
-elements.frozen_baked_tart = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:850, tempHigh:10, stateHigh:"baked_tart"};
-
-elements.raw_phyllo_dough = {color:"#fffff0", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:960, tempHigh:120, stateHigh:"baked_phyllo", tempLow:-5, stateLow:"frozen_raw_phyllo_dough", breakInto:"water"};
-elements.frozen_raw_phyllo_dough = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"raw_phyllo_dough"};
-elements.baked_phyllo = {color:"#e6c280", behavior:behaviors.WALL, category:"food", state:"solid", density:860, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_phyllo"};
-elements.frozen_baked_phyllo = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:860, tempHigh:10, stateHigh:"baked_phyllo"};
-
-elements.raw_choux_pastry = {color:"#ffebcd", behavior:behaviors.STURDYPOWDER, category:"food", state:"solid", density:970, tempHigh:120, stateHigh:"baked_choux", tempLow:-5, stateLow:"frozen_raw_choux_pastry", breakInto:"water"};
-elements.frozen_raw_choux_pastry = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:970, tempHigh:10, stateHigh:"raw_choux_pastry"};
-elements.baked_choux = {color:"#d2b48c", behavior:behaviors.WALL, category:"food", state:"solid", density:870, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_choux"};
-elements.frozen_baked_choux = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:870, tempHigh:10, stateHigh:"baked_choux"};
-
-// --- 3. NUTS & SEEDS (Raw -> Roasted) ---
-elements.raw_peanut = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:600, tempHigh:120, stateHigh:"roasted_peanut", tempLow:-5, stateLow:"frozen_raw_peanut", breakInto:"nut_oil"};
-elements.frozen_raw_peanut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:600, tempHigh:10, stateHigh:"raw_peanut"};
-elements.roasted_peanut = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:550, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_peanut"};
-elements.frozen_roasted_peanut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:550, tempHigh:10, stateHigh:"roasted_peanut"};
-
-elements.raw_almond = {color:"#ffebcd", behavior:behaviors.POWDER, category:"food", state:"solid", density:610, tempHigh:120, stateHigh:"roasted_almond", tempLow:-5, stateLow:"frozen_raw_almond", breakInto:"nut_oil"};
-elements.frozen_raw_almond = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:610, tempHigh:10, stateHigh:"raw_almond"};
-elements.roasted_almond = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:560, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_almond"};
-elements.frozen_roasted_almond = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:560, tempHigh:10, stateHigh:"roasted_almond"};
-
-elements.raw_walnut = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:620, tempHigh:120, stateHigh:"roasted_walnut", tempLow:-5, stateLow:"frozen_raw_walnut", breakInto:"nut_oil"};
-elements.frozen_raw_walnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:620, tempHigh:10, stateHigh:"raw_walnut"};
-elements.roasted_walnut = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:570, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_walnut"};
-elements.frozen_roasted_walnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:570, tempHigh:10, stateHigh:"roasted_walnut"};
-
-elements.raw_pecan = {color:"#cd853f", behavior:behaviors.POWDER, category:"food", state:"solid", density:630, tempHigh:120, stateHigh:"roasted_pecan", tempLow:-5, stateLow:"frozen_raw_pecan", breakInto:"nut_oil"};
-elements.frozen_raw_pecan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:630, tempHigh:10, stateHigh:"raw_pecan"};
-elements.roasted_pecan = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:580, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_pecan"};
-elements.frozen_roasted_pecan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:580, tempHigh:10, stateHigh:"roasted_pecan"};
-
-elements.raw_cashew = {color:"#fff8dc", behavior:behaviors.POWDER, category:"food", state:"solid", density:640, tempHigh:120, stateHigh:"roasted_cashew", tempLow:-5, stateLow:"frozen_raw_cashew", breakInto:"nut_oil"};
-elements.frozen_raw_cashew = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:640, tempHigh:10, stateHigh:"raw_cashew"};
-elements.roasted_cashew = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:590, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_cashew"};
-elements.frozen_roasted_cashew = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:590, tempHigh:10, stateHigh:"roasted_cashew"};
-
-elements.raw_pistachio = {color:"#93c572", behavior:behaviors.POWDER, category:"food", state:"solid", density:650, tempHigh:120, stateHigh:"roasted_pistachio", tempLow:-5, stateLow:"frozen_raw_pistachio", breakInto:"nut_oil"};
-elements.frozen_raw_pistachio = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:650, tempHigh:10, stateHigh:"raw_pistachio"};
-elements.roasted_pistachio = {color:"#556b2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:600, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_pistachio"};
-elements.frozen_roasted_pistachio = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:600, tempHigh:10, stateHigh:"roasted_pistachio"};
-
-elements.raw_macadamia = {color:"#fdf5e6", behavior:behaviors.POWDER, category:"food", state:"solid", density:660, tempHigh:120, stateHigh:"roasted_macadamia", tempLow:-5, stateLow:"frozen_raw_macadamia", breakInto:"nut_oil"};
-elements.frozen_raw_macadamia = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:660, tempHigh:10, stateHigh:"raw_macadamia"};
-elements.roasted_macadamia = {color:"#e6c280", behavior:behaviors.POWDER, category:"food", state:"solid", density:610, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_macadamia"};
-elements.frozen_roasted_macadamia = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:610, tempHigh:10, stateHigh:"roasted_macadamia"};
-
-elements.raw_hazelnut = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:670, tempHigh:120, stateHigh:"roasted_hazelnut", tempLow:-5, stateLow:"frozen_raw_hazelnut", breakInto:"nut_oil"};
-elements.frozen_raw_hazelnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:670, tempHigh:10, stateHigh:"raw_hazelnut"};
-elements.roasted_hazelnut = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:620, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_hazelnut"};
-elements.frozen_roasted_hazelnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:620, tempHigh:10, stateHigh:"roasted_hazelnut"};
-
-elements.raw_brazil_nut = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:680, tempHigh:120, stateHigh:"roasted_brazil_nut", tempLow:-5, stateLow:"frozen_raw_brazil_nut", breakInto:"nut_oil"};
-elements.frozen_raw_brazil_nut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:680, tempHigh:10, stateHigh:"raw_brazil_nut"};
-elements.roasted_brazil_nut = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:630, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_brazil_nut"};
-elements.frozen_roasted_brazil_nut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:630, tempHigh:10, stateHigh:"roasted_brazil_nut"};
-
-elements.raw_pine_nut = {color:"#fffacd", behavior:behaviors.POWDER, category:"food", state:"solid", density:690, tempHigh:120, stateHigh:"roasted_pine_nut", tempLow:-5, stateLow:"frozen_raw_pine_nut", breakInto:"nut_oil"};
-elements.frozen_raw_pine_nut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:690, tempHigh:10, stateHigh:"raw_pine_nut"};
-elements.roasted_pine_nut = {color:"#daa520", behavior:behaviors.POWDER, category:"food", state:"solid", density:640, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_pine_nut"};
-elements.frozen_roasted_pine_nut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:640, tempHigh:10, stateHigh:"roasted_pine_nut"};
-
-elements.raw_chestnut = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:700, tempHigh:120, stateHigh:"roasted_chestnut", tempLow:-5, stateLow:"frozen_raw_chestnut", breakInto:"nut_oil"};
-elements.frozen_raw_chestnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:700, tempHigh:10, stateHigh:"raw_chestnut"};
-elements.roasted_chestnut = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:650, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_chestnut"};
-elements.frozen_roasted_chestnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:650, tempHigh:10, stateHigh:"roasted_chestnut"};
-
-elements.raw_sunflower_seed = {color:"#d3d3d3", behavior:behaviors.POWDER, category:"food", state:"solid", density:710, tempHigh:120, stateHigh:"roasted_sunflower_seed", tempLow:-5, stateLow:"frozen_raw_sunflower_seed", breakInto:"nut_oil"};
-elements.frozen_raw_sunflower_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:710, tempHigh:10, stateHigh:"raw_sunflower_seed"};
-elements.roasted_sunflower_seed = {color:"#a9a9a9", behavior:behaviors.POWDER, category:"food", state:"solid", density:660, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_sunflower_seed"};
-elements.frozen_roasted_sunflower_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:660, tempHigh:10, stateHigh:"roasted_sunflower_seed"};
-
-elements.raw_pumpkin_seed = {color:"#9acd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:720, tempHigh:120, stateHigh:"roasted_pumpkin_seed", tempLow:-5, stateLow:"frozen_raw_pumpkin_seed", breakInto:"nut_oil"};
-elements.frozen_raw_pumpkin_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:720, tempHigh:10, stateHigh:"raw_pumpkin_seed"};
-elements.roasted_pumpkin_seed = {color:"#6b8e23", behavior:behaviors.POWDER, category:"food", state:"solid", density:670, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_pumpkin_seed"};
-elements.frozen_roasted_pumpkin_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:670, tempHigh:10, stateHigh:"roasted_pumpkin_seed"};
-
-elements.raw_sesame_seed = {color:"#fff8dc", behavior:behaviors.POWDER, category:"food", state:"solid", density:730, tempHigh:120, stateHigh:"roasted_sesame_seed", tempLow:-5, stateLow:"frozen_raw_sesame_seed", breakInto:"nut_oil"};
-elements.frozen_raw_sesame_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:730, tempHigh:10, stateHigh:"raw_sesame_seed"};
-elements.roasted_sesame_seed = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:680, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_sesame_seed"};
-elements.frozen_roasted_sesame_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:680, tempHigh:10, stateHigh:"roasted_sesame_seed"};
-
-elements.raw_flax_seed = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:740, tempHigh:120, stateHigh:"roasted_flax_seed", tempLow:-5, stateLow:"frozen_raw_flax_seed", breakInto:"nut_oil"};
-elements.frozen_raw_flax_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:740, tempHigh:10, stateHigh:"raw_flax_seed"};
-elements.roasted_flax_seed = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:690, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_flax_seed"};
-elements.frozen_roasted_flax_seed = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:690, tempHigh:10, stateHigh:"roasted_flax_seed"};
-
-// --- 4. VEGGIES (Raw -> Roasted) ---
-elements.raw_brussels_sprout = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:400, tempHigh:120, stateHigh:"roasted_brussels_sprout", tempLow:-5, stateLow:"frozen_raw_brussels_sprout", breakInto:"water"};
-elements.frozen_raw_brussels_sprout = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:400, tempHigh:10, stateHigh:"raw_brussels_sprout"};
-elements.roasted_brussels_sprout = {color:"#556b2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:350, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_brussels_sprout"};
-elements.frozen_roasted_brussels_sprout = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:350, tempHigh:10, stateHigh:"roasted_brussels_sprout"};
-
-elements.raw_swiss_chard = {color:"#32cd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:410, tempHigh:120, stateHigh:"cooked_swiss_chard", tempLow:-5, stateLow:"frozen_raw_swiss_chard", breakInto:"water"};
-elements.frozen_raw_swiss_chard = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:410, tempHigh:10, stateHigh:"raw_swiss_chard"};
-elements.cooked_swiss_chard = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:360, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_swiss_chard"};
-elements.frozen_cooked_swiss_chard = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:360, tempHigh:10, stateHigh:"cooked_swiss_chard"};
-
-elements.raw_collard_green = {color:"#2e8b57", behavior:behaviors.POWDER, category:"food", state:"solid", density:420, tempHigh:120, stateHigh:"cooked_collard_green", tempLow:-5, stateLow:"frozen_raw_collard_green", breakInto:"water"};
-elements.frozen_raw_collard_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:420, tempHigh:10, stateHigh:"raw_collard_green"};
-elements.cooked_collard_green = {color:"#004d00", behavior:behaviors.POWDER, category:"food", state:"solid", density:370, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_collard_green"};
-elements.frozen_cooked_collard_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:370, tempHigh:10, stateHigh:"cooked_collard_green"};
-
-elements.raw_mustard_green = {color:"#9acd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:430, tempHigh:120, stateHigh:"cooked_mustard_green", tempLow:-5, stateLow:"frozen_raw_mustard_green", breakInto:"water"};
-elements.frozen_raw_mustard_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:430, tempHigh:10, stateHigh:"raw_mustard_green"};
-elements.cooked_mustard_green = {color:"#6b8e23", behavior:behaviors.POWDER, category:"food", state:"solid", density:380, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_mustard_green"};
-elements.frozen_cooked_mustard_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:380, tempHigh:10, stateHigh:"cooked_mustard_green"};
-
-elements.raw_turnip_green = {color:"#7cfc00", behavior:behaviors.POWDER, category:"food", state:"solid", density:440, tempHigh:120, stateHigh:"cooked_turnip_green", tempLow:-5, stateLow:"frozen_raw_turnip_green", breakInto:"water"};
-elements.frozen_raw_turnip_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:440, tempHigh:10, stateHigh:"raw_turnip_green"};
-elements.cooked_turnip_green = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:390, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_turnip_green"};
-elements.frozen_cooked_turnip_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:390, tempHigh:10, stateHigh:"cooked_turnip_green"};
-
-elements.raw_beet_green = {color:"#8fbc8f", behavior:behaviors.POWDER, category:"food", state:"solid", density:450, tempHigh:120, stateHigh:"cooked_beet_green", tempLow:-5, stateLow:"frozen_raw_beet_green", breakInto:"water"};
-elements.frozen_raw_beet_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:450, tempHigh:10, stateHigh:"raw_beet_green"};
-elements.cooked_beet_green = {color:"#2e8b57", behavior:behaviors.POWDER, category:"food", state:"solid", density:400, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_beet_green"};
-elements.frozen_cooked_beet_green = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:400, tempHigh:10, stateHigh:"cooked_beet_green"};
-
-elements.raw_endive = {color:"#f0e68c", behavior:behaviors.POWDER, category:"food", state:"solid", density:460, tempHigh:120, stateHigh:"cooked_endive", tempLow:-5, stateLow:"frozen_raw_endive", breakInto:"water"};
-elements.frozen_raw_endive = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:460, tempHigh:10, stateHigh:"raw_endive"};
-elements.cooked_endive = {color:"#bdb76b", behavior:behaviors.POWDER, category:"food", state:"solid", density:410, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_endive"};
-elements.frozen_cooked_endive = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:410, tempHigh:10, stateHigh:"cooked_endive"};
-
-elements.raw_radicchio = {color:"#c71585", behavior:behaviors.POWDER, category:"food", state:"solid", density:470, tempHigh:120, stateHigh:"cooked_radicchio", tempLow:-5, stateLow:"frozen_raw_radicchio", breakInto:"water"};
-elements.frozen_raw_radicchio = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:470, tempHigh:10, stateHigh:"raw_radicchio"};
-elements.cooked_radicchio = {color:"#8b008b", behavior:behaviors.POWDER, category:"food", state:"solid", density:420, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_radicchio"};
-elements.frozen_cooked_radicchio = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:420, tempHigh:10, stateHigh:"cooked_radicchio"};
-
-elements.raw_frisee = {color:"#98fb98", behavior:behaviors.POWDER, category:"food", state:"solid", density:480, tempHigh:120, stateHigh:"cooked_frisee", tempLow:-5, stateLow:"frozen_raw_frisee", breakInto:"water"};
-elements.frozen_raw_frisee = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:480, tempHigh:10, stateHigh:"raw_frisee"};
-elements.cooked_frisee = {color:"#3cb371", behavior:behaviors.POWDER, category:"food", state:"solid", density:430, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_frisee"};
-elements.frozen_cooked_frisee = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:430, tempHigh:10, stateHigh:"cooked_frisee"};
-
-elements.raw_iceberg_lettuce = {color:"#e0ffff", behavior:behaviors.POWDER, category:"food", state:"solid", density:490, tempHigh:120, stateHigh:"cooked_iceberg_lettuce", tempLow:-5, stateLow:"frozen_raw_iceberg_lettuce", breakInto:"water"};
-elements.frozen_raw_iceberg_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:490, tempHigh:10, stateHigh:"raw_iceberg_lettuce"};
-elements.cooked_iceberg_lettuce = {color:"#afeeee", behavior:behaviors.POWDER, category:"food", state:"solid", density:440, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_iceberg_lettuce"};
-elements.frozen_cooked_iceberg_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:440, tempHigh:10, stateHigh:"cooked_iceberg_lettuce"};
-
-elements.raw_romaine_lettuce = {color:"#90ee90", behavior:behaviors.POWDER, category:"food", state:"solid", density:500, tempHigh:120, stateHigh:"cooked_romaine_lettuce", tempLow:-5, stateLow:"frozen_raw_romaine_lettuce", breakInto:"water"};
-elements.frozen_raw_romaine_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:500, tempHigh:10, stateHigh:"raw_romaine_lettuce"};
-elements.cooked_romaine_lettuce = {color:"#32cd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:450, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_romaine_lettuce"};
-elements.frozen_cooked_romaine_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:450, tempHigh:10, stateHigh:"cooked_romaine_lettuce"};
-
-elements.raw_butterhead_lettuce = {color:"#ccffcc", behavior:behaviors.POWDER, category:"food", state:"solid", density:510, tempHigh:120, stateHigh:"cooked_butterhead_lettuce", tempLow:-5, stateLow:"frozen_raw_butterhead_lettuce", breakInto:"water"};
-elements.frozen_raw_butterhead_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:510, tempHigh:10, stateHigh:"raw_butterhead_lettuce"};
-elements.cooked_butterhead_lettuce = {color:"#99cc99", behavior:behaviors.POWDER, category:"food", state:"solid", density:460, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_butterhead_lettuce"};
-elements.frozen_cooked_butterhead_lettuce = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:460, tempHigh:10, stateHigh:"cooked_butterhead_lettuce"};
-
-elements.raw_kohlrabi = {color:"#d8bfd8", behavior:behaviors.POWDER, category:"food", state:"solid", density:520, tempHigh:120, stateHigh:"roasted_kohlrabi", tempLow:-5, stateLow:"frozen_raw_kohlrabi", breakInto:"water"};
-elements.frozen_raw_kohlrabi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:520, tempHigh:10, stateHigh:"raw_kohlrabi"};
-elements.roasted_kohlrabi = {color:"#dda0dd", behavior:behaviors.POWDER, category:"food", state:"solid", density:470, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_kohlrabi"};
-elements.frozen_roasted_kohlrabi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:470, tempHigh:10, stateHigh:"roasted_kohlrabi"};
-
-elements.raw_rutabaga = {color:"#ffefd5", behavior:behaviors.POWDER, category:"food", state:"solid", density:530, tempHigh:120, stateHigh:"roasted_rutabaga", tempLow:-5, stateLow:"frozen_raw_rutabaga", breakInto:"water"};
-elements.frozen_raw_rutabaga = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:530, tempHigh:10, stateHigh:"raw_rutabaga"};
-elements.roasted_rutabaga = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:480, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_rutabaga"};
-elements.frozen_roasted_rutabaga = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:480, tempHigh:10, stateHigh:"roasted_rutabaga"};
-
-elements.raw_jicama = {color:"#fdf5e6", behavior:behaviors.POWDER, category:"food", state:"solid", density:540, tempHigh:120, stateHigh:"roasted_jicama", tempLow:-5, stateLow:"frozen_raw_jicama", breakInto:"water"};
-elements.frozen_raw_jicama = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:540, tempHigh:10, stateHigh:"raw_jicama"};
-elements.roasted_jicama = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:490, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_jicama"};
-elements.frozen_roasted_jicama = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:490, tempHigh:10, stateHigh:"roasted_jicama"};
-
-elements.raw_sunchoke = {color:"#fff8dc", behavior:behaviors.POWDER, category:"food", state:"solid", density:550, tempHigh:120, stateHigh:"roasted_sunchoke", tempLow:-5, stateLow:"frozen_raw_sunchoke", breakInto:"water"};
-elements.frozen_raw_sunchoke = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:550, tempHigh:10, stateHigh:"raw_sunchoke"};
-elements.roasted_sunchoke = {color:"#bdb76b", behavior:behaviors.POWDER, category:"food", state:"solid", density:500, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_sunchoke"};
-elements.frozen_roasted_sunchoke = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:500, tempHigh:10, stateHigh:"roasted_sunchoke"};
-
-elements.raw_bamboo_shoot = {color:"#fffacd", behavior:behaviors.POWDER, category:"food", state:"solid", density:560, tempHigh:120, stateHigh:"cooked_bamboo_shoot", tempLow:-5, stateLow:"frozen_raw_bamboo_shoot", breakInto:"water"};
-elements.frozen_raw_bamboo_shoot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:560, tempHigh:10, stateHigh:"raw_bamboo_shoot"};
-elements.cooked_bamboo_shoot = {color:"#f0e68c", behavior:behaviors.POWDER, category:"food", state:"solid", density:510, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_bamboo_shoot"};
-elements.frozen_cooked_bamboo_shoot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:510, tempHigh:10, stateHigh:"cooked_bamboo_shoot"};
-
-elements.raw_heart_of_palm = {color:"#fffff0", behavior:behaviors.POWDER, category:"food", state:"solid", density:570, tempHigh:120, stateHigh:"cooked_heart_of_palm", tempLow:-5, stateLow:"frozen_raw_heart_of_palm", breakInto:"water"};
-elements.frozen_raw_heart_of_palm = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:570, tempHigh:10, stateHigh:"raw_heart_of_palm"};
-elements.cooked_heart_of_palm = {color:"#fafad2", behavior:behaviors.POWDER, category:"food", state:"solid", density:520, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_heart_of_palm"};
-elements.frozen_cooked_heart_of_palm = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:520, tempHigh:10, stateHigh:"cooked_heart_of_palm"};
-
-elements.raw_water_chestnut = {color:"#f0ffff", behavior:behaviors.POWDER, category:"food", state:"solid", density:580, tempHigh:120, stateHigh:"cooked_water_chestnut", tempLow:-5, stateLow:"frozen_raw_water_chestnut", breakInto:"water"};
-elements.frozen_raw_water_chestnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:580, tempHigh:10, stateHigh:"raw_water_chestnut"};
-elements.cooked_water_chestnut = {color:"#e0eeee", behavior:behaviors.POWDER, category:"food", state:"solid", density:530, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_water_chestnut"};
-elements.frozen_cooked_water_chestnut = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:530, tempHigh:10, stateHigh:"cooked_water_chestnut"};
-
-elements.raw_lotus_root = {color:"#ffe4e1", behavior:behaviors.POWDER, category:"food", state:"solid", density:590, tempHigh:120, stateHigh:"cooked_lotus_root", tempLow:-5, stateLow:"frozen_raw_lotus_root", breakInto:"water"};
-elements.frozen_raw_lotus_root = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:590, tempHigh:10, stateHigh:"raw_lotus_root"};
-elements.cooked_lotus_root = {color:"#ffc0cb", behavior:behaviors.POWDER, category:"food", state:"solid", density:540, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_lotus_root"};
-elements.frozen_cooked_lotus_root = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:540, tempHigh:10, stateHigh:"cooked_lotus_root"};
-
-elements.raw_burdock_root = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:600, tempHigh:120, stateHigh:"cooked_burdock_root", tempLow:-5, stateLow:"frozen_raw_burdock_root", breakInto:"water"};
-elements.frozen_raw_burdock_root = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:600, tempHigh:10, stateHigh:"raw_burdock_root"};
-elements.cooked_burdock_root = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:550, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_burdock_root"};
-elements.frozen_cooked_burdock_root = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:550, tempHigh:10, stateHigh:"cooked_burdock_root"};
-
-elements.raw_bitter_melon = {color:"#9acd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:610, tempHigh:120, stateHigh:"cooked_bitter_melon", tempLow:-5, stateLow:"frozen_raw_bitter_melon", breakInto:"water"};
-elements.frozen_raw_bitter_melon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:610, tempHigh:10, stateHigh:"raw_bitter_melon"};
-elements.cooked_bitter_melon = {color:"#6b8e23", behavior:behaviors.POWDER, category:"food", state:"solid", density:560, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_bitter_melon"};
-elements.frozen_cooked_bitter_melon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:560, tempHigh:10, stateHigh:"cooked_bitter_melon"};
-
-elements.raw_butternut_squash = {color:"#ffebcd", behavior:behaviors.POWDER, category:"food", state:"solid", density:620, tempHigh:120, stateHigh:"roasted_butternut_squash", tempLow:-5, stateLow:"frozen_raw_butternut_squash", breakInto:"water"};
-elements.frozen_raw_butternut_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:620, tempHigh:10, stateHigh:"raw_butternut_squash"};
-elements.roasted_butternut_squash = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:570, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_butternut_squash"};
-elements.frozen_roasted_butternut_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:570, tempHigh:10, stateHigh:"roasted_butternut_squash"};
-
-elements.raw_acorn_squash = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:630, tempHigh:120, stateHigh:"roasted_acorn_squash", tempLow:-5, stateLow:"frozen_raw_acorn_squash", breakInto:"water"};
-elements.frozen_raw_acorn_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:630, tempHigh:10, stateHigh:"raw_acorn_squash"};
-elements.roasted_acorn_squash = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:580, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_acorn_squash"};
-elements.frozen_roasted_acorn_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:580, tempHigh:10, stateHigh:"roasted_acorn_squash"};
-
-elements.raw_spaghetti_squash = {color:"#fffacd", behavior:behaviors.POWDER, category:"food", state:"solid", density:640, tempHigh:120, stateHigh:"roasted_spaghetti_squash", tempLow:-5, stateLow:"frozen_raw_spaghetti_squash", breakInto:"water"};
-elements.frozen_raw_spaghetti_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:640, tempHigh:10, stateHigh:"raw_spaghetti_squash"};
-elements.roasted_spaghetti_squash = {color:"#ffd700", behavior:behaviors.POWDER, category:"food", state:"solid", density:590, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roasted_spaghetti_squash"};
-elements.frozen_roasted_spaghetti_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:590, tempHigh:10, stateHigh:"roasted_spaghetti_squash"};
-
-elements.raw_courgette = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:650, tempHigh:120, stateHigh:"cooked_courgette", tempLow:-5, stateLow:"frozen_raw_courgette", breakInto:"water"};
-elements.frozen_raw_courgette = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:650, tempHigh:10, stateHigh:"raw_courgette"};
-elements.cooked_courgette = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:600, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_courgette"};
-elements.frozen_cooked_courgette = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:600, tempHigh:10, stateHigh:"cooked_courgette"};
-
-elements.raw_pattypan_squash = {color:"#f0e68c", behavior:behaviors.POWDER, category:"food", state:"solid", density:660, tempHigh:120, stateHigh:"cooked_pattypan_squash", tempLow:-5, stateLow:"frozen_raw_pattypan_squash", breakInto:"water"};
-elements.frozen_raw_pattypan_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:660, tempHigh:10, stateHigh:"raw_pattypan_squash"};
-elements.cooked_pattypan_squash = {color:"#bdb76b", behavior:behaviors.POWDER, category:"food", state:"solid", density:610, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_pattypan_squash"};
-elements.frozen_cooked_pattypan_squash = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:610, tempHigh:10, stateHigh:"cooked_pattypan_squash"};
-
-elements.raw_chayote = {color:"#98fb98", behavior:behaviors.POWDER, category:"food", state:"solid", density:670, tempHigh:120, stateHigh:"cooked_chayote", tempLow:-5, stateLow:"frozen_raw_chayote", breakInto:"water"};
-elements.frozen_raw_chayote = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:670, tempHigh:10, stateHigh:"raw_chayote"};
-elements.cooked_chayote = {color:"#3cb371", behavior:behaviors.POWDER, category:"food", state:"solid", density:620, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_chayote"};
-elements.frozen_cooked_chayote = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:620, tempHigh:10, stateHigh:"cooked_chayote"};
-
-elements.raw_tomatillo = {color:"#adff2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:680, tempHigh:120, stateHigh:"cooked_tomatillo", tempLow:-5, stateLow:"frozen_raw_tomatillo", breakInto:"water"};
-elements.frozen_raw_tomatillo = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:680, tempHigh:10, stateHigh:"raw_tomatillo"};
-elements.cooked_tomatillo = {color:"#808000", behavior:behaviors.POWDER, category:"food", state:"solid", density:630, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_tomatillo"};
-elements.frozen_cooked_tomatillo = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:630, tempHigh:10, stateHigh:"cooked_tomatillo"};
-
-elements.raw_nopales = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:690, tempHigh:120, stateHigh:"cooked_nopales", tempLow:-5, stateLow:"frozen_raw_nopales", breakInto:"water"};
-elements.frozen_raw_nopales = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:690, tempHigh:10, stateHigh:"raw_nopales"};
-elements.cooked_nopales = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:640, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_nopales"};
-elements.frozen_cooked_nopales = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:640, tempHigh:10, stateHigh:"cooked_nopales"};
-
-// --- 5. FUNGI & ALGAE (Raw -> Cooked) ---
-elements.raw_oyster_mushroom = {color:"#e6e6fa", behavior:behaviors.POWDER, category:"food", state:"solid", density:700, tempHigh:120, stateHigh:"sauteed_oyster_mushroom", tempLow:-5, stateLow:"frozen_raw_oyster_mushroom", breakInto:"water"};
-elements.frozen_raw_oyster_mushroom = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:700, tempHigh:10, stateHigh:"raw_oyster_mushroom"};
-elements.sauteed_oyster_mushroom = {color:"#b0c4de", behavior:behaviors.POWDER, category:"food", state:"solid", density:650, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_oyster_mushroom"};
-elements.frozen_sauteed_oyster_mushroom = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:650, tempHigh:10, stateHigh:"sauteed_oyster_mushroom"};
-
-elements.raw_cremini = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:710, tempHigh:120, stateHigh:"sauteed_cremini", tempLow:-5, stateLow:"frozen_raw_cremini", breakInto:"water"};
-elements.frozen_raw_cremini = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:710, tempHigh:10, stateHigh:"raw_cremini"};
-elements.sauteed_cremini = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:660, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_cremini"};
-elements.frozen_sauteed_cremini = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:660, tempHigh:10, stateHigh:"sauteed_cremini"};
-
-elements.raw_chanterelle = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:720, tempHigh:120, stateHigh:"sauteed_chanterelle", tempLow:-5, stateLow:"frozen_raw_chanterelle", breakInto:"water"};
-elements.frozen_raw_chanterelle = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:720, tempHigh:10, stateHigh:"raw_chanterelle"};
-elements.sauteed_chanterelle = {color:"#ff8c00", behavior:behaviors.POWDER, category:"food", state:"solid", density:670, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_chanterelle"};
-elements.frozen_sauteed_chanterelle = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:670, tempHigh:10, stateHigh:"sauteed_chanterelle"};
-
-elements.raw_porcini = {color:"#d2691e", behavior:behaviors.POWDER, category:"food", state:"solid", density:730, tempHigh:120, stateHigh:"sauteed_porcini", tempLow:-5, stateLow:"frozen_raw_porcini", breakInto:"water"};
-elements.frozen_raw_porcini = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:730, tempHigh:10, stateHigh:"raw_porcini"};
-elements.sauteed_porcini = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:680, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_porcini"};
-elements.frozen_sauteed_porcini = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:680, tempHigh:10, stateHigh:"sauteed_porcini"};
-
-elements.raw_morel = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:740, tempHigh:120, stateHigh:"sauteed_morel", tempLow:-5, stateLow:"frozen_raw_morel", breakInto:"water"};
-elements.frozen_raw_morel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:740, tempHigh:10, stateHigh:"raw_morel"};
-elements.sauteed_morel = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:690, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_morel"};
-elements.frozen_sauteed_morel = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:690, tempHigh:10, stateHigh:"sauteed_morel"};
-
-elements.raw_maitake = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:750, tempHigh:120, stateHigh:"sauteed_maitake", tempLow:-5, stateLow:"frozen_raw_maitake", breakInto:"water"};
-elements.frozen_raw_maitake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:750, tempHigh:10, stateHigh:"raw_maitake"};
-elements.sauteed_maitake = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:700, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_maitake"};
-elements.frozen_sauteed_maitake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:700, tempHigh:10, stateHigh:"sauteed_maitake"};
-
-elements.raw_matsutake = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:760, tempHigh:120, stateHigh:"sauteed_matsutake", tempLow:-5, stateLow:"frozen_raw_matsutake", breakInto:"water"};
-elements.frozen_raw_matsutake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:760, tempHigh:10, stateHigh:"raw_matsutake"};
-elements.sauteed_matsutake = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:710, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_matsutake"};
-elements.frozen_sauteed_matsutake = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:710, tempHigh:10, stateHigh:"sauteed_matsutake"};
-
-elements.raw_wood_ear = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:770, tempHigh:120, stateHigh:"sauteed_wood_ear", tempLow:-5, stateLow:"frozen_raw_wood_ear", breakInto:"water"};
-elements.frozen_raw_wood_ear = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:770, tempHigh:10, stateHigh:"raw_wood_ear"};
-elements.sauteed_wood_ear = {color:"#2b1d14", behavior:behaviors.POWDER, category:"food", state:"solid", density:720, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sauteed_wood_ear"};
-elements.frozen_sauteed_wood_ear = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:720, tempHigh:10, stateHigh:"sauteed_wood_ear"};
-
-elements.raw_kelp = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:780, tempHigh:120, stateHigh:"cooked_kelp", tempLow:-5, stateLow:"frozen_raw_kelp", breakInto:"water"};
-elements.frozen_raw_kelp = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:780, tempHigh:10, stateHigh:"raw_kelp"};
-elements.cooked_kelp = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:730, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_kelp"};
-elements.frozen_cooked_kelp = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:730, tempHigh:10, stateHigh:"cooked_kelp"};
-
-elements.raw_wakame = {color:"#32cd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:790, tempHigh:120, stateHigh:"cooked_wakame", tempLow:-5, stateLow:"frozen_raw_wakame", breakInto:"water"};
-elements.frozen_raw_wakame = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:790, tempHigh:10, stateHigh:"raw_wakame"};
-elements.cooked_wakame = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:740, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_wakame"};
-elements.frozen_cooked_wakame = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:740, tempHigh:10, stateHigh:"cooked_wakame"};
-
-elements.raw_nori = {color:"#004d00", behavior:behaviors.POWDER, category:"food", state:"solid", density:800, tempHigh:120, stateHigh:"cooked_nori", tempLow:-5, stateLow:"frozen_raw_nori", breakInto:"water"};
-elements.frozen_raw_nori = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:800, tempHigh:10, stateHigh:"raw_nori"};
-elements.cooked_nori = {color:"#003300", behavior:behaviors.POWDER, category:"food", state:"solid", density:750, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_nori"};
-elements.frozen_cooked_nori = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:750, tempHigh:10, stateHigh:"cooked_nori"};
-
-elements.raw_kombu = {color:"#556b2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:810, tempHigh:120, stateHigh:"cooked_kombu", tempLow:-5, stateLow:"frozen_raw_kombu", breakInto:"water"};
-elements.frozen_raw_kombu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:810, tempHigh:10, stateHigh:"raw_kombu"};
-elements.cooked_kombu = {color:"#2f4f4f", behavior:behaviors.POWDER, category:"food", state:"solid", density:760, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_kombu"};
-elements.frozen_cooked_kombu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:760, tempHigh:10, stateHigh:"cooked_kombu"};
-
-elements.raw_dulse = {color:"#8b0000", behavior:behaviors.POWDER, category:"food", state:"solid", density:820, tempHigh:120, stateHigh:"cooked_dulse", tempLow:-5, stateLow:"frozen_raw_dulse", breakInto:"water"};
-elements.frozen_raw_dulse = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:820, tempHigh:10, stateHigh:"raw_dulse"};
-elements.cooked_dulse = {color:"#800000", behavior:behaviors.POWDER, category:"food", state:"solid", density:770, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_dulse"};
-elements.frozen_cooked_dulse = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:770, tempHigh:10, stateHigh:"cooked_dulse"};
-
-elements.raw_spirulina = {color:"#00fa9a", behavior:behaviors.POWDER, category:"food", state:"solid", density:830, tempHigh:120, stateHigh:"cooked_spirulina", tempLow:-5, stateLow:"frozen_raw_spirulina", breakInto:"water"};
-elements.frozen_raw_spirulina = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:830, tempHigh:10, stateHigh:"raw_spirulina"};
-elements.cooked_spirulina = {color:"#00cf7a", behavior:behaviors.POWDER, category:"food", state:"solid", density:780, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_spirulina"};
-elements.frozen_cooked_spirulina = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:780, tempHigh:10, stateHigh:"cooked_spirulina"};
-
-elements.raw_agar_agar = {color:"#f5fffa", behavior:behaviors.POWDER, category:"food", state:"solid", density:840, tempHigh:120, stateHigh:"cooked_agar_agar", tempLow:-5, stateLow:"frozen_raw_agar_agar", breakInto:"water"};
-elements.frozen_raw_agar_agar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:840, tempHigh:10, stateHigh:"raw_agar_agar"};
-elements.cooked_agar_agar = {color:"#e6e6fa", behavior:behaviors.POWDER, category:"food", state:"solid", density:790, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_agar_agar"};
-elements.frozen_cooked_agar_agar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:790, tempHigh:10, stateHigh:"cooked_agar_agar"};
-
-// --- 6. FRUITS (Raw -> Grilled/Baked) ---
-elements.raw_apricot = {color:"#ffb347", behavior:behaviors.POWDER, category:"food", state:"solid", density:850, tempHigh:120, stateHigh:"grilled_apricot", tempLow:-5, stateLow:"frozen_raw_apricot", breakInto:"peach_juice"};
-elements.frozen_raw_apricot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:850, tempHigh:10, stateHigh:"raw_apricot"};
-elements.grilled_apricot = {color:"#d2691e", behavior:behaviors.POWDER, category:"food", state:"solid", density:800, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_apricot"};
-elements.frozen_grilled_apricot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:800, tempHigh:10, stateHigh:"grilled_apricot"};
-
-elements.raw_nectarine = {color:"#ff7f50", behavior:behaviors.POWDER, category:"food", state:"solid", density:860, tempHigh:120, stateHigh:"grilled_nectarine", tempLow:-5, stateLow:"frozen_raw_nectarine", breakInto:"peach_juice"};
-elements.frozen_raw_nectarine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:860, tempHigh:10, stateHigh:"raw_nectarine"};
-elements.grilled_nectarine = {color:"#cd5c5c", behavior:behaviors.POWDER, category:"food", state:"solid", density:810, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_nectarine"};
-elements.frozen_grilled_nectarine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:810, tempHigh:10, stateHigh:"grilled_nectarine"};
-
-elements.raw_plumcot = {color:"#c71585", behavior:behaviors.POWDER, category:"food", state:"solid", density:870, tempHigh:120, stateHigh:"grilled_plumcot", tempLow:-5, stateLow:"frozen_raw_plumcot", breakInto:"plum_juice"};
-elements.frozen_raw_plumcot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:870, tempHigh:10, stateHigh:"raw_plumcot"};
-elements.grilled_plumcot = {color:"#8b008b", behavior:behaviors.POWDER, category:"food", state:"solid", density:820, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_plumcot"};
-elements.frozen_grilled_plumcot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:820, tempHigh:10, stateHigh:"grilled_plumcot"};
-
-elements.raw_pluot = {color:"#800080", behavior:behaviors.POWDER, category:"food", state:"solid", density:880, tempHigh:120, stateHigh:"grilled_pluot", tempLow:-5, stateLow:"frozen_raw_pluot", breakInto:"plum_juice"};
-elements.frozen_raw_pluot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:880, tempHigh:10, stateHigh:"raw_pluot"};
-elements.grilled_pluot = {color:"#4b0082", behavior:behaviors.POWDER, category:"food", state:"solid", density:830, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_pluot"};
-elements.frozen_grilled_pluot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:830, tempHigh:10, stateHigh:"grilled_pluot"};
-
-elements.raw_blood_orange = {color:"#ff4500", behavior:behaviors.POWDER, category:"food", state:"solid", density:890, tempHigh:120, stateHigh:"grilled_blood_orange", tempLow:-5, stateLow:"frozen_raw_blood_orange", breakInto:"water"};
-elements.frozen_raw_blood_orange = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:890, tempHigh:10, stateHigh:"raw_blood_orange"};
-elements.grilled_blood_orange = {color:"#b22222", behavior:behaviors.POWDER, category:"food", state:"solid", density:840, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_blood_orange"};
-elements.frozen_grilled_blood_orange = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:840, tempHigh:10, stateHigh:"grilled_blood_orange"};
-
-elements.raw_navel_orange = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:900, tempHigh:120, stateHigh:"grilled_navel_orange", tempLow:-5, stateLow:"frozen_raw_navel_orange", breakInto:"water"};
-elements.frozen_raw_navel_orange = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:900, tempHigh:10, stateHigh:"raw_navel_orange"};
-elements.grilled_navel_orange = {color:"#cc8400", behavior:behaviors.POWDER, category:"food", state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_navel_orange"};
-elements.frozen_grilled_navel_orange = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:850, tempHigh:10, stateHigh:"grilled_navel_orange"};
-
-elements.raw_clementine = {color:"#ff8c00", behavior:behaviors.POWDER, category:"food", state:"solid", density:910, tempHigh:120, stateHigh:"grilled_clementine", tempLow:-5, stateLow:"frozen_raw_clementine", breakInto:"water"};
-elements.frozen_raw_clementine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"raw_clementine"};
-elements.grilled_clementine = {color:"#e67e22", behavior:behaviors.POWDER, category:"food", state:"solid", density:860, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_clementine"};
-elements.frozen_grilled_clementine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:860, tempHigh:10, stateHigh:"grilled_clementine"};
-
-elements.raw_tangerine = {color:"#f4a460", behavior:behaviors.POWDER, category:"food", state:"solid", density:920, tempHigh:120, stateHigh:"grilled_tangerine", tempLow:-5, stateLow:"frozen_raw_tangerine", breakInto:"water"};
-elements.frozen_raw_tangerine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"raw_tangerine"};
-elements.grilled_tangerine = {color:"#d2691e", behavior:behaviors.POWDER, category:"food", state:"solid", density:870, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_tangerine"};
-elements.frozen_grilled_tangerine = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:870, tempHigh:10, stateHigh:"grilled_tangerine"};
-
-elements.raw_mandarin = {color:"#ff7f50", behavior:behaviors.POWDER, category:"food", state:"solid", density:930, tempHigh:120, stateHigh:"grilled_mandarin", tempLow:-5, stateLow:"frozen_raw_mandarin", breakInto:"water"};
-elements.frozen_raw_mandarin = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"raw_mandarin"};
-elements.grilled_mandarin = {color:"#cd5c5c", behavior:behaviors.POWDER, category:"food", state:"solid", density:880, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_mandarin"};
-elements.frozen_grilled_mandarin = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:880, tempHigh:10, stateHigh:"grilled_mandarin"};
-
-elements.raw_grapefruit = {color:"#ffb6c1", behavior:behaviors.POWDER, category:"food", state:"solid", density:940, tempHigh:120, stateHigh:"grilled_grapefruit", tempLow:-5, stateLow:"frozen_raw_grapefruit", breakInto:"water"};
-elements.frozen_raw_grapefruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"raw_grapefruit"};
-elements.grilled_grapefruit = {color:"#ff69b4", behavior:behaviors.POWDER, category:"food", state:"solid", density:890, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_grapefruit"};
-elements.frozen_grilled_grapefruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:890, tempHigh:10, stateHigh:"grilled_grapefruit"};
-
-elements.raw_pomelo = {color:"#98fb98", behavior:behaviors.POWDER, category:"food", state:"solid", density:950, tempHigh:120, stateHigh:"grilled_pomelo", tempLow:-5, stateLow:"frozen_raw_pomelo", breakInto:"water"};
-elements.frozen_raw_pomelo = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"raw_pomelo"};
-elements.grilled_pomelo = {color:"#3cb371", behavior:behaviors.POWDER, category:"food", state:"solid", density:900, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_pomelo"};
-elements.frozen_grilled_pomelo = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:900, tempHigh:10, stateHigh:"grilled_pomelo"};
-
-elements.raw_meyer_lemon = {color:"#fffacd", behavior:behaviors.POWDER, category:"food", state:"solid", density:960, tempHigh:120, stateHigh:"grilled_meyer_lemon", tempLow:-5, stateLow:"frozen_raw_meyer_lemon", breakInto:"water"};
-elements.frozen_raw_meyer_lemon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"raw_meyer_lemon"};
-elements.grilled_meyer_lemon = {color:"#f0e68c", behavior:behaviors.POWDER, category:"food", state:"solid", density:910, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_meyer_lemon"};
-elements.frozen_grilled_meyer_lemon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:910, tempHigh:10, stateHigh:"grilled_meyer_lemon"};
-
-elements.raw_key_lemon = {color:"#f0e68c", behavior:behaviors.POWDER, category:"food", state:"solid", density:970, tempHigh:120, stateHigh:"grilled_key_lemon", tempLow:-5, stateLow:"frozen_raw_key_lemon", breakInto:"water"};
-elements.frozen_raw_key_lemon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:970, tempHigh:10, stateHigh:"raw_key_lemon"};
-elements.grilled_key_lemon = {color:"#bdb76b", behavior:behaviors.POWDER, category:"food", state:"solid", density:920, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_key_lemon"};
-elements.frozen_grilled_key_lemon = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:920, tempHigh:10, stateHigh:"grilled_key_lemon"};
-
-elements.raw_yuzu = {color:"#ffd700", behavior:behaviors.POWDER, category:"food", state:"solid", density:980, tempHigh:120, stateHigh:"grilled_yuzu", tempLow:-5, stateLow:"frozen_raw_yuzu", breakInto:"water"};
-elements.frozen_raw_yuzu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:980, tempHigh:10, stateHigh:"raw_yuzu"};
-elements.grilled_yuzu = {color:"#daa520", behavior:behaviors.POWDER, category:"food", state:"solid", density:930, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_yuzu"};
-elements.frozen_grilled_yuzu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:930, tempHigh:10, stateHigh:"grilled_yuzu"};
-
-elements.raw_calamansi = {color:"#ff8c00", behavior:behaviors.POWDER, category:"food", state:"solid", density:990, tempHigh:120, stateHigh:"grilled_calamansi", tempLow:-5, stateLow:"frozen_raw_calamansi", breakInto:"water"};
-elements.frozen_raw_calamansi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:990, tempHigh:10, stateHigh:"raw_calamansi"};
-elements.grilled_calamansi = {color:"#d2691e", behavior:behaviors.POWDER, category:"food", state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_calamansi"};
-elements.frozen_grilled_calamansi = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:940, tempHigh:10, stateHigh:"grilled_calamansi"};
-
-elements.raw_citron = {color:"#fff8dc", behavior:behaviors.POWDER, category:"food", state:"solid", density:1000, tempHigh:120, stateHigh:"grilled_citron", tempLow:-5, stateLow:"frozen_raw_citron", breakInto:"water"};
-elements.frozen_raw_citron = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1000, tempHigh:10, stateHigh:"raw_citron"};
-elements.grilled_citron = {color:"#bdb76b", behavior:behaviors.POWDER, category:"food", state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_citron"};
-elements.frozen_grilled_citron = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:950, tempHigh:10, stateHigh:"grilled_citron"};
-
-elements.raw_kumquat = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:1010, tempHigh:120, stateHigh:"grilled_kumquat", tempLow:-5, stateLow:"frozen_raw_kumquat", breakInto:"water"};
-elements.frozen_raw_kumquat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"raw_kumquat"};
-elements.grilled_kumquat = {color:"#cc8400", behavior:behaviors.POWDER, category:"food", state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_kumquat"};
-elements.frozen_grilled_kumquat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:960, tempHigh:10, stateHigh:"grilled_kumquat"};
-
-elements.raw_lime = {color:"#00ff00", behavior:behaviors.POWDER, category:"food", state:"solid", density:1020, tempHigh:120, stateHigh:"grilled_lime", tempLow:-5, stateLow:"frozen_raw_lime", breakInto:"water"};
-elements.frozen_raw_lime = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1020, tempHigh:10, stateHigh:"raw_lime"};
-elements.grilled_lime = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:970, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_lime"};
-elements.frozen_grilled_lime = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:970, tempHigh:10, stateHigh:"grilled_lime"};
-
-elements.raw_bergamot = {color:"#adff2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:1030, tempHigh:120, stateHigh:"grilled_bergamot", tempLow:-5, stateLow:"frozen_raw_bergamot", breakInto:"water"};
-elements.frozen_raw_bergamot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1030, tempHigh:10, stateHigh:"raw_bergamot"};
-elements.grilled_bergamot = {color:"#556b2f", behavior:behaviors.POWDER, category:"food", state:"solid", density:980, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_bergamot"};
-elements.frozen_grilled_bergamot = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:980, tempHigh:10, stateHigh:"grilled_bergamot"};
-
-elements.raw_ugli_fruit = {color:"#9acd32", behavior:behaviors.POWDER, category:"food", state:"solid", density:1040, tempHigh:120, stateHigh:"grilled_ugli_fruit", tempLow:-5, stateLow:"frozen_raw_ugli_fruit", breakInto:"water"};
-elements.frozen_raw_ugli_fruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1040, tempHigh:10, stateHigh:"raw_ugli_fruit"};
-elements.grilled_ugli_fruit = {color:"#6b8e23", behavior:behaviors.POWDER, category:"food", state:"solid", density:990, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_ugli_fruit"};
-elements.frozen_grilled_ugli_fruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:990, tempHigh:10, stateHigh:"grilled_ugli_fruit"};
-
-elements.raw_jackfruit = {color:"#ffd700", behavior:behaviors.POWDER, category:"food", state:"solid", density:1050, tempHigh:120, stateHigh:"grilled_jackfruit", tempLow:-5, stateLow:"frozen_raw_jackfruit", breakInto:"banana_puree"};
-elements.frozen_raw_jackfruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1050, tempHigh:10, stateHigh:"raw_jackfruit"};
-elements.grilled_jackfruit = {color:"#daa520", behavior:behaviors.POWDER, category:"food", state:"solid", density:1000, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_jackfruit"};
-elements.frozen_grilled_jackfruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1000, tempHigh:10, stateHigh:"grilled_jackfruit"};
-
-elements.raw_durian = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:1060, tempHigh:120, stateHigh:"grilled_durian", tempLow:-5, stateLow:"frozen_raw_durian", breakInto:"banana_puree"};
-elements.frozen_raw_durian = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1060, tempHigh:10, stateHigh:"raw_durian"};
-elements.grilled_durian = {color:"#cd853f", behavior:behaviors.POWDER, category:"food", state:"solid", density:1010, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_durian"};
-elements.frozen_grilled_durian = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1010, tempHigh:10, stateHigh:"grilled_durian"};
-
-elements.raw_breadfruit = {color:"#98fb98", behavior:behaviors.POWDER, category:"food", state:"solid", density:1070, tempHigh:120, stateHigh:"grilled_breadfruit", tempLow:-5, stateLow:"frozen_raw_breadfruit", breakInto:"banana_puree"};
-elements.frozen_raw_breadfruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1070, tempHigh:10, stateHigh:"raw_breadfruit"};
-elements.grilled_breadfruit = {color:"#228b22", behavior:behaviors.POWDER, category:"food", state:"solid", density:1020, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_breadfruit"};
-elements.frozen_grilled_breadfruit = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1020, tempHigh:10, stateHigh:"grilled_breadfruit"};
-
-elements.raw_soursop = {color:"#3cb371", behavior:behaviors.POWDER, category:"food", state:"solid", density:1080, tempHigh:120, stateHigh:"grilled_soursop", tempLow:-5, stateLow:"frozen_raw_soursop", breakInto:"banana_puree"};
-elements.frozen_raw_soursop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1080, tempHigh:10, stateHigh:"raw_soursop"};
-elements.grilled_soursop = {color:"#006400", behavior:behaviors.POWDER, category:"food", state:"solid", density:1030, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_soursop"};
-elements.frozen_grilled_soursop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1030, tempHigh:10, stateHigh:"grilled_soursop"};
-
-elements.raw_cherimoya = {color:"#90ee90", behavior:behaviors.POWDER, category:"food", state:"solid", density:1090, tempHigh:120, stateHigh:"grilled_cherimoya", tempLow:-5, stateLow:"frozen_raw_cherimoya", breakInto:"banana_puree"};
-elements.frozen_raw_cherimoya = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1090, tempHigh:10, stateHigh:"raw_cherimoya"};
-elements.grilled_cherimoya = {color:"#2e8b57", behavior:behaviors.POWDER, category:"food", state:"solid", density:1040, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_cherimoya"};
-elements.frozen_grilled_cherimoya = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1040, tempHigh:10, stateHigh:"grilled_cherimoya"};
-
-elements.raw_sweetsop = {color:"#98fb98", behavior:behaviors.POWDER, category:"food", state:"solid", density:1100, tempHigh:120, stateHigh:"grilled_sweetsop", tempLow:-5, stateLow:"frozen_raw_sweetsop", breakInto:"banana_puree"};
-elements.frozen_raw_sweetsop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1100, tempHigh:10, stateHigh:"raw_sweetsop"};
-elements.grilled_sweetsop = {color:"#3cb371", behavior:behaviors.POWDER, category:"food", state:"solid", density:1050, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_sweetsop"};
-elements.frozen_grilled_sweetsop = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1050, tempHigh:10, stateHigh:"grilled_sweetsop"};
-
-elements.raw_mamey = {color:"#d2691e", behavior:behaviors.POWDER, category:"food", state:"solid", density:1110, tempHigh:120, stateHigh:"grilled_mamey", tempLow:-5, stateLow:"frozen_raw_mamey", breakInto:"peach_juice"};
-elements.frozen_raw_mamey = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1110, tempHigh:10, stateHigh:"raw_mamey"};
-elements.grilled_mamey = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1060, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_mamey"};
-elements.frozen_grilled_mamey = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1060, tempHigh:10, stateHigh:"grilled_mamey"};
-
-elements.raw_sapote = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1120, tempHigh:120, stateHigh:"grilled_sapote", tempLow:-5, stateLow:"frozen_raw_sapote", breakInto:"peach_juice"};
-elements.frozen_raw_sapote = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1120, tempHigh:10, stateHigh:"raw_sapote"};
-elements.grilled_sapote = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:1070, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_sapote"};
-elements.frozen_grilled_sapote = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1070, tempHigh:10, stateHigh:"grilled_sapote"};
-
-elements.raw_sapodilla = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:1130, tempHigh:120, stateHigh:"grilled_sapodilla", tempLow:-5, stateLow:"frozen_raw_sapodilla", breakInto:"peach_juice"};
-elements.frozen_raw_sapodilla = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1130, tempHigh:10, stateHigh:"raw_sapodilla"};
-elements.grilled_sapodilla = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1080, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_sapodilla"};
-elements.frozen_grilled_sapodilla = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1080, tempHigh:10, stateHigh:"grilled_sapodilla"};
-
-elements.raw_longan = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:1140, tempHigh:120, stateHigh:"grilled_longan", tempLow:-5, stateLow:"frozen_raw_longan", breakInto:"cherry_juice"};
-elements.frozen_raw_longan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1140, tempHigh:10, stateHigh:"raw_longan"};
-elements.grilled_longan = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:1090, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_longan"};
-elements.frozen_grilled_longan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1090, tempHigh:10, stateHigh:"grilled_longan"};
-
-elements.raw_rambutan = {color:"#dc143c", behavior:behaviors.POWDER, category:"food", state:"solid", density:1150, tempHigh:120, stateHigh:"grilled_rambutan", tempLow:-5, stateLow:"frozen_raw_rambutan", breakInto:"cherry_juice"};
-elements.frozen_raw_rambutan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1150, tempHigh:10, stateHigh:"raw_rambutan"};
-elements.grilled_rambutan = {color:"#8b0000", behavior:behaviors.POWDER, category:"food", state:"solid", density:1100, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_rambutan"};
-elements.frozen_grilled_rambutan = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1100, tempHigh:10, stateHigh:"grilled_rambutan"};
-
-elements.raw_mangosteen = {color:"#4b0082", behavior:behaviors.POWDER, category:"food", state:"solid", density:1160, tempHigh:120, stateHigh:"grilled_mangosteen", tempLow:-5, stateLow:"frozen_raw_mangosteen", breakInto:"cherry_juice"};
-elements.frozen_raw_mangosteen = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1160, tempHigh:10, stateHigh:"raw_mangosteen"};
-elements.grilled_mangosteen = {color:"#2a0a3a", behavior:behaviors.POWDER, category:"food", state:"solid", density:1110, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_mangosteen"};
-elements.frozen_grilled_mangosteen = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1110, tempHigh:10, stateHigh:"grilled_mangosteen"};
-
-elements.raw_salak = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1170, tempHigh:120, stateHigh:"grilled_salak", tempLow:-5, stateLow:"frozen_raw_salak", breakInto:"cherry_juice"};
-elements.frozen_raw_salak = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1170, tempHigh:10, stateHigh:"raw_salak"};
-elements.grilled_salak = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:1120, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_salak"};
-elements.frozen_grilled_salak = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1120, tempHigh:10, stateHigh:"grilled_salak"};
-
-elements.raw_jabuticaba = {color:"#2a0a3a", behavior:behaviors.POWDER, category:"food", state:"solid", density:1180, tempHigh:120, stateHigh:"grilled_jabuticaba", tempLow:-5, stateLow:"frozen_raw_jabuticaba", breakInto:"cherry_juice"};
-elements.frozen_raw_jabuticaba = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1180, tempHigh:10, stateHigh:"raw_jabuticaba"};
-elements.grilled_jabuticaba = {color:"#000000", behavior:behaviors.POWDER, category:"food", state:"solid", density:1130, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_jabuticaba"};
-elements.frozen_grilled_jabuticaba = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1130, tempHigh:10, stateHigh:"grilled_jabuticaba"};
-
-elements.raw_langsat = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:1190, tempHigh:120, stateHigh:"grilled_langsat", tempLow:-5, stateLow:"frozen_raw_langsat", breakInto:"cherry_juice"};
-elements.frozen_raw_langsat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1190, tempHigh:10, stateHigh:"raw_langsat"};
-elements.grilled_langsat = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:1140, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_langsat"};
-elements.frozen_grilled_langsat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1140, tempHigh:10, stateHigh:"grilled_langsat"};
-
-elements.raw_ackee = {color:"#ff4500", behavior:behaviors.POWDER, category:"food", state:"solid", density:1200, tempHigh:120, stateHigh:"grilled_ackee", tempLow:-5, stateLow:"frozen_raw_ackee", breakInto:"cherry_juice"};
-elements.frozen_raw_ackee = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1200, tempHigh:10, stateHigh:"raw_ackee"};
-elements.grilled_ackee = {color:"#b22222", behavior:behaviors.POWDER, category:"food", state:"solid", density:1150, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_ackee"};
-elements.frozen_grilled_ackee = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1150, tempHigh:10, stateHigh:"grilled_ackee"};
-
-elements.raw_cupuacu = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1210, tempHigh:120, stateHigh:"grilled_cupuacu", tempLow:-5, stateLow:"frozen_raw_cupuacu", breakInto:"cherry_juice"};
-elements.frozen_raw_cupuacu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1210, tempHigh:10, stateHigh:"raw_cupuacu"};
-elements.grilled_cupuacu = {color:"#5c3a21", behavior:behaviors.POWDER, category:"food", state:"solid", density:1160, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_cupuacu"};
-elements.frozen_grilled_cupuacu = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1160, tempHigh:10, stateHigh:"grilled_cupuacu"};
-
-elements.raw_loquat = {color:"#ffa500", behavior:behaviors.POWDER, category:"food", state:"solid", density:1220, tempHigh:120, stateHigh:"grilled_loquat", tempLow:-5, stateLow:"frozen_raw_loquat", breakInto:"peach_juice"};
-elements.frozen_raw_loquat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1220, tempHigh:10, stateHigh:"raw_loquat"};
-elements.grilled_loquat = {color:"#cc8400", behavior:behaviors.POWDER, category:"food", state:"solid", density:1170, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_loquat"};
-elements.frozen_grilled_loquat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1170, tempHigh:10, stateHigh:"grilled_loquat"};
-
-elements.raw_quince = {color:"#ffd700", behavior:behaviors.POWDER, category:"food", state:"solid", density:1230, tempHigh:120, stateHigh:"grilled_quince", tempLow:-5, stateLow:"frozen_raw_quince", breakInto:"pear_juice"};
-elements.frozen_raw_quince = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1230, tempHigh:10, stateHigh:"raw_quince"};
-elements.grilled_quince = {color:"#daa520", behavior:behaviors.POWDER, category:"food", state:"solid", density:1180, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_quince"};
-elements.frozen_grilled_quince = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1180, tempHigh:10, stateHigh:"grilled_quince"};
-
-elements.raw_medlar = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:1240, tempHigh:120, stateHigh:"grilled_medlar", tempLow:-5, stateLow:"frozen_raw_medlar", breakInto:"pear_juice"};
-elements.frozen_raw_medlar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1240, tempHigh:10, stateHigh:"raw_medlar"};
-elements.grilled_medlar = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:1190, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_grilled_medlar"};
-elements.frozen_grilled_medlar = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1190, tempHigh:10, stateHigh:"grilled_medlar"};
-
-// --- 7. GRAINS & MISC ---
-elements.raw_quinoa = {color:"#deb887", behavior:behaviors.POWDER, category:"food", state:"solid", density:1250, tempHigh:120, stateHigh:"cooked_quinoa", tempLow:-5, stateLow:"frozen_raw_quinoa", breakInto:"water"};
-elements.frozen_raw_quinoa = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1250, tempHigh:10, stateHigh:"raw_quinoa"};
-elements.cooked_quinoa = {color:"#f5deb3", behavior:behaviors.POWDER, category:"food", state:"solid", density:1200, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_quinoa"};
-elements.frozen_cooked_quinoa = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1200, tempHigh:10, stateHigh:"cooked_quinoa"};
-
-elements.raw_barley = {color:"#d2b48c", behavior:behaviors.POWDER, category:"food", state:"solid", density:1260, tempHigh:120, stateHigh:"cooked_barley", tempLow:-5, stateLow:"frozen_raw_barley", breakInto:"water"};
-elements.frozen_raw_barley = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1260, tempHigh:10, stateHigh:"raw_barley"};
-elements.cooked_barley = {color:"#f5f5dc", behavior:behaviors.POWDER, category:"food", state:"solid", density:1210, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_barley"};
-elements.frozen_cooked_barley = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1210, tempHigh:10, stateHigh:"cooked_barley"};
-
-elements.raw_buckwheat = {color:"#8b4513", behavior:behaviors.POWDER, category:"food", state:"solid", density:1270, tempHigh:120, stateHigh:"cooked_buckwheat", tempLow:-5, stateLow:"frozen_raw_buckwheat", breakInto:"water"};
-elements.frozen_raw_buckwheat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1270, tempHigh:10, stateHigh:"raw_buckwheat"};
-elements.cooked_buckwheat = {color:"#a0522d", behavior:behaviors.POWDER, category:"food", state:"solid", density:1220, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_buckwheat"};
-elements.frozen_cooked_buckwheat = {color:"#e0f7fa", behavior:behaviors.WALL, category:"states", state:"solid", density:1220, tempHigh:10, stateHigh:"cooked_buckwheat"};
-
 
 // ==========================================
 // 1. RAW MEATS & VEGGIES (COOK TO COOKED STATE)
@@ -1805,4 +1078,320 @@ for (let i = 0; i < cookablePrefixes.length; i++) {
     if (!elements.olive_oil) elements.olive_oil = { reactions: {} };
     if (!elements.olive_oil.reactions) elements.olive_oil.reactions = {};
     elements.olive_oil.reactions[rawName] = { elem1: cookedName, elem2: "olive_oil" };
+}
+
+/ ==========================================
+// EXPANSION PACK: 100 NEW FOODS & INGREDIENTS
+// Paste this at the absolute bottom of your file!
+// ==========================================
+
+// --- 1. NEW DAIRY & CHEESES (15) ---
+elements.provolone = {color:"#fffff0", behavior:W, category:F, state:"solid", density:950, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_provolone"};
+elements.frozen_provolone = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"provolone"};
+elements.camembert = {color:"#fffacd", behavior:SP, category:F, state:"solid", density:920, tempHigh:150, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_camembert"};
+elements.frozen_camembert = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:920, tempHigh:10, stateHigh:"camembert"};
+elements.ricotta = {color:"#f8f8ff", behavior:SP, category:F, state:"solid", density:1000, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_ricotta"};
+elements.frozen_ricotta = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"ricotta"};
+elements.halloumi = {color:"#fff8dc", behavior:W, category:F, state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_halloumi"};
+elements.frozen_halloumi = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:960, tempHigh:10, stateHigh:"halloumi"};
+elements.paneer = {color:"#ffefd5", behavior:W, category:F, state:"solid", density:940, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_paneer"};
+elements.frozen_paneer = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:940, tempHigh:10, stateHigh:"paneer"};
+elements.mascarpone = {color:"#fffaf0", behavior:SP, category:F, state:"solid", density:1020, tempHigh:150, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_mascarpone"};
+elements.frozen_mascarpone = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"mascarpone"};
+elements.roquefort = {color:"#b0e0e6", behavior:W, category:F, state:"solid", density:950, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_roquefort"};
+elements.frozen_roquefort = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"roquefort"};
+elements.gorgonzola = {color:"#add8e6", behavior:SP, category:F, state:"solid", density:960, tempHigh:180, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_gorgonzola"};
+elements.frozen_gorgonzola = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:960, tempHigh:10, stateHigh:"gorgonzola"};
+elements.gruyere = {color:"#f5deb3", behavior:W, category:F, state:"solid", density:980, tempHigh:200, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_gruyere"};
+elements.frozen_gruyere = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:980, tempHigh:10, stateHigh:"gruyere"};
+elements.pecorino = {color:"#ffdead", behavior:W, category:F, state:"solid", density:1010, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_pecorino"};
+elements.frozen_pecorino = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"pecorino"};
+elements.butter_stick = {color:"#fafad2", behavior:W, category:F, state:"solid", density:910, tempHigh:35, stateHigh:"grease", tempLow:-5, stateLow:"frozen_butter_stick"};
+elements.frozen_butter_stick = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:910, tempHigh:10, stateHigh:"butter_stick"};
+elements.ghee = {color:"#ffd700", behavior:L, category:F, state:"liquid", density:900, tempHigh:250, stateHigh:"fire", tempLow:15, stateLow:"butter_stick"};
+elements.heavy_cream = {color:"#fffff0", behavior:L, category:F, state:"liquid", density:1010, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_heavy_cream"};
+elements.frozen_heavy_cream = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"heavy_cream"};
+elements.buttermilk = {color:"#fdf5e6", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_buttermilk"};
+elements.frozen_buttermilk = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"buttermilk"};
+elements.condensed_milk = {color:"#ffe4b5", behavior:L, category:F, state:"liquid", density:1300, viscosity: 60000, tempHigh:100, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_condensed_milk"};
+elements.frozen_condensed_milk = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1300, tempHigh:10, stateHigh:"condensed_milk"};
+
+// --- 2. NEW MEALS & SIDES (20) ---
+elements.shawarma = {color:"#a0522d", behavior:W, category:F, state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_shawarma"};
+elements.frozen_shawarma = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"shawarma"};
+elements.falafel = {color:"#8b5a2b", behavior:SP, category:F, state:"solid", density:700, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_falafel"};
+elements.frozen_falafel = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:700, tempHigh:10, stateHigh:"falafel"};
+elements.gyro = {color:"#d2b48c", behavior:W, category:F, state:"solid", density:880, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_gyro"};
+elements.frozen_gyro = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:880, tempHigh:10, stateHigh:"gyro"};
+elements.kebab_skewer = {color:"#8b0000", behavior:W, category:F, state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_kebab_skewer"};
+elements.frozen_kebab_skewer = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"kebab_skewer"};
+elements.meatloaf = {color:"#8b4513", behavior:W, category:F, state:"solid", density:1000, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_meatloaf"};
+elements.frozen_meatloaf = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"meatloaf"};
+elements.brisket_sandwich = {color:"#cd853f", behavior:W, category:F, state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_brisket_sandwich"};
+elements.frozen_brisket_sandwich = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"brisket_sandwich"};
+elements.hot_wings = {color:"#ff4500", behavior:SP, category:F, state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_hot_wings"};
+elements.frozen_hot_wings = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"hot_wings"};
+elements.corndog = {color:"#daa520", behavior:W, category:F, state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_corndog"};
+elements.frozen_corndog = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"corndog"};
+elements.chili_dog = {color:"#b22222", behavior:W, category:F, state:"solid", density:900, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_chili_dog"};
+elements.frozen_chili_dog = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"chili_dog"};
+elements.onion_ring = {color:"#f5deb3", behavior:SP, category:F, state:"solid", density:600, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_onion_ring"};
+elements.frozen_onion_ring = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:600, tempHigh:10, stateHigh:"onion_ring"};
+elements.mozzarella_stick = {color:"#deb887", behavior:W, category:F, state:"solid", density:800, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_mozzarella_stick"};
+elements.frozen_mozzarella_stick = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:800, tempHigh:10, stateHigh:"mozzarella_stick"};
+elements.cheese_curd = {color:"#ffffe0", behavior:SP, category:F, state:"solid", density:900, tempHigh:200, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cheese_curd"};
+elements.frozen_cheese_curd = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"cheese_curd"};
+elements.hash_brown = {color:"#ffd700", behavior:SP, category:F, state:"solid", density:750, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_hash_brown"};
+elements.frozen_hash_brown = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:750, tempHigh:10, stateHigh:"hash_brown"};
+elements.tater_tot = {color:"#d2b48c", behavior:SP, category:F, state:"solid", density:700, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_tater_tot"};
+elements.frozen_tater_tot = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:700, tempHigh:10, stateHigh:"tater_tot"};
+elements.mashed_potato = {color:"#fff8dc", behavior:SP, category:F, state:"solid", density:900, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_mashed_potato"};
+elements.frozen_mashed_potato = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:10, stateHigh:"mashed_potato"};
+elements.baked_beans = {color:"#a0522d", behavior:SP, category:F, state:"solid", density:1050, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baked_beans"};
+elements.frozen_baked_beans = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"baked_beans"};
+elements.refried_beans = {color:"#8b4513", behavior:SP, category:F, state:"solid", density:1100, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_refried_beans"};
+elements.frozen_refried_beans = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1100, tempHigh:10, stateHigh:"refried_beans"};
+elements.hummus = {color:"#e6c280", behavior:SP, category:F, state:"solid", density:1080, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_hummus"};
+elements.frozen_hummus = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1080, tempHigh:10, stateHigh:"hummus"};
+elements.tzatziki = {color:"#f0fff0", behavior:L, category:F, state:"liquid", density:1050, viscosity: 20000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_tzatziki"};
+elements.frozen_tzatziki = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"tzatziki"};
+elements.baba_ganoush = {color:"#dcdcdc", behavior:SP, category:F, state:"solid", density:1050, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_baba_ganoush"};
+elements.frozen_baba_ganoush = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"baba_ganoush"};
+
+// --- 3. DESSERTS & SWEETS (20) ---
+elements.truffle_candy = {color:"#3b2f2f", behavior:W, category:F, state:"solid", density:1100, tempHigh:40, stateHigh:"melted_dark_chocolate", tempLow:-5, stateLow:"frozen_truffle_candy"};
+elements.frozen_truffle_candy = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1100, tempHigh:10, stateHigh:"truffle_candy"};
+elements.bonbon = {color:"#ff69b4", behavior:W, category:F, state:"solid", density:1000, tempHigh:45, stateHigh:"melted_white_chocolate", tempLow:-5, stateLow:"frozen_bonbon"};
+elements.frozen_bonbon = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"bonbon"};
+elements.gelato = {color:"#fff0f5", behavior:SP, category:F, state:"solid", density:950, tempHigh:10, stateHigh:"milk", tempLow:-10, stateLow:"frozen_gelato"};
+elements.frozen_gelato = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:0, stateHigh:"gelato"};
+elements.sorbet = {color:"#ff7f50", behavior:SP, category:F, state:"solid", density:900, tempHigh:5, stateHigh:"water", tempLow:-10, stateLow:"frozen_sorbet"};
+elements.frozen_sorbet = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:0, stateHigh:"sorbet"};
+elements.sherbet = {color:"#ffa07a", behavior:SP, category:F, state:"solid", density:920, tempHigh:5, stateHigh:"water", tempLow:-10, stateLow:"frozen_sherbet"};
+elements.frozen_sherbet = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:920, tempHigh:0, stateHigh:"sherbet"};
+elements.frozen_yogurt = {color:"#fffff0", behavior:SP, category:F, state:"solid", density:950, tempHigh:10, stateHigh:"yogurt", tempLow:-15, stateLow:"ice"};
+elements.popsicle = {color:"#ff1493", behavior:W, category:F, state:"solid", density:900, tempHigh:5, stateHigh:"sugar_water", tempLow:-10, stateLow:"ice"};
+elements.ice_cream_sandwich = {color:"#3e1e04", behavior:W, category:F, state:"solid", density:800, tempHigh:15, stateHigh:"cookie", tempLow:-10, stateLow:"frozen_ice_cream_sandwich"};
+elements.frozen_ice_cream_sandwich = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:800, tempHigh:0, stateHigh:"ice_cream_sandwich"};
+elements.sundae = {color:"#ffb6c1", behavior:SP, category:F, state:"solid", density:950, tempHigh:15, stateHigh:"milk", tempLow:-10, stateLow:"frozen_sundae"};
+elements.frozen_sundae = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:0, stateHigh:"sundae"};
+elements.banana_split = {color:"#ffe4b5", behavior:SP, category:F, state:"solid", density:900, tempHigh:15, stateHigh:"banana_puree", tempLow:-10, stateLow:"frozen_banana_split"};
+elements.frozen_banana_split = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:900, tempHigh:0, stateHigh:"banana_split"};
+elements.parfait = {color:"#ffebcd", behavior:SP, category:F, state:"solid", density:980, tempHigh:20, stateHigh:"yogurt", tempLow:-10, stateLow:"frozen_parfait"};
+elements.frozen_parfait = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:980, tempHigh:0, stateHigh:"parfait"};
+elements.mousse = {color:"#5c3a21", behavior:SP, category:F, state:"solid", density:600, tempHigh:40, stateHigh:"melted_dark_chocolate", tempLow:-5, stateLow:"frozen_mousse"};
+elements.frozen_mousse = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:600, tempHigh:10, stateHigh:"mousse"};
+elements.souffle = {color:"#f5deb3", behavior:SP, category:F, state:"solid", density:500, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_souffle"};
+elements.frozen_souffle = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:500, tempHigh:10, stateHigh:"souffle"};
+elements.panna_cotta = {color:"#fffff0", behavior:SP, category:F, state:"solid", density:1050, tempHigh:60, stateHigh:"heavy_cream", tempLow:-5, stateLow:"frozen_panna_cotta"};
+elements.frozen_panna_cotta = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"panna_cotta"};
+elements.fruit_tart = {color:"#ff8c00", behavior:W, category:F, state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_fruit_tart"};
+elements.frozen_fruit_tart = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"fruit_tart"};
+elements.galette = {color:"#d2691e", behavior:W, category:F, state:"solid", density:800, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_galette"};
+elements.frozen_galette = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:800, tempHigh:10, stateHigh:"galette"};
+elements.peach_cobbler = {color:"#ffdab9", behavior:SP, category:F, state:"solid", density:850, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_peach_cobbler"};
+elements.frozen_peach_cobbler = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:850, tempHigh:10, stateHigh:"peach_cobbler"};
+elements.apple_crisp = {color:"#deb887", behavior:SP, category:F, state:"solid", density:800, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_apple_crisp"};
+elements.frozen_apple_crisp = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:800, tempHigh:10, stateHigh:"apple_crisp"};
+elements.apple_strudel = {color:"#f5deb3", behavior:W, category:F, state:"solid", density:750, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_apple_strudel"};
+elements.frozen_apple_strudel = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:750, tempHigh:10, stateHigh:"apple_strudel"};
+elements.churro_bite = {color:"#d2691e", behavior:W, category:F, state:"solid", density:600, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_churro_bite"};
+elements.frozen_churro_bite = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:600, tempHigh:10, stateHigh:"churro_bite"};
+
+// --- 4. NEW PEPPERS, CAPERS & SPICY VEGGIES (15) ---
+elements.caper = {color:"#556b2f", behavior:P, category:F, breakInto:"water", state:"solid", density:600, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_caper"};
+elements.frozen_caper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:600, tempHigh:10, stateHigh:"caper"};
+elements.gherkin = {color:"#228b22", behavior:P, category:F, breakInto:"water", state:"solid", density:650, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_gherkin"};
+elements.frozen_gherkin = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:650, tempHigh:10, stateHigh:"gherkin"};
+elements.serrano = {color:"#008000", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:500, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_serrano"};
+elements.frozen_serrano = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:500, tempHigh:10, stateHigh:"serrano"};
+elements.poblano = {color:"#006400", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:520, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_poblano"};
+elements.frozen_poblano = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:520, tempHigh:10, stateHigh:"poblano"};
+elements.scotch_bonnet = {color:"#ffa500", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:480, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_scotch_bonnet"};
+elements.frozen_scotch_bonnet = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:480, tempHigh:10, stateHigh:"scotch_bonnet"};
+elements.carolina_reaper = {color:"#ff0000", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:450, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_carolina_reaper"};
+elements.frozen_carolina_reaper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:450, tempHigh:10, stateHigh:"carolina_reaper"};
+elements.shishito = {color:"#9acd32", behavior:P, category:F, breakInto:"water", state:"solid", density:490, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_shishito"};
+elements.frozen_shishito = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:490, tempHigh:10, stateHigh:"shishito"};
+elements.peppadew = {color:"#dc143c", behavior:P, category:F, breakInto:"water", state:"solid", density:510, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_peppadew"};
+elements.frozen_peppadew = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:510, tempHigh:10, stateHigh:"peppadew"};
+elements.padron = {color:"#6b8e23", behavior:P, category:F, breakInto:"water", state:"solid", density:500, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_padron"};
+elements.frozen_padron = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:500, tempHigh:10, stateHigh:"padron"};
+elements.sweet_pepper = {color:"#ff8c00", behavior:P, category:F, breakInto:"water", state:"solid", density:530, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sweet_pepper"};
+elements.frozen_sweet_pepper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:530, tempHigh:10, stateHigh:"sweet_pepper"};
+elements.sport_pepper = {color:"#7cfc00", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:480, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_sport_pepper"};
+elements.frozen_sport_pepper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:480, tempHigh:10, stateHigh:"sport_pepper"};
+elements.cherry_pepper = {color:"#b22222", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:510, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cherry_pepper"};
+elements.frozen_cherry_pepper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:510, tempHigh:10, stateHigh:"cherry_pepper"};
+elements.banana_pepper = {color:"#ffd700", behavior:P, category:F, breakInto:"water", state:"solid", density:520, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_banana_pepper"};
+elements.frozen_banana_pepper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:520, tempHigh:10, stateHigh:"banana_pepper"};
+elements.fresno_pepper = {color:"#ff4500", behavior:P, category:F, breakInto:"hot_sauce", state:"solid", density:490, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_fresno_pepper"};
+elements.frozen_fresno_pepper = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:490, tempHigh:10, stateHigh:"fresno_pepper"};
+elements.pimento = {color:"#cd5c5c", behavior:P, category:F, breakInto:"water", state:"solid", density:540, tempHigh:220, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_pimento"};
+elements.frozen_pimento = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:540, tempHigh:10, stateHigh:"pimento"};
+
+// --- 5. EXOTIC GAME MEATS (10 Raw -> 10 Cooked) ---
+elements.raw_squab = {color:"#d98880", behavior:W, category:F, state:"solid", density:1010, tempHigh:110, stateHigh:"cooked_squab", tempLow:-5, stateLow:"frozen_raw_squab", breakInto:"blood"};
+elements.frozen_raw_squab = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"raw_squab"};
+elements.cooked_squab = {color:"#a65c5c", behavior:W, category:F, state:"solid", density:940, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_squab"};
+elements.frozen_cooked_squab = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:940, tempHigh:10, stateHigh:"cooked_squab"};
+
+elements.raw_guinea_fowl = {color:"#e6b3b3", behavior:W, category:F, state:"solid", density:1020, tempHigh:110, stateHigh:"cooked_guinea_fowl", tempLow:-5, stateLow:"frozen_raw_guinea_fowl", breakInto:"blood"};
+elements.frozen_raw_guinea_fowl = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"raw_guinea_fowl"};
+elements.cooked_guinea_fowl = {color:"#b37777", behavior:W, category:F, state:"solid", density:950, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_guinea_fowl"};
+elements.frozen_cooked_guinea_fowl = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:950, tempHigh:10, stateHigh:"cooked_guinea_fowl"};
+
+elements.raw_grouse = {color:"#cc7a7a", behavior:W, category:F, state:"solid", density:1030, tempHigh:110, stateHigh:"cooked_grouse", tempLow:-5, stateLow:"frozen_raw_grouse", breakInto:"blood"};
+elements.frozen_raw_grouse = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1030, tempHigh:10, stateHigh:"raw_grouse"};
+elements.cooked_grouse = {color:"#994d4d", behavior:W, category:F, state:"solid", density:960, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_grouse"};
+elements.frozen_cooked_grouse = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:960, tempHigh:10, stateHigh:"cooked_grouse"};
+
+elements.raw_partridge = {color:"#d99090", behavior:W, category:F, state:"solid", density:1025, tempHigh:110, stateHigh:"cooked_partridge", tempLow:-5, stateLow:"frozen_raw_partridge", breakInto:"blood"};
+elements.frozen_raw_partridge = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1025, tempHigh:10, stateHigh:"raw_partridge"};
+elements.cooked_partridge = {color:"#a65959", behavior:W, category:F, state:"solid", density:955, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_partridge"};
+elements.frozen_cooked_partridge = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:955, tempHigh:10, stateHigh:"cooked_partridge"};
+
+elements.raw_woodcock = {color:"#e09999", behavior:W, category:F, state:"solid", density:1015, tempHigh:110, stateHigh:"cooked_woodcock", tempLow:-5, stateLow:"frozen_raw_woodcock", breakInto:"blood"};
+elements.frozen_raw_woodcock = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1015, tempHigh:10, stateHigh:"raw_woodcock"};
+elements.cooked_woodcock = {color:"#b36666", behavior:W, category:F, state:"solid", density:945, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_woodcock"};
+elements.frozen_cooked_woodcock = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:945, tempHigh:10, stateHigh:"cooked_woodcock"};
+
+elements.raw_ostrich = {color:"#a32e2e", behavior:W, category:F, state:"solid", density:1060, tempHigh:110, stateHigh:"cooked_ostrich", tempLow:-5, stateLow:"frozen_raw_ostrich", breakInto:"blood"};
+elements.frozen_raw_ostrich = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1060, tempHigh:10, stateHigh:"raw_ostrich"};
+elements.cooked_ostrich = {color:"#661a1a", behavior:W, category:F, state:"solid", density:990, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_ostrich"};
+elements.frozen_cooked_ostrich = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:990, tempHigh:10, stateHigh:"cooked_ostrich"};
+
+elements.raw_emu = {color:"#b84d4d", behavior:W, category:F, state:"solid", density:1050, tempHigh:110, stateHigh:"cooked_emu", tempLow:-5, stateLow:"frozen_raw_emu", breakInto:"blood"};
+elements.frozen_raw_emu = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1050, tempHigh:10, stateHigh:"raw_emu"};
+elements.cooked_emu = {color:"#802b2b", behavior:W, category:F, state:"solid", density:980, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_emu"};
+elements.frozen_cooked_emu = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:980, tempHigh:10, stateHigh:"cooked_emu"};
+
+elements.raw_alligator = {color:"#e6e6fa", behavior:W, category:F, state:"solid", density:1080, tempHigh:110, stateHigh:"cooked_alligator", tempLow:-5, stateLow:"frozen_raw_alligator", breakInto:"blood"};
+elements.frozen_raw_alligator = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1080, tempHigh:10, stateHigh:"raw_alligator"};
+elements.cooked_alligator = {color:"#b0c4de", behavior:W, category:F, state:"solid", density:1010, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_alligator"};
+elements.frozen_cooked_alligator = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"cooked_alligator"};
+
+elements.raw_kangaroo = {color:"#cd5c5c", behavior:W, category:F, state:"solid", density:1070, tempHigh:110, stateHigh:"cooked_kangaroo", tempLow:-5, stateLow:"frozen_raw_kangaroo", breakInto:"blood"};
+elements.frozen_raw_kangaroo = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1070, tempHigh:10, stateHigh:"raw_kangaroo"};
+elements.cooked_kangaroo = {color:"#8b0000", behavior:W, category:F, state:"solid", density:1000, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_kangaroo"};
+elements.frozen_cooked_kangaroo = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"cooked_kangaroo"};
+
+elements.raw_camel = {color:"#a0522d", behavior:W, category:F, state:"solid", density:1090, tempHigh:110, stateHigh:"cooked_camel", tempLow:-5, stateLow:"frozen_raw_camel", breakInto:"blood"};
+elements.frozen_raw_camel = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1090, tempHigh:10, stateHigh:"raw_camel"};
+elements.cooked_camel = {color:"#5c3a21", behavior:W, category:F, state:"solid", density:1020, tempHigh:240, stateHigh:"burnt", tempLow:-5, stateLow:"frozen_cooked_camel"};
+elements.frozen_cooked_camel = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"cooked_camel"};
+
+// --- 6. DRINKS & REFRESHMENTS (20) ---
+elements.apple_cider = {color:"#d2691e", behavior:L, category:F, state:"liquid", density:1030, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_apple_cider"};
+elements.frozen_apple_cider = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1030, tempHigh:10, stateHigh:"apple_cider"};
+elements.pear_cider = {color:"#e4d96f", behavior:L, category:F, state:"liquid", density:1030, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_pear_cider"};
+elements.frozen_pear_cider = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1030, tempHigh:10, stateHigh:"pear_cider"};
+elements.ginger_ale = {color:"#ffd700", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_ginger_ale"};
+elements.frozen_ginger_ale = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"ginger_ale"};
+elements.root_beer = {color:"#3e1e04", behavior:L, category:F, state:"liquid", density:1035, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_root_beer"};
+elements.frozen_root_beer = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1035, tempHigh:10, stateHigh:"root_beer"};
+elements.cream_soda = {color:"#ffefd5", behavior:L, category:F, state:"liquid", density:1025, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_cream_soda"};
+elements.frozen_cream_soda = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1025, tempHigh:10, stateHigh:"cream_soda"};
+elements.cola = {color:"#1a1110", behavior:L, category:F, state:"liquid", density:1040, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_cola"};
+elements.frozen_cola = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1040, tempHigh:10, stateHigh:"cola"};
+elements.lemon_lime_soda = {color:"#e0ffffe0", behavior:L, category:F, state:"liquid", density:1010, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_lemon_lime_soda"};
+elements.frozen_lemon_lime_soda = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"lemon_lime_soda"};
+elements.orange_soda = {color:"#ff8c00", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_orange_soda"};
+elements.frozen_orange_soda = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"orange_soda"};
+elements.grape_soda = {color:"#8a2be2", behavior:L, category:F, state:"liquid", density:1030, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_grape_soda"};
+elements.frozen_grape_soda = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1030, tempHigh:10, stateHigh:"grape_soda"};
+elements.tonic_water = {color:"#f0ffff", behavior:L, category:F, state:"liquid", density:1005, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_tonic_water"};
+elements.frozen_tonic_water = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1005, tempHigh:10, stateHigh:"tonic_water"};
+elements.club_soda = {color:"#e0ffff", behavior:L, category:F, state:"liquid", density:1000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_club_soda"};
+elements.frozen_club_soda = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"club_soda"};
+elements.seltzer = {color:"#f5fffa", behavior:L, category:F, state:"liquid", density:1000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_seltzer"};
+elements.frozen_seltzer = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"seltzer"};
+elements.sparkling_water = {color:"#e6e6fa", behavior:L, category:F, state:"liquid", density:1000, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_sparkling_water"};
+elements.frozen_sparkling_water = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1000, tempHigh:10, stateHigh:"sparkling_water"};
+elements.espresso = {color:"#2b1b10", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_espresso"};
+elements.frozen_espresso = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"espresso"};
+elements.cappuccino = {color:"#d2b48c", behavior:L, category:F, state:"liquid", density:1010, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_cappuccino"};
+elements.frozen_cappuccino = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"cappuccino"};
+elements.macchiato = {color:"#8b4513", behavior:L, category:F, state:"liquid", density:1015, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_macchiato"};
+elements.frozen_macchiato = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1015, tempHigh:10, stateHigh:"macchiato"};
+elements.flat_white = {color:"#deb887", behavior:L, category:F, state:"liquid", density:1010, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_flat_white"};
+elements.frozen_flat_white = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"flat_white"};
+elements.cold_brew = {color:"#3e1e04", behavior:L, category:F, state:"liquid", density:1005, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_cold_brew"};
+elements.frozen_cold_brew = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1005, tempHigh:10, stateHigh:"cold_brew"};
+elements.matcha_latte = {color:"#8fbc8f", behavior:L, category:F, state:"liquid", density:1020, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_matcha_latte"};
+elements.frozen_matcha_latte = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1020, tempHigh:10, stateHigh:"matcha_latte"};
+elements.chai_tea = {color:"#cd853f", behavior:L, category:F, state:"liquid", density:1010, tempHigh:100, stateHigh:"steam", tempLow:-5, stateLow:"frozen_chai_tea"};
+elements.frozen_chai_tea = {color:"#e0f7fa", behavior:W, category:S, state:"solid", density:1010, tempHigh:10, stateHigh:"chai_tea"};
+
+// ==========================================
+// REACTIONS & CHEMISTRY ENGINE
+// ==========================================
+
+// Ensure all new elements have empty reaction objects
+const newReactants = [
+"provolone", "camembert", "ricotta", "halloumi", "paneer", "mascarpone", "roquefort", "gorgonzola", "gruyere", "pecorino", "butter_stick", "heavy_cream", "buttermilk", "condensed_milk",
+"shawarma", "falafel", "gyro", "kebab_skewer", "meatloaf", "brisket_sandwich", "hot_wings", "corndog", "chili_dog", "onion_ring", "mozzarella_stick", "cheese_curd", "hash_brown", "tater_tot", "mashed_potato", "baked_beans", "refried_beans", "hummus", "tzatziki", "baba_ganoush",
+"truffle_candy", "bonbon", "gelato", "sorbet", "sherbet", "frozen_yogurt", "popsicle", "ice_cream_sandwich", "sundae", "banana_split", "parfait", "mousse", "souffle", "panna_cotta", "fruit_tart", "galette", "peach_cobbler", "apple_crisp", "apple_strudel", "churro_bite",
+"caper", "gherkin", "serrano", "poblano", "scotch_bonnet", "carolina_reaper", "shishito", "peppadew", "padron", "sweet_pepper", "sport_pepper", "cherry_pepper", "banana_pepper", "fresno_pepper", "pimento",
+"raw_squab", "raw_guinea_fowl", "raw_grouse", "raw_partridge", "raw_woodcock", "raw_ostrich", "raw_emu", "raw_alligator", "raw_kangaroo", "raw_camel",
+"apple_cider", "pear_cider", "ginger_ale", "root_beer", "cream_soda", "cola", "lemon_lime_soda", "orange_soda", "grape_soda", "tonic_water", "club_soda", "seltzer", "sparkling_water", "espresso", "cappuccino", "macchiato", "flat_white", "cold_brew", "matcha_latte", "chai_tea",
+"acid", "water", "sugar", "salt", "ice", "milk", "potato", "olive_oil", "dough", "coffee_bean", "tea_leaf", "chili_pepper", "cabbage", "vinegar"
+];
+
+newReactants.forEach(e => {
+if (elements[e]) {
+if (!elements[e].reactions) elements[e].reactions = {};
+}
+});
+
+// A. Cooking New Meats (Fire / Smoke / Curing)
+elements.raw_squab.reactions["fire"] = { elem1: "cooked_squab", elem2: null };
+elements.raw_guinea_fowl.reactions["fire"] = { elem1: "cooked_guinea_fowl", elem2: null };
+elements.raw_grouse.reactions["fire"] = { elem1: "cooked_grouse", elem2: null };
+elements.raw_partridge.reactions["fire"] = { elem1: "cooked_partridge", elem2: null };
+elements.raw_woodcock.reactions["fire"] = { elem1: "cooked_woodcock", elem2: null };
+elements.raw_ostrich.reactions["fire"] = { elem1: "cooked_ostrich", elem2: null };
+elements.raw_emu.reactions["fire"] = { elem1: "cooked_emu", elem2: null };
+elements.raw_alligator.reactions["fire"] = { elem1: "cooked_alligator", elem2: null };
+elements.raw_kangaroo.reactions["fire"] = { elem1: "cooked_kangaroo", elem2: null };
+elements.raw_camel.reactions["fire"] = { elem1: "cooked_camel", elem2: null };
+
+// Curing Exotic Meats
+elements.raw_ostrich.reactions["salt"] = { elem1: "cooked_ostrich", elem2: null };
+elements.raw_camel.reactions["salt"] = { elem1: "cooked_camel", elem2: null };
+
+// B. Pickling & Hot Sauces
+const newPeppers = ["serrano", "poblano", "scotch_bonnet", "carolina_reaper", "sport_pepper", "cherry_pepper", "fresno_pepper"];
+newPeppers.forEach(p => {
+if (elements[p]) {
+elements[p].reactions["water"] = { elem1: "hot_sauce", elem2: null };
+elements[p].reactions["vinegar"] = { elem1: "hot_sauce", elem2: null };
+}
+});
+if (elements.cabbage) elements.cabbage.reactions["salt"] = { elem1: "sauerkraut", elem2: null };
+if (elements.cucumber) elements.cucumber.reactions["vinegar"] = { elem1: "gherkin", elem2: null };
+
+// C. Deep Frying
+if (elements.olive_oil) {
+elements.olive_oil.reactions["potato"] = { elem1: "hash_brown", elem2: "olive_oil" };
+elements.olive_oil.reactions["cheese_curd"] = { elem1: "mozzarella_stick", elem2: "olive_oil" };
+elements.olive_oil.reactions["onion"] = { elem1: "onion_ring", elem2: "olive_oil" };
+}
+
+// D. Drinks & Coffees
+if (elements.espresso) {
+elements.espresso.reactions["milk"] = { elem1: "cappuccino", elem2: null };
+elements.espresso.reactions["heavy_cream"] = { elem1: "macchiato", elem2: null };
+}
+if (elements.coffee_bean) {
+elements.coffee_bean.reactions["water"] = { elem1: "cold_brew", elem2: null };
+}
+if (elements.tea_leaf) {
+elements.tea_leaf.reactions["milk"] = { elem1: "chai_tea", elem2: null };
+}
+
+// E. Fun Soda & Acid Interactions
+if (elements.cola) {
+elements.cola.reactions["mint_leaf"] = { elem1: "foam", elem2: "foam" }; // Diet coke & mentos!
+elements.root_beer.reactions["gelato"] = { elem1: "foam", elem2: null }; // Root beer float!
 }
