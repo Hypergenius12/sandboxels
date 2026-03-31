@@ -1,9 +1,13 @@
 // ==========================================
-// 100 Foods Ultimate Expansion Mod
-// Adds 100 new, non-vanilla foods and wires them into the game's chemistry!
+// 200 FOODS ULTIMATE CULINARY EXPANSION
+// Adds 200 non-vanilla foods and wires them into the game's chemistry!
 // ==========================================
 
 const cat = "food";
+
+/* ==========================================
+   PART 1: The Original 100 Custom Foods 
+   ========================================== */
 
 /* === 1-15: FRUITS & BERRIES === */
 elements.avocado = { color: "#568203", behavior: behaviors.POWDER, category: cat, state: "solid", density: 800, reactions: { "rock": { elem1: "guacamole", elem2: "rock" } } };
@@ -118,8 +122,133 @@ elements.bbq_sauce = { color: "#3E1E04", behavior: behaviors.LIQUID, category: c
 elements.gravy = { color: "#8B5A2B", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1080, viscosity: 20000 };
 
 
-/* === CROSS-MOD & VANILLA REACTIONS BINDING === */
-// Binding all the new foods cleanly to the existing Sandboxels vanilla elements
+/* ==========================================
+   PART 2: The New 100 Custom Foods (101-200)
+   ========================================== */
+
+/* === 101-110: NUTS & SEEDS === */
+elements.almond = { color: "#FFEBCD", behavior: behaviors.POWDER, category: cat, state: "solid", density: 600 };
+elements.walnut = { color: "#8B4513", behavior: behaviors.POWDER, category: cat, state: "solid", density: 550 };
+elements.pecan = { color: "#A0522D", behavior: behaviors.POWDER, category: cat, state: "solid", density: 580 };
+elements.cashew = { color: "#F5DEB3", behavior: behaviors.POWDER, category: cat, state: "solid", density: 620 };
+elements.pistachio = { color: "#93C572", behavior: behaviors.POWDER, category: cat, state: "solid", density: 610 };
+elements.macadamia = { color: "#FFF8DC", behavior: behaviors.POWDER, category: cat, state: "solid", density: 650 };
+elements.sunflower_seed = { color: "#3B2F2F", behavior: behaviors.POWDER, category: cat, state: "solid", density: 400 };
+elements.chia_seed = { color: "#2B1B10", behavior: behaviors.POWDER, category: cat, state: "solid", density: 300 };
+elements.flax_seed = { color: "#8B5A2B", behavior: behaviors.POWDER, category: cat, state: "solid", density: 350 };
+elements.sesame_seed = { color: "#F0E68C", behavior: behaviors.POWDER, category: cat, state: "solid", density: 320 };
+
+/* === 111-120: VEGGIES & ROOTS === */
+elements.asparagus = { color: "#7BA05B", behavior: behaviors.POWDER, category: cat, state: "solid", density: 400 };
+elements.artichoke = { color: "#8F9779", behavior: behaviors.POWDER, category: cat, state: "solid", density: 450 };
+elements.eggplant = { color: "#483248", behavior: behaviors.POWDER, category: cat, state: "solid", density: 500 };
+elements.zucchini = { color: "#5C7148", behavior: behaviors.POWDER, category: cat, state: "solid", density: 480 };
+elements.radish = { color: "#DC143C", behavior: behaviors.POWDER, category: cat, state: "solid", density: 550 };
+elements.turnip = { color: "#F5F5DC", behavior: behaviors.POWDER, category: cat, state: "solid", density: 600 };
+elements.parsnip = { color: "#FFF8DC", behavior: behaviors.POWDER, category: cat, state: "solid", density: 620 };
+elements.beet = { color: "#8A1538", behavior: behaviors.POWDER, category: cat, state: "solid", density: 700 };
+elements.sweet_potato = { color: "#D2691E", behavior: behaviors.POWDER, category: cat, state: "solid", density: 750 };
+elements.edamame = { color: "#9ACD32", behavior: behaviors.POWDER, category: cat, state: "solid", density: 500 };
+
+/* === 121-130: DAIRY ALTERNATIVES & CHEESES === */
+elements.sour_cream = { color: "#FFFAFA", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1020, viscosity: 40000 };
+elements.cream_cheese = { color: "#FFFDD0", behavior: behaviors.WALL, category: cat, state: "solid", density: 950 };
+elements.cottage_cheese = { color: "#F8F8FF", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 900 };
+elements.brie = { color: "#F5DEB3", behavior: behaviors.WALL, category: cat, state: "solid", density: 850 };
+elements.cheddar = { color: "#FF8C00", behavior: behaviors.WALL, category: cat, state: "solid", density: 950 };
+elements.mozzarella = { color: "#FFFAF0", behavior: behaviors.WALL, category: cat, state: "solid", density: 920 };
+elements.parmesan = { color: "#FFFACD", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 1000 };
+elements.gouda = { color: "#DAA520", behavior: behaviors.WALL, category: cat, state: "solid", density: 930 };
+elements.soy_milk = { color: "#FFF8DC", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1010 };
+elements.oat_milk = { color: "#F5DEB3", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1020 };
+
+/* === 131-140: SPICES === */
+elements.cinnamon = { color: "#D2691E", behavior: behaviors.POWDER, category: cat, state: "solid", density: 400 };
+elements.nutmeg = { color: "#8B4513", behavior: behaviors.POWDER, category: cat, state: "solid", density: 450 };
+elements.ginger = { color: "#F5DEB3", behavior: behaviors.POWDER, category: cat, state: "solid", density: 500 };
+elements.turmeric = { color: "#FFD700", behavior: behaviors.POWDER, category: cat, state: "solid", density: 400 };
+elements.paprika = { color: "#FF4500", behavior: behaviors.POWDER, category: cat, state: "solid", density: 420 };
+elements.black_pepper = { color: "#2F4F4F", behavior: behaviors.POWDER, category: cat, state: "solid", density: 450 };
+elements.cumin = { color: "#B8860B", behavior: behaviors.POWDER, category: cat, state: "solid", density: 430 };
+elements.oregano = { color: "#556B2F", behavior: behaviors.POWDER, category: cat, state: "solid", density: 300 };
+elements.basil = { color: "#228B22", behavior: behaviors.POWDER, category: cat, state: "solid", density: 250 };
+elements.thyme = { color: "#6B8E23", behavior: behaviors.POWDER, category: cat, state: "solid", density: 280 };
+
+/* === 141-155: PANTRY STAPLES & SPREADS === */
+elements.vanilla_extract = { color: "#3E1E04", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1050 };
+elements.powdered_sugar = { color: "#FFFFFF", behavior: behaviors.POWDER, category: cat, state: "solid", density: 400 };
+elements.brown_sugar = { color: "#CD853F", behavior: behaviors.POWDER, category: cat, state: "solid", density: 700 };
+elements.icing = { color: "#FFC0CB", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1100, viscosity: 60000 };
+elements.sprinkles = { color: "#FF69B4", behavior: behaviors.POWDER, category: cat, state: "solid", density: 500 };
+elements.cocoa_powder = { color: "#4B3621", behavior: behaviors.POWDER, category: cat, state: "solid", density: 550 };
+elements.peanut_butter = { color: "#D2691E", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1050, viscosity: 80000 };
+elements.almond_butter = { color: "#C4A484", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1060, viscosity: 75000 };
+elements.jam = { color: "#8B008B", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1100, viscosity: 50000 };
+elements.marmalade = { color: "#FF8C00", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1080, viscosity: 45000 };
+elements.aioli = { color: "#FFFDD0", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1020, viscosity: 35000 };
+elements.relish = { color: "#9ACD32", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 1000 };
+elements.salsa = { color: "#B22222", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1050, viscosity: 15000 };
+elements.tzatziki = { color: "#F8F8FF", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1030, viscosity: 25000 };
+elements.hummus = { color: "#D2B48C", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1070, viscosity: 60000 };
+
+/* === 156-165: GRAINS & PASTA === */
+elements.tahini = { color: "#F5DEB3", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1060, viscosity: 55000 };
+elements.pesto = { color: "#228B22", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1040, viscosity: 30000 };
+elements.macaroni = { color: "#FFD700", behavior: behaviors.POWDER, category: cat, state: "solid", density: 600 };
+elements.penne = { color: "#F0E68C", behavior: behaviors.POWDER, category: cat, state: "solid", density: 650 };
+elements.couscous = { color: "#FFE4B5", behavior: behaviors.POWDER, category: cat, state: "solid", density: 700 };
+elements.quinoa = { color: "#DEB887", behavior: behaviors.POWDER, category: cat, state: "solid", density: 680 };
+elements.barley = { color: "#D2B48C", behavior: behaviors.POWDER, category: cat, state: "solid", density: 720 };
+elements.millet = { color: "#F5DEB3", behavior: behaviors.POWDER, category: cat, state: "solid", density: 710 };
+elements.polenta = { color: "#FFD700", behavior: behaviors.POWDER, category: cat, state: "solid", density: 750 };
+elements.grits = { color: "#FFF8DC", behavior: behaviors.POWDER, category: cat, state: "solid", density: 730 };
+
+/* === 166-175: SWEETS & CANDY === */
+elements.breadcrumbs = { color: "#D2B48C", behavior: behaviors.POWDER, category: cat, state: "solid", density: 300 };
+elements.taco_shell = { color: "#DAA520", behavior: behaviors.WALL, category: cat, state: "solid", density: 500 };
+elements.gummy_bear = { color: "#FF69B4", behavior: behaviors.WALL, category: cat, state: "solid", density: 900 };
+elements.jellybean = { color: "#FF4500", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 850 };
+elements.lollipop = { color: "#FF1493", behavior: behaviors.WALL, category: cat, state: "solid", density: 950 };
+elements.taffy = { color: "#FFB6C1", behavior: behaviors.WALL, category: cat, state: "solid", density: 800 };
+elements.licorice = { color: "#000000", behavior: behaviors.WALL, category: cat, state: "solid", density: 880 };
+elements.mint = { color: "#98FF98", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 700 };
+elements.chewing_gum = { color: "#FFC0CB", behavior: behaviors.WALL, category: cat, state: "solid", density: 750 };
+elements.truffle = { color: "#3B2F2F", behavior: behaviors.WALL, category: cat, state: "solid", density: 920 };
+
+/* === 176-180: DRINKS === */
+elements.matcha = { color: "#8F9779", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1010 };
+elements.fruit_punch = { color: "#DC143C", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1030 };
+elements.smoothie = { color: "#FF69B4", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1050, viscosity: 15000 };
+elements.milkshake = { color: "#FFF0F5", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1060, viscosity: 20000 };
+elements.boba = { color: "#D2B48C", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1040, viscosity: 10000 };
+
+/* === 181-200: GLOBAL MEALS & DISHES === */
+elements.empanada = { color: "#DAA520", behavior: behaviors.WALL, category: cat, state: "solid", density: 750 };
+elements.calzone = { color: "#D2691E", behavior: behaviors.WALL, category: cat, state: "solid", density: 800 };
+elements.quiche = { color: "#F0E68C", behavior: behaviors.WALL, category: cat, state: "solid", density: 700 };
+elements.falafel = { color: "#8B5A2B", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 850 };
+elements.shawarma = { color: "#A0522D", behavior: behaviors.WALL, category: cat, state: "solid", density: 900 };
+elements.gyro = { color: "#D2B48C", behavior: behaviors.WALL, category: cat, state: "solid", density: 880 };
+elements.taquito = { color: "#CD853F", behavior: behaviors.WALL, category: cat, state: "solid", density: 800 };
+elements.tamale = { color: "#F5DEB3", behavior: behaviors.WALL, category: cat, state: "solid", density: 850 };
+elements.enchilada = { color: "#B22222", behavior: behaviors.WALL, category: cat, state: "solid", density: 920 };
+elements.paella = { color: "#FFD700", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 950 };
+elements.risotto = { color: "#FFFACD", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 960 };
+elements.jambalaya = { color: "#CD5C5C", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 980 };
+elements.gumbo = { color: "#8B4513", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1090, viscosity: 12000 };
+elements.chowder = { color: "#FFF8DC", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1080, viscosity: 15000 };
+elements.bisque = { color: "#FF7F50", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1070, viscosity: 10000 };
+elements.ceviche = { color: "#FFE4E1", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 1000 };
+elements.kimchi = { color: "#DC143C", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 900 };
+elements.sauerkraut = { color: "#F5F5DC", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 880 };
+elements.miso = { color: "#D2B48C", behavior: behaviors.LIQUID, category: cat, state: "liquid", density: 1060, viscosity: 20000 };
+elements.gelato = { color: "#FFF0F5", behavior: behaviors.STURDYPOWDER, category: cat, state: "solid", density: 950 };
+
+
+/* ==========================================
+   PART 3: THE CHEMISTRY ENGINE
+   Wiring all 200 items into Sandboxels Native Elements!
+   ========================================== */
 
 // 1. Dough Reactions
 if (!elements.dough.reactions) elements.dough.reactions = {};
@@ -133,6 +262,8 @@ elements.dough.reactions.juice = { "elem1": "pie", "elem2": null };
 elements.dough.reactions.candy = { "elem1": "toaster_pastry", "elem2": null }; 
 elements.dough.reactions.meat = { "elem1": "dumpling", "elem2": null }; 
 elements.dough.reactions.potato = { "elem1": "samosa", "elem2": null }; 
+elements.dough.reactions.cooked_meat = { "elem1": "empanada", "elem2": null }; 
+elements.dough.reactions.cheese = { "elem1": "calzone", "elem2": null }; 
 
 // 2. Batter Reactions
 if (!elements.batter.reactions) elements.batter.reactions = {};
@@ -146,6 +277,8 @@ elements.meat.reactions.sauce = { "elem1": "meatball", "elem2": null };
 elements.meat.reactions.salt = { "elem1": "ham", "elem2": null }; 
 elements.meat.reactions.wood = { "elem1": "kebab", "elem2": null }; 
 elements.meat.reactions.herb = { "elem1": "pepperoni", "elem2": null }; 
+elements.meat.reactions.bread = { "elem1": "shawarma", "elem2": null }; 
+elements.meat.reactions.pita_bread = { "elem1": "gyro", "elem2": null }; 
 
 if (!elements.bird.reactions) elements.bird.reactions = {};
 elements.bird.reactions.fire = { "elem1": "turkey_meat", "elem2": null }; 
@@ -156,6 +289,7 @@ elements.bird.reactions.bread = { "elem1": "chicken_nugget", "elem2": null };
 if (!elements.fish.reactions) elements.fish.reactions = {};
 elements.fish.reactions.sand = { "elem1": "shrimp", "elem2": null }; 
 elements.fish.reactions.rock = { "elem1": "crab_meat", "elem2": null }; 
+elements.fish.reactions.corn = { "elem1": "ceviche", "elem2": null }; 
 
 // 5. Bread & Carbs Reactions
 if (!elements.bread.reactions) elements.bread.reactions = {};
@@ -175,7 +309,9 @@ if (!elements.rice.reactions) elements.rice.reactions = {};
 elements.rice.reactions.nut_oil = { "elem1": "fried_rice", "elem2": null }; 
 elements.rice.reactions.water = { "elem1": "riceball", "elem2": null }; 
 elements.rice.reactions.fish = { "elem1": "sushi", "elem2": null }; 
+elements.rice.reactions.broth = { "elem1": "risotto", "elem2": null }; 
 
+// Oats Custom 
 elements.oats.reactions = { "milk": { "elem1": "oatmeal", "elem2": null }, "water": { "elem1": "oatmeal", "elem2": null }, "honey": { "elem1": "granola", "elem2": null } };
 
 // 6. Sauces, Dairy & Liquids Reactions
@@ -184,10 +320,15 @@ elements.cheese.reactions.sugar = { "elem1": "cheesecake", "elem2": null };
 
 if (!elements.milk.reactions) elements.milk.reactions = {};
 elements.milk.reactions.sugar = { "elem1": "pudding", "elem2": null }; 
+elements.milk.reactions.ice = { "elem1": "milkshake", "elem2": null }; 
+// Using cell to mimic bacteria culturing cheese [cite: 268, 304]
+elements.milk.reactions.cell = { "elem1": "brie", "elem2": null }; 
+elements.milk.reactions.yeast = { "elem1": "gouda", "elem2": null }; 
 
 if (!elements.sugar.reactions) elements.sugar.reactions = {};
 elements.sugar.reactions.flash = { "elem1": "cotton_candy", "elem2": null }; 
 elements.sugar.reactions.foam = { "elem1": "marshmallow", "elem2": null }; 
+elements.sugar.reactions.water = { "elem1": "fruit_punch", "elem2": null }; 
 
 if (!elements.broth.reactions) elements.broth.reactions = {};
 elements.broth.reactions.meat = { "elem1": "stew", "elem2": null }; 
@@ -202,4 +343,13 @@ if (!elements.ketchup.reactions) elements.ketchup.reactions = {};
 elements.ketchup.reactions.caramel = { "elem1": "bbq_sauce", "elem2": null }; 
 
 if (!elements.grease.reactions) elements.grease.reactions = {};
-elements.grease.reactions.flour = { "elem1": "gravy", "elem2": null };
+elements.grease.reactions.flour = { "elem1": "gravy", "elem2": null }; 
+
+// 7. Veggie Pickling & Fermentation
+if (!elements.cabbage.reactions) elements.cabbage.reactions = {};
+// Using vanilla vinegar to pickle/ferment [cite: 303]
+elements.cabbage.reactions.vinegar = { "elem1": "sauerkraut", "elem2": null }; 
+
+// 8. Water & Bean
+if (!elements.water.reactions) elements.water.reactions = {};
+elements.water.reactions.plant = { "elem1": "soy_milk", "elem2": null };
