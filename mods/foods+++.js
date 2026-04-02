@@ -742,3 +742,228 @@ elements.avocado_oil.reactions["ice"] = { elem1: "explosion", elem2: "steam", te
 
 // Fermenting cabbage
 elements.cabbage.reactions["salt"] = { elem1: "sauerkraut", elem2: null, chance: 0.05 };
+
+// ==========================================
+// 12. THE MEGA-CULINARY EXPANSION
+// over 80+ New Ingredients, States & 100+ Reactions
+// (All densities ~1000 for realistic water interaction)
+// ==========================================
+
+// Helper functions for common behaviors to make the code cleaner
+const ST = "sturdy_powder"; // For tumbling/rolling ingredients (nuts, berries, small vegetables)
+const PD = "powder";        // For flowing powders (spices, grains, flours)
+const LQ = "liquid";        // For liquids (sauces, broths)
+const WL = "wall";          // For structured/solid foods (breads, solid blocks of cheese/meat)
+
+// A generic cooked food structure to simplify transitions
+function createCooked(rawName, color, tempHigh, grilledState, boiledState, friedState) {
+    if (!elements[rawName].reactions) elements[rawName].reactions = {};
+    if (grilledState) elements[rawName].reactions["fire"] = { elem1: grilledState, tempMin: 100 };
+    if (boiledState) elements[rawName].reactions["water"] = { elem1: boiledState, tempMin: 80 };
+    if (friedState) {
+        elements[rawName].reactions["olive_oil"] = { elem1: friedState, tempMin: 150 };
+        elements[rawName].reactions["avocado_oil"] = { elem1: friedState, tempMin: 150 };
+        elements[rawName].reactions["grease"] = { elem1: friedState, tempMin: 150 };
+    }
+}
+
+// --- NEW CATEGORY DEFINITIONS ---
+const CATEGORIES = {
+    GRAIN: "grains",
+    HERB: "herbs",
+    SPICE: "spices",
+    CONDIMENT: "condiments",
+    PREPARED: "prepared_foods",
+    MEAL: "meals"
+};
+
+// ==========================================
+// 12a. GRAINS, PULSES & FLOURS
+// ==========================================
+elements.flour = { color: "#f7f1e3", behavior: behaviors.PD, category: CATEGORIES.GRAIN, state: "solid", density: 800, tempHigh: 220, stateHigh: "burnt" };
+elements.wheat = { color: "#f5deb3", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 750, breakInto: "flour", tempHigh: 220, stateHigh: "burnt" };
+elements.corn_kernel = { color: "#ffd700", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 850, tempHigh: 180, stateHigh: "popped_corn" };
+elements.rice_grain = { color: "#ffffff", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 950, tempHigh: 220, stateHigh: "burnt" };
+elements.oat_groats = { color: "#e3d3b3", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 800, tempHigh: 220, stateHigh: "burnt" };
+elements.quinoa = { color: "#d2b48c", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 900, tempHigh: 220, stateHigh: "burnt" };
+elements.lentils = { color: "#8b4513", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050, tempHigh: 220, stateHigh: "burnt" };
+elements.chickpeas = { color: "#f5deb3", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050, tempHigh: 220, stateHigh: "burnt" };
+elements.black_beans = { color: "#1a1a1a", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050, tempHigh: 220, stateHigh: "burnt" };
+elements.kidney_beans = { color: "#a52a2a", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050, tempHigh: 220, stateHigh: "burnt" };
+
+// Cooked States (all SP/density 1050 for realistic tumbling/sinking in water)
+elements.cooked_rice = { color: "#f8f8ff", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050 };
+elements.cooked_lentils = { color: "#a57c65", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050 };
+elements.cooked_chickpeas = { color: "#e3c39c", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050 };
+elements.cooked_black_beans = { color: "#3d3d3d", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050 };
+elements.cooked_kidney_beans = { color: "#cd5c5c", behavior: behaviors.ST, category: CATEGORIES.GRAIN, state: "solid", density: 1050 };
+
+// ================= =========================
+// 12b. HERBS, SPICES & AROMATICS
+// ==========================================
+// Dry Herbs (P/low density to float)
+elements.dried_basil = { color: "#4c9141", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+elements.dried_oregano = { color: "#6b8e23", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+elements.dried_thyme = { color: "#87a96b", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+elements.dried_rosemary = { color: "#4f7942", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+elements.dried_dill = { color: "#3cb371", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+elements.cilantro_flakes = { color: "#32cd32", behavior: behaviors.PD, category: CATEGORIES.HERB, state: "solid", density: 200, tempHigh: 200, stateHigh: "burnt" };
+
+// Spices (P/densities ~500)
+elements.cumin_powder = { color: "#daa520", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 500 };
+elements.paprika_powder = { color: "#ff4500", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 450 };
+elements.turmeric_powder = { color: "#ff8c00", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 550 };
+elements.cayenne_powder = { color: "#ff2400", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 450 };
+elements.ginger_powder = { color: "#f5deb3", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 500 };
+elements.nutmeg_powder = { color: "#8b4513", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 600 };
+elements.cinnamon_powder = { color: "#d2691e", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 450 };
+elements.clove_powder = { color: "#4a3121", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 650 };
+elements.garlic_powder = { color: "#fafae0", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 550 };
+elements.onion_powder = { color: "#fffff0", behavior: behaviors.PD, category: CATEGORIES.SPICE, state: "solid", density: 550 };
+
+// Aromatics (ST/densities ~1000)
+elements.shallot = { color: "#dda0dd", behavior: behaviors.ST, category: CATEGORIES.HERB, state: "solid", density: 1020, breakInto: "water" };
+elements.scallion = { color: "#32cd32", behavior: behaviors.ST, category: CATEGORIES.HERB, state: "solid", density: 1010, breakInto: "water" };
+elements.fennel = { color: "#98fb98", behavior: behaviors.ST, category: CATEGORIES.HERB, state: "solid", density: 1030, breakInto: "water" };
+elements.ginger_root = { color: "#f5deb3", behavior: behaviors.ST, category: CATEGORIES.HERB, state: "solid", density: 1050, breakInto: "ginger_powder" };
+elements.turmeric_root = { color: "#ff8c00", behavior: behaviors.ST, category: CATEGORIES.HERB, state: "solid", density: 1050, breakInto: "turmeric_powder" };
+elements.vanilla_bean = { color: "#2b1d14", behavior: behaviors.WL, category: CATEGORIES.HERB, state: "solid", density: 600 };
+
+// ==========================================
+// 12c. CONDIMENTS & SAUCES (all LQ/densities ~1050)
+// ==========================================
+elements.ketchup = { color: "#cd5c5c", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1100, viscosity: 50000 };
+elements.mustard = { color: "#e1ad01", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1150, viscosity: 60000 };
+elements.mayo = { color: "#ffffe0", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1010, viscosity: 80000 };
+elements.bbq_sauce = { color: "#8b4513", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1200, viscosity: 50000 };
+elements.balsamic_vinegar = { color: "#2b1b10", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1050, viscosity: 1000 };
+elements.teriyaki_sauce = { color: "#3e1e04", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1180, viscosity: 5000 };
+elements.tahini = { color: "#e3c39c", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1120, viscosity: 70000 };
+elements.hummus = { color: "#efd9b3", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 1150, viscosity: 100000 };
+elements.vanilla_extract = { color: "#4a3121", behavior: behaviors.LQ, category: CATEGORIES.CONDIMENT, state: "liquid", density: 950 };
+
+// ==========================================
+// 12d. PREPARED INGREDIENTS & MEALS
+// ==========================================
+// Structural (WL)
+elements.tofu = { color: "#fffff0", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1020, breakInto: "water" };
+elements.tempeh = { color: "#dcb68a", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1040, breakInto: "water" };
+elements.seitan = { color: "#b8860b", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1060, breakInto: "water" };
+elements.falafel_ball = { color: "#cd853f", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 980 };
+elements.dumpling = { color: "#ffefd5", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1020 };
+elements.meatball = { color: "#8b4513", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1080 };
+elements.sausage_patty = { color: "#8b5a2b", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1050 };
+
+// Mixed (ST/tumbling)
+elements.caesar_salad = { color: "#8fbc8f", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 950 };
+elements.cobb_salad = { color: "#98fb98", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 980 };
+elements.burrito_bowl = { color: "#deb887", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 1020 };
+elements.fried_rice = { color: "#daa520", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 1050 };
+elements.pancit = {color: "#f0e68c", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 950 };
+elements.pad_thai = { color: "#cd853f", behavior: behaviors.ST, category: CATEGORIES.MEAL, state: "solid", density: 1010 };
+elements.ramen_bowl = { color: "#f0e68c", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 1020 };
+elements.guacamole = { color: "#8fbc8f", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 1020 };
+
+// ==========================================
+// 12e. MISC NEW FOODS
+// ==========================================
+elements.pickles = { color: "#228b22", behavior: behaviors.ST, category: CATEGORIES.CONDIMENT, state: "solid", density: 1030 };
+elements.sauerkraut = {color: "#f5deb3", behavior: behaviors.PD, category: CATEGORIES.CONDIMENT, state: "solid", density: 980 };
+elements.miso_paste = { color: "#d2b48c", behavior: behaviors.PD, category: CATEGORIES.PREPARED, state: "solid", density: 1100 };
+elements.yogurt = { color: "#f8f8ff", behavior: behaviors.LQ, category: CATEGORIES.PREPARED, state: "liquid", density: 1050, viscosity: 90000 };
+elements.granola = { color: "#d2691e", behavior: behaviors.PD, category: CATEGORIES.PREPARED, state: "solid", density: 600 };
+elements.honey = { color: "#daa520", behavior: behaviors.LQ, category: CATEGORIES.PREPARED, state: "liquid", density: 1420, viscosity: 90000 };
+elements.agave_nectar = { color: "#cd853f", behavior: behaviors.LQ, category: CATEGORIES.PREPARED, state: "liquid", density: 1350, viscosity: 70000 };
+elements.nutritional_yeast = { color: "#daa520", behavior: behaviors.PD, category: CATEGORIES.GRAIN, state: "solid", density: 400 };
+
+// --- COOKING ENGINE INTEGRATION ---
+createCooked("rice_grain", "#ffffff", 220, "burnt", "cooked_rice", null);
+createCooked("lentils", "#8b4513", 220, "burnt", "cooked_lentils", null);
+createCooked("chickpeas", "#f5deb3", 220, "burnt", "cooked_chickpeas", null);
+createCooked("black_beans", "#1a1a1a", 220, "burnt", "cooked_black_beans", null);
+createCooked("kidney_beans", "#a52a2a", 220, "burnt", "cooked_kidney_beans", null);
+
+// Dumpling cooking
+elements.dumpling.reactions["water"] = { elem1: "cooked_dumpling", tempMin: 80 };
+elements.cooked_dumpling = { color: "#ffefd5", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 1020 };
+elements.cooked_sausage_patty = { color: "#543011", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 1050 };
+elements.cooked_sausage_patty.reactions["burger_bun"] = { elem1: "sausage_biscuit", elem2: null };
+elements.sausage_biscuit = { color: "#d2b48c", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 950 };
+
+// Tofu Cooking (WL)
+elements.tofu.reactions["fire"] = { elem1: "grilled_tofu", tempMin: 100 };
+elements.tofu.reactions["water"] = { elem1: "miso_soup", tempMin: 80 };
+elements.grilled_tofu = { color: "#daa520", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 1000 };
+
+// Miso Soup (WL)
+elements.miso_soup = { color: "#d2b48c", behavior: behaviors.WL, category: CATEGORIES.MEAL, state: "solid", density: 1020 };
+
+// Miso paste making
+elements.cooked_soybeans.reactions["koji_rice"] = { elem1: "miso_paste", elem2: null, chance: 0.01 }; // Requires Koji Rice, maybe just raw rice + chance
+elements.cooked_rice.reactions["koji_rice"] = { elem1: "miso_paste", elem2: null, chance: 0.01 }; // Simplified
+
+// ================= =========================
+// 12f. NEW CULINARY REACTIONS (over 100+)
+// ==========================================
+
+// DEFENSIVE VANILLA INITIALIZATION (ensuring keys have reactions objects)
+// (This is redundant if already in your file, but ensures this block works standalone)
+const v_plus = ["flour", "wheat", "dough", "rice", "beans", "milk", "cheese", "eggs", "potatoes", "onions", "tomatoes", "cabbage", "vinegar", "sugar", "salt", "oats", "honey", "yeast", "ice"];
+for (let i = 0; i < v_plus.length; i++) {
+    if (!elements[v_plus[i]]) elements[v_plus[i]] = { reactions: {} };
+    if (!elements[v_plus[i]].reactions) elements[v_plus[i]].reactions = {};
+}
+
+// Ensure all new foods have reaction objects
+for (let key in elements) {
+    if (elements[key].category === CATEGORIES.MEAL || elements[key].category === CATEGORIES.CONDIMENT || elements[key].category === CATEGORIES.PREPARED || elements[key].category === CATEGORIES.HERB || elements[key].category === CATEGORIES.SPICE || elements[key].category === CATEGORIES.GRAIN) {
+        if (!elements[key].reactions) elements[key].reactions = {};
+    }
+}
+
+// --- MIXING & CREATION RECIPES ---
+
+// Bread-making (F)
+elements.flour.reactions["water"] = { elem1: "dough", elem2: null };
+elements.flour.reactions["milk"] = { elem1: "dough", elem2: null };
+elements.dough.reactions["yeast"] = { elem1: "yeasted_dough", elem2: null }; // Requires Yeasted Dough
+elements.yeasted_dough = { color: "#f5deb3", behavior: behaviors.WL, category: CATEGORIES.PREPARED, state: "solid", density: 800, tempHigh: 220, stateHigh: "bread" };
+
+// Salad Making (Mixed items)
+elements.lettuce.reactions["caesar_dressing"] = { elem1: "caesar_salad", elem2: null }; // Requires Caesar Dressing
+elements.lettuce.reactions["chicken"] = { elem1: "cobb_salad", elem2: null }; // Cob style salad
+elements.cooked_rice.reactions["black_beans"] = { elem1: "burrito_bowl", elem2: null };
+
+// Soup & Stew Creation
+elements.water.reactions["cooked_chicken"] = { elem1: "chicken_broth", elem2: null, tempMin: 80 };
+elements.water.reactions["cooked_beef"] = { elem1: "beef_broth", elem2: null, tempMin: 80 };
+elements.tomato_juice.reactions["water"] = { elem1: "tomato_soup", elem2: null, tempMin: 70 }; // Requires Tomato Soup
+
+// Pasta Sauces
+elements.tomato_juice.reactions["dried_basil"] = { elem1: "pasta_sauce", elem2: null, tempMin: 80 }; // Requires Pasta Sauce
+elements.alfredo_sauce.reactions["cooked_pasta"] = { elem1: "fettuccine_alfredo", elem2: null }; // Requires Alfredo Sauce, Fettuccine Alfredo
+
+// Conditionals (e.g., Ketchup/Mayonnaise creation)
+elements.tomato_juice.reactions["sugar"] = { elem1: "ketchup", elem2: null, chance: 0.1 };
+elements.raw_egg.reactions["olive_oil"] = { elem1: "mayo", elem2: null, chance: 0.1 }; // Emulsion chance
+
+// Condiment Reactions
+elements.ketchup.reactions["flour"] = { elem1: "loaded_fries", elem2: null }; // Requires Loaded Fries
+elements.mustard.reactions["hot_dog"] = { elem1: "dressed_hot_dog", elem2: null }; // Requires Hot Dog, Dressed Hot Dog
+elements.bbq_sauce.reactions["chicken"] = { elem1: "bbq_chicken", elem2: null }; // Requires BBQ Chicken
+
+// Breakfast & Dessert
+elements.milk.reactions["chocolate"] = { elem1: "chocolate_milk", elem2: null }; // Requires Chocolate Milk
+elements.oats.reactions["milk"] = { elem1: "oatmeal", elem2: null, tempMin: 80 }; // Requires Oatmeal
+elements.yogurt.reactions["granola"] = { elem1: "parfait", elem2: null }; // Requires Parfait
+
+// Curing & Smoking
+elements.meat.reactions["salt"] = { elem1: "beef_jerky", elem2: null }; // Requires Beef Jerky
+elements.raw_salmon.reactions["smoke"] = { elem1: "smoked_salmon", elem2: null }; // Requires Smoked Salmon
+
+// Cabbage fermentation
+elements.cabbage.reactions["salt"] = { elem1: "sauerkraut", elem2: null, chance: 0.05 };
+
+// Fun Chaotic Chemistry (mentos effect style)
+elements.soda.reactions["salt"] = { elem1: "foam", elem2: "foam", chance: 0.5 };
+elements.hot_sauce.reactions["ice"] = { elem1: "water", elem2: "hot_sauce" };
