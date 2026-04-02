@@ -629,3 +629,116 @@ elements.hot_sauce.reactions["snow"] = { elem1: "water", elem2: "hot_sauce" };
 elements.chili_pepper.reactions["meat"] = { elem1: "stew", elem2: null };
 elements.milk.reactions["acid"] = { elem1: "sour_cream", elem2: null };
 elements.milk.reactions["lemon_juice"] = { elem1: "sour_cream", elem2: null };
+// ==========================================
+// 11. ADVANCED CULINARY REACTIONS & RECIPES
+// ==========================================
+
+// Ensure baseline elements exist for our complex recipes. 
+// If they don't exist yet, we generate a fallback template for them!
+const complex_foods = [
+    "ketchup", "mustard", "mayo", "salad", "cheese_fries", "loaded_fries", 
+    "chicken_soup", "beef_stew", "grilled_cheese", "cheeseburger", 
+    "chocolate_milk", "smoothie", "jam", "wine", "sour_cream", "bacon_sandwich", 
+    "chicken_sandwich", "loaded_potato", "buttered_potato", "chicken_broth", 
+    "beef_broth", "tomato_soup", "perfection", "syrup_pancake", "syrup_waffle", 
+    "chicken_and_waffles", "breakfast_plate", "dressed_salad", "caesar_salad", 
+    "chicken_salad", "cinnamon_roll", "raw_apple_pie", "apple_pie", "s_more", 
+    "guacamole", "good_guacamole", "tortilla_chip", "chips_and_guac", "nachos", 
+    "sauerkraut"
+];
+
+for (let i = 0; i < complex_foods.length; i++) {
+    let el = complex_foods[i];
+    if (!elements[el]) {
+        elements[el] = { 
+            color: "#dcb68a", // Generic appetizing baked color fallback
+            behavior: behaviors.STURDYPOWDER, 
+            category: "food", 
+            state: "solid", 
+            density: 800,
+            tempHigh: 250,
+            stateHigh: "burnt",
+            reactions: {}
+        };
+    } else if (!elements[el].reactions) {
+        elements[el].reactions = {};
+    }
+}
+
+// Add specific colors to some of the new fun items to make them pop
+elements.sauerkraut.color = "#e3e3b3";
+elements.tomato_soup.color = "#d93b2b";
+elements.chicken_broth.color = "#e8c97d";
+elements.beef_broth.color = "#5c3317";
+elements.nachos.color = "#e6af2e";
+elements.mayo.color = "#ffffe0";
+elements.guacamole.color = "#7da848";
+
+// --- A. THE BURGER & SANDWICH WORKSHOP ---
+// Bread + meat = sandwich/burger bases
+elements.bread.reactions["steak"] = { elem1: "burger", elem2: null };
+elements.bread.reactions["bacon"] = { elem1: "bacon_sandwich", elem2: null };
+elements.bread.reactions["fried_chicken"] = { elem1: "chicken_sandwich", elem2: null };
+// Adding cheese
+elements.burger.reactions["cheese"] = { elem1: "cheeseburger", elem2: null };
+elements.bread.reactions["cheese"] = { elem1: "grilled_cheese", elem2: null, tempMin: 60 }; // Needs to be toasted!
+
+// --- B. POTATO PERFECTION (Fries & Loaded Potatoes) ---
+elements.fried_potato.reactions["ketchup"] = { elem1: "loaded_fries", elem2: null };
+elements.fried_potato.reactions["cheese"] = { elem1: "cheese_fries", elem2: null };
+elements.baked_potato.reactions["sour_cream"] = { elem1: "loaded_potato", elem2: null };
+elements.baked_potato.reactions["butter_stick"] = { elem1: "buttered_potato", elem2: null };
+elements.baked_potato.reactions["bacon"] = { elem1: "loaded_potato", elem2: null };
+
+// --- C. SOUPS & STEWS (Water + Cooked Ingredients) ---
+elements.water.reactions["boiled_chicken"] = { elem1: "chicken_broth", elem2: null, tempMin: 80 };
+elements.chicken_broth.reactions["boiled_carrot"] = { elem1: "chicken_soup", elem2: null, tempMin: 80 };
+elements.water.reactions["boiled_steak"] = { elem1: "beef_broth", elem2: null, tempMin: 80 };
+elements.beef_broth.reactions["boiled_potato"] = { elem1: "beef_stew", elem2: null, tempMin: 80 };
+elements.tomato_juice.reactions["water"] = { elem1: "tomato_soup", elem2: null, tempMin: 70 };
+elements.tomato_soup.reactions["grilled_cheese"] = { elem1: "perfection", elem2: null }; // Fun easter egg combo!
+
+// --- D. BREAKFAST COMBOS ---
+elements.pancake.reactions["maple_syrup"] = { elem1: "syrup_pancake", elem2: null };
+elements.waffle.reactions["maple_syrup"] = { elem1: "syrup_waffle", elem2: null };
+elements.waffle.reactions["fried_chicken"] = { elem1: "chicken_and_waffles", elem2: null };
+elements.fried_egg.reactions["bacon"] = { elem1: "breakfast_plate", elem2: null };
+
+// --- E. SALADS & HEALTHY STUFF ---
+elements.lettuce.reactions["tomato"] = { elem1: "salad", elem2: null };
+elements.salad.reactions["olive_oil"] = { elem1: "dressed_salad", elem2: null };
+elements.salad.reactions["crouton"] = { elem1: "caesar_salad", elem2: null };
+elements.salad.reactions["chicken"] = { elem1: "chicken_salad", elem2: null };
+
+// --- F. DESSERTS, SWEETS & BAKING ---
+elements.milk.reactions["chocolate_syrup"] = { elem1: "chocolate_milk", elem2: null };
+elements.milk.reactions["chocolate"] = { elem1: "chocolate_milk", elem2: null };
+elements.cookie_dough.reactions["fire"] = { elem1: "cookie", elem2: null, tempMin: 150 };
+elements.dough.reactions["cinnamon"] = { elem1: "cinnamon_roll", elem2: null, tempMin: 150 };
+elements.apple.reactions["dough"] = { elem1: "raw_apple_pie", elem2: null };
+elements.raw_apple_pie.reactions["fire"] = { elem1: "apple_pie", elem2: null, tempMin: 160 };
+elements.marshmallow.reactions["chocolate"] = { elem1: "s_more", elem2: null }; 
+
+// --- G. CONDIMENTS, EXTRAS, & EMULSIONS ---
+elements.tomato.reactions["vinegar"] = { elem1: "ketchup", elem2: null };
+elements.raw_egg.reactions["olive_oil"] = { elem1: "mayo", elem2: null }; // Creating an emulsion!
+elements.avocado.reactions["onion"] = { elem1: "guacamole", elem2: null };
+elements.guacamole.reactions["lime_juice"] = { elem1: "good_guacamole", elem2: null };
+elements.tortilla.reactions["fire"] = { elem1: "tortilla_chip", elem2: null, tempMin: 100 };
+elements.tortilla_chip.reactions["guacamole"] = { elem1: "chips_and_guac", elem2: null };
+elements.tortilla_chip.reactions["cheese"] = { elem1: "nachos", elem2: null, tempMin: 50 }; // Melts into nachos
+
+// --- H. KITCHEN DISASTERS & CHAOTIC CHEMISTRY ---
+// Mentos + Soda style reaction (using salt and soda if soda exists)
+if (elements.soda) {
+    if (!elements.soda.reactions) elements.soda.reactions = {};
+    elements.soda.reactions["salt"] = { elem1: "foam", elem2: "foam", chance: 0.5 };
+}
+
+// Deep frying ice is incredibly dangerous!
+elements.grease.reactions["ice"] = { elem1: "explosion", elem2: "steam", tempMin: 150, chance: 0.2 };
+elements.olive_oil.reactions["ice"] = { elem1: "explosion", elem2: "steam", tempMin: 150, chance: 0.2 };
+elements.avocado_oil.reactions["ice"] = { elem1: "explosion", elem2: "steam", tempMin: 150, chance: 0.2 };
+
+// Fermenting cabbage
+elements.cabbage.reactions["salt"] = { elem1: "sauerkraut", elem2: null, chance: 0.05 };
