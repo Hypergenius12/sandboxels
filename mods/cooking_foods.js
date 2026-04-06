@@ -1,165 +1,186 @@
-/* == Master Chef Mod - Complete Unified Edition == */
+/* == Master Chef Mod - Complete Unified Edition (Debugged & Enhanced) == */
 // Adds new raw ingredients, complex multi-step reactions, and a dedicated "Dishes" tab.
 // Ensure you do a HARD REFRESH (Ctrl+F5 or Cmd+Shift+R) after saving!
 
 // ==========================================
-// 1. RAW INGREDIENTS & SPICES
+// 1. SMART ELEMENT INITIALIZER 
 // ==========================================
-elements.onion = { color: "#e6e6fa", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 };
-elements.garlic = { color: "#f3eec3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 };
-elements.mushroom = { color: "#d9c8b4", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600 };
-elements.bacon_raw = { color: "#ff9999", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1000, tempHigh: 110, stateHigh: "bacon_cooked" };
-elements.bacon_cooked = { color: "#8b4513", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 950 };
-elements.pasta_raw = { color: "#ffebb5", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1200 };
-elements.pasta_cooked = { color: "#f5d678", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1100 };
-elements.strawberry = { color: "#ff3333", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 };
-elements.apple = { color: "#ff4d4d", behavior: behaviors.POWDER, category: "food", state: "solid", density: 950 };
-elements.olive_oil = { color: "#d4db84", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 910, viscosity: 100, burn: 60, burnTime: 300 };
-elements.salmon = { color: "#fa8072", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 100, stateHigh: "cookedmeat" };
-elements.milk = { color: "#fdfff0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1030 };
-elements.cream = { color: "#ffffe0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010, viscosity: 200 };
-elements.vanilla_extract = { color: "#4a3018", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 980 };
-elements.cocoa_powder = { color: "#5c3a21", behavior: behaviors.POWDER, category: "food", state: "solid", density: 500 };
-elements.baking_soda = { color: "#ffffff", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 };
-elements.vinegar = { color: "#e3e3c8", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010 };
-elements.lemon = { color: "#fff000", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 };
-elements.lemon_juice = { color: "#fffacd", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1020 };
-elements.honey = { color: "#ffc300", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1420, viscosity: 50000 };
-elements.maple_syrup = { color: "#bb5d19", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1370, viscosity: 10000 };
-elements.cinnamon = { color: "#d2691e", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600 };
-elements.black_pepper = { color: "#363636", behavior: behaviors.POWDER, category: "food", state: "solid", density: 550 };
-elements.chili_powder = { color: "#c42a2a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600 };
-elements.tortilla = { color: "#f2e3c6", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 900 };
-elements.corn_chip = { color: "#e8c351", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 850 };
-elements.sausage_raw = { color: "#cc7a7a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 110, stateHigh: "sausage_cooked" };
-elements.sausage_cooked = { color: "#8a4f4f", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1000 };
-elements.chicken_raw = { color: "#ffccb3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 120, stateHigh: "cookedmeat" };
+// This helper function safely adds elements, automatically injecting
+// burn temperatures, freezing points, and breaking physics without overriding vanilla elements.
+function addFood(name, data) {
+    if (!elements[name]) {
+        // Automatically add burning mechanics to solids if not explicitly defined
+        if (data.state === "solid" && !data.tempHigh) {
+            data.tempHigh = 250;
+            data.stateHigh = "ash";
+        }
+        // Automatically add freezing mechanics to liquids if not explicitly defined
+        if (data.state === "liquid" && !data.tempLow) {
+            data.tempLow = 0;
+            data.stateLow = "ice";
+        }
+        // Give sturdy foods a physical crumbling mechanic
+        if (data.behavior === behaviors.STURDYPOWDER && !data.breakInto) {
+            data.breakInto = "crumb"; 
+        }
+        elements[name] = data;
+    }
+}
 
 // ==========================================
-// 2. INTERMEDIARY FOODS (Hidden from UI, used for crafting logic)
+// 2. RAW INGREDIENTS & SPICES
 // ==========================================
-elements.blt_base = { color: "#b36b3b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.blt_almost = { color: "#6bb33b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.pb_bread = { color: "#d6a45e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.meat_broth = { color: "#8a5c32", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040, hidden: true };
-elements.bean_sauce = { color: "#9e3814", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1080, hidden: true };
-elements.sushi_rice = { color: "#e6f2eb", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.meat_taco = { color: "#c49a47", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.bean_burrito = { color: "#b5a37e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.alfredo_base = { color: "#faecc8", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.noodle_broth = { color: "#bda755", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", hidden: true };
-elements.eggy_bread = { color: "#ded18c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.sausage_toast = { color: "#8a582b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.cinnamon_dough = { color: "#ba9f7b", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", tempHigh: 120, stateHigh: "baked_cinnamon_roll", hidden: true };
-elements.baked_cinnamon_roll = { color: "#9e7746", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
-elements.choco_icecream = { color: "#99736c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true };
+addFood("onion", { color: "#e6e6fa", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 });
+addFood("garlic", { color: "#f3eec3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 });
+addFood("mushroom", { color: "#d9c8b4", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600 });
+addFood("bacon_raw", { color: "#ff9999", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1000, tempHigh: 110, stateHigh: "bacon_cooked" });
+addFood("bacon_cooked", { color: "#8b4513", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 950 });
+addFood("pasta_raw", { color: "#ffebb5", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1200 });
+addFood("pasta_cooked", { color: "#f5d678", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1100 });
+addFood("strawberry", { color: "#ff3333", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 });
+addFood("apple", { color: "#ff4d4d", behavior: behaviors.POWDER, category: "food", state: "solid", density: 950 });
+addFood("olive_oil", { color: "#d4db84", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 910, viscosity: 100, burn: 60, burnTime: 300, tempHigh: 280, stateHigh: "fire" });
+addFood("salmon", { color: "#fa8072", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 100, stateHigh: "cookedmeat" });
+addFood("milk", { color: "#fdfff0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1030 });
+addFood("cream", { color: "#ffffe0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010, viscosity: 200 });
+addFood("vanilla_extract", { color: "#4a3018", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 980 });
+addFood("cocoa_powder", { color: "#5c3a21", behavior: behaviors.POWDER, category: "food", state: "solid", density: 500, breakInto: "dust" });
+addFood("baking_soda", { color: "#ffffff", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800, breakInto: "dust" });
+addFood("vinegar", { color: "#e3e3c8", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010 });
+addFood("lemon", { color: "#fff000", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 });
+addFood("lemon_juice", { color: "#fffacd", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1020 });
+addFood("honey", { color: "#ffc300", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1420, viscosity: 50000 });
+addFood("maple_syrup", { color: "#bb5d19", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1370, viscosity: 10000 });
+addFood("cinnamon", { color: "#d2691e", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600, breakInto: "dust" });
+addFood("black_pepper", { color: "#363636", behavior: behaviors.POWDER, category: "food", state: "solid", density: 550, breakInto: "dust" });
+addFood("chili_powder", { color: "#c42a2a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600, breakInto: "dust" });
+addFood("tortilla", { color: "#f2e3c6", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 900 });
+addFood("corn_chip", { color: "#e8c351", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 850 });
+addFood("sausage_raw", { color: "#cc7a7a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 110, stateHigh: "sausage_cooked" });
+addFood("sausage_cooked", { color: "#8a4f4f", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1000 });
+addFood("chicken_raw", { color: "#ffccb3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 120, stateHigh: "cookedmeat" });
 
 // ==========================================
-// 3. FINAL DISHES (Visible in the new UI tab)
+// 3. INTERMEDIARY FOODS (Hidden from UI)
 // ==========================================
-elements.pizza_dough = { color: "#ffe4b5", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.pizza = { color: "#d9643a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.salad = { color: "#4caf50", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.dressed_salad = { color: "#7cbd6b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.burger = { color: "#8b5a2b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.cheeseburger = { color: "#dca938", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.bacon_burger = { color: "#75461c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.omelet = { color: "#ffd700", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.mushroom_soup = { color: "#a38d72", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 };
-elements.onion_soup = { color: "#c2a378", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1030 };
-elements.mac_and_cheese = { color: "#ffb90f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.spaghetti_bolognese = { color: "#b22222", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.fried_rice = { color: "#e8c982", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.sushi = { color: "#ffffff", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.apple_pie = { color: "#e59c3a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.strawberry_tart = { color: "#e86f68", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.garlic_bread = { color: "#e8d082", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.fries = { color: "#f4c63f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.grilled_cheese = { color: "#e8a923", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.blt_sandwich = { color: "#d67c52", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.pbj_sandwich = { color: "#955c9e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.stew = { color: "#6b421a", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1100, viscosity: 500 };
-elements.chili = { color: "#7a270a", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1150, viscosity: 800 };
-elements.syrup = { color: "#8f571b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1300, viscosity: 8000 };
-elements.caramel = { color: "#d68a22", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1200, viscosity: 10000 };
-elements.choco_strawberry = { color: "#4a2511", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.garlic_oil = { color: "#e3dd81", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 920, viscosity: 100 };
-elements.pancake_batter = { color: "#f5deb3", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1100, viscosity: 5000, tempHigh: 100, stateHigh: "pancake" };
-elements.pancake = { color: "#e0b876", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.waffle_batter = { color: "#f5deb3", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1150, viscosity: 8000, tempHigh: 110, stateHigh: "waffle" };
-elements.waffle = { color: "#d29c4b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.cookie_dough = { color: "#dcb274", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1200, tempHigh: 150, stateHigh: "cookie" };
-elements.cookie = { color: "#b38241", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.chocolate_chip_cookie = { color: "#9e6f31", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.brownie_batter = { color: "#4a2e15", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1250, viscosity: 15000, tempHigh: 160, stateHigh: "brownie" };
-elements.brownie = { color: "#36200d", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.taco = { color: "#e3bc4b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.burrito = { color: "#d6c9a9", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.nachos = { color: "#e8a923", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.hot_dog = { color: "#b86349", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.lemonade = { color: "#fdfd96", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040 };
-elements.chocolate_milk = { color: "#8b5a2b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 };
-elements.hot_chocolate = { color: "#6b4226", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 };
-elements.fettuccine_alfredo = { color: "#fcf5e3", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.quesadilla = { color: "#f0d381", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.french_toast = { color: "#c98f3e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.cinnamon_roll = { color: "#d6ab72", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.chicken_noodle_soup = { color: "#d1bc6b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040 };
-elements.ice_cream_sundae = { color: "#f0dde2", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.breakfast_sandwich = { color: "#b57b45", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
-elements.latte = { color: "#c29d78", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1020 };
-elements.iced_coffee = { color: "#543315", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1010 };
-elements.gravy = { color: "#704f2d", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1080, viscosity: 2000 };
-elements.mashed_potatoes_gravy = { color: "#e8dca2", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" };
+addFood("blt_base", { color: "#b36b3b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("blt_almost", { color: "#6bb33b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("pb_bread", { color: "#d6a45e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("meat_broth", { color: "#8a5c32", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040, hidden: true });
+addFood("bean_sauce", { color: "#9e3814", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1080, hidden: true });
+addFood("sushi_rice", { color: "#e6f2eb", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("meat_taco", { color: "#c49a47", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("bean_burrito", { color: "#b5a37e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("alfredo_base", { color: "#faecc8", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("noodle_broth", { color: "#bda755", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", hidden: true });
+addFood("eggy_bread", { color: "#ded18c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("sausage_toast", { color: "#8a582b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("cinnamon_dough", { color: "#ba9f7b", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", tempHigh: 120, stateHigh: "baked_cinnamon_roll", hidden: true });
+addFood("baked_cinnamon_roll", { color: "#9e7746", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
+addFood("choco_icecream", { color: "#99736c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true, tempHigh: 30, stateHigh: "chocolate_milk" });
 
 // ==========================================
-// 4. SAFELY INITIALIZE DICTIONARIES
+// 4. FINAL DISHES 
 // ==========================================
-// This unified check ensures we never accidentally crash the game by referencing undefined objects.
-const vanillaElementsToHook = [
+addFood("pizza_dough", { color: "#ffe4b5", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("pizza", { color: "#d9643a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("salad", { color: "#4caf50", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", breakInto: "lettuce" });
+addFood("dressed_salad", { color: "#7cbd6b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", breakInto: "lettuce" });
+addFood("burger", { color: "#8b5a2b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("cheeseburger", { color: "#dca938", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("bacon_burger", { color: "#75461c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("omelet", { color: "#ffd700", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("mushroom_soup", { color: "#a38d72", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 });
+addFood("onion_soup", { color: "#c2a378", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1030 });
+addFood("mac_and_cheese", { color: "#ffb90f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("spaghetti_bolognese", { color: "#b22222", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("fried_rice", { color: "#e8c982", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("sushi", { color: "#ffffff", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("apple_pie", { color: "#e59c3a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("strawberry_tart", { color: "#e86f68", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("garlic_bread", { color: "#e8d082", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("fries", { color: "#f4c63f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("grilled_cheese", { color: "#e8a923", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("blt_sandwich", { color: "#d67c52", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("pbj_sandwich", { color: "#955c9e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("stew", { color: "#6b421a", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1100, viscosity: 500 });
+addFood("chili", { color: "#7a270a", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1150, viscosity: 800 });
+addFood("syrup", { color: "#8f571b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1300, viscosity: 8000 });
+addFood("caramel", { color: "#d68a22", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1200, viscosity: 10000 });
+addFood("choco_strawberry", { color: "#4a2511", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("garlic_oil", { color: "#e3dd81", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 920, viscosity: 100 });
+addFood("pancake_batter", { color: "#f5deb3", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1100, viscosity: 5000, tempHigh: 100, stateHigh: "pancake" });
+addFood("pancake", { color: "#e0b876", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("waffle_batter", { color: "#f5deb3", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1150, viscosity: 8000, tempHigh: 110, stateHigh: "waffle" });
+addFood("waffle", { color: "#d29c4b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("cookie_dough", { color: "#dcb274", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1200, tempHigh: 150, stateHigh: "cookie" });
+addFood("cookie", { color: "#b38241", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("chocolate_chip_cookie", { color: "#9e6f31", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("brownie_batter", { color: "#4a2e15", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1250, viscosity: 15000, tempHigh: 160, stateHigh: "brownie" });
+addFood("brownie", { color: "#36200d", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("taco", { color: "#e3bc4b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("burrito", { color: "#d6c9a9", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("nachos", { color: "#e8a923", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("hot_dog", { color: "#b86349", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("lemonade", { color: "#fdfd96", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040 });
+addFood("chocolate_milk", { color: "#8b5a2b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 });
+addFood("hot_chocolate", { color: "#6b4226", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1050 });
+addFood("fettuccine_alfredo", { color: "#fcf5e3", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("quesadilla", { color: "#f0d381", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("french_toast", { color: "#c98f3e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("cinnamon_roll", { color: "#d6ab72", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("chicken_noodle_soup", { color: "#d1bc6b", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1040 });
+addFood("ice_cream_sundae", { color: "#f0dde2", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("breakfast_sandwich", { color: "#b57b45", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("latte", { color: "#c29d78", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1020 });
+addFood("iced_coffee", { color: "#543315", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1010 });
+addFood("gravy", { color: "#704f2d", behavior: behaviors.LIQUID, category: "dishes", state: "liquid", density: 1080, viscosity: 2000 });
+addFood("mashed_potatoes_gravy", { color: "#e8dca2", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+
+// ==========================================
+// 5. SAFELY INITIALIZE DICTIONARIES
+// ==========================================
+// We must defensively inject an empty reactions object into ANY element we plan on modifying.
+const elementsToHook = [
+    // Vanilla targets
     "water", "salt", "sugar", "flour", "broth", "egg", "yolk", "dough", "batter", 
     "butter", "cheese", "chocolate", "grape", "herb", "lettuce", "pickle", "tomato", 
     "sauce", "pumpkin", "corn", "potato", "bakedpotato", "mashedpotato", "yeast", 
     "bread", "toast", "rice", "coffee", "nut", "jelly", "yogurt", "icecream", "icing", 
-    "beans", "meat", "cookedmeat", "ice", "curedmeat", "foam", "carbon_dioxide"
+    "beans", "meat", "cookedmeat", "ice", "curedmeat", "foam", "carbon_dioxide",
+    // Mod targets
+    "pizza_dough", "burger", "cheeseburger", "salad", "pasta_cooked", "spaghetti_bolognese",
+    "blt_base", "blt_almost", "pb_bread", "meat_broth", "bean_sauce", "sushi_rice",
+    "meat_taco", "bean_burrito", "alfredo_base", "noodle_broth", "eggy_bread", "sausage_toast",
+    "baked_cinnamon_roll", "choco_icecream", "cookie_dough", "milk", "lemon_juice",
+    "pancake", "waffle", "nachos", "pasta_raw", "olive_oil", "lemon", "baking_soda",
+    "chicken_raw", "garlic", "onion", "mushroom"
 ];
 
-vanillaElementsToHook.forEach(el => {
-    // Only attempt to hook if the element actually exists in the current version of the game
+elementsToHook.forEach(el => {
+    // Only attempt to hook if the element actually exists
     if (elements[el]) {
         if (!elements[el].reactions) elements[el].reactions = {};
     }
 });
 
-// Ensure our custom intermediate items have reaction dictionaries too
-const modElementsToHook = [
-    "pizza_dough", "burger", "cheeseburger", "salad", "pasta_cooked", "spaghetti_bolognese",
-    "blt_base", "blt_almost", "pb_bread", "meat_broth", "bean_sauce", "sushi_rice",
-    "meat_taco", "bean_burrito", "alfredo_base", "noodle_broth", "eggy_bread", "sausage_toast",
-    "baked_cinnamon_roll", "choco_icecream", "toast", "cookie_dough", "milk", "lemon_juice",
-    "pancake", "waffle", "nachos"
-];
-
-modElementsToHook.forEach(el => {
-    if (elements[el] && !elements[el].reactions) elements[el].reactions = {};
-});
-
 // ==========================================
-// 5. THE CHEMISTRY & REACTIONS LOGIC
+// 6. THE CHEMISTRY & REACTIONS LOGIC
 // ==========================================
 
 // --- Basic Cooking & Boiling ---
-elements.pasta_raw.reactions = { "water": { elem1: "pasta_cooked", elem2: null, tempMin: 90, chance: 0.1 } };
-elements.salt.reactions = { "ice": { elem1: "water", elem2: "water", chance: 0.2 }, "meat": { elem1: null, elem2: "curedmeat", chance: 0.1 } };
+elements.pasta_raw.reactions.water = { elem1: "pasta_cooked", elem2: null, tempMin: 90, chance: 0.1 };
+elements.salt.reactions.ice = { elem1: "water", elem2: "water", chance: 0.2 };
+elements.salt.reactions.meat = { elem1: null, elem2: "curedmeat", chance: 0.1 };
 
 // --- Frying & Oils ---
-elements.olive_oil.reactions = {
+Object.assign(elements.olive_oil.reactions, {
     "potato": { elem1: "olive_oil", elem2: "fries", tempMin: 150, chance: 0.8 },
-    "batter": { elem1: "olive_oil", elem2: "bakedbatter", tempMin: 160, chance: 0.7 },
+    "batter": { elem1: "olive_oil", elem2: "pancake", tempMin: 160, chance: 0.7 }, // Changed to pancake to avoid missing element ref
     "meat": { elem1: "olive_oil", elem2: "cookedmeat", tempMin: 140, chance: 0.8 },
     "bacon_raw": { elem1: "olive_oil", elem2: "bacon_cooked", tempMin: 140, chance: 0.8 },
     "water": { elem1: "fire", elem2: "steam", tempMin: 100, chance: 0.5 } // Grease fire
-};
+});
 
 // --- Burgers, Sandwiches & Pizza ---
 elements.dough.reactions.sauce = { elem1: "pizza_dough", elem2: null, chance: 0.5 };
@@ -255,15 +276,18 @@ elements.milk.reactions.honey = { elem1: "milk", elem2: null, color1: "#faebd7",
 // --- Baking Soda Physics ---
 elements.baking_soda.reactions.vinegar = { elem1: "foam", elem2: "carbon_dioxide", chance: 1.0 };
 elements.baking_soda.reactions.lemon_juice = { elem1: "foam", elem2: "carbon_dioxide", chance: 1.0 };
+// This successfully deploys your attr2 parameter manipulation to simulate dynamic bubbling foam physics!
 elements.baking_soda.reactions.dough = { elem1: null, elem2: "dough", attr2: { "foam": 20 }, tempMin: 80, chance: 0.1 };
 
 // --- Spices & Aromatics ---
-elements.garlic.reactions = { "olive_oil": { elem1: null, elem2: "garlic_oil", tempMin: 60, chance: 0.1 } };
-elements.onion.reactions = { "olive_oil": { elem1: null, elem2: "garlic_oil", tempMin: 60, chance: 0.1 } };
-elements.mushroom.reactions = { "olive_oil": { elem1: null, elem2: "olive_oil", tempMin: 80, chance: 0.1 } };
-elements.chicken_raw.reactions = {
+elements.garlic.reactions.olive_oil = { elem1: null, elem2: "garlic_oil", tempMin: 60, chance: 0.1 };
+elements.onion.reactions.olive_oil = { elem1: null, elem2: "garlic_oil", tempMin: 60, chance: 0.1 };
+elements.mushroom.reactions.olive_oil = { elem1: null, elem2: "olive_oil", tempMin: 80, chance: 0.1 };
+
+Object.assign(elements.chicken_raw.reactions, {
     "black_pepper": { elem1: "chicken_raw", elem2: null, color1: "#e3b6a1", chance: 0.2 },
     "chili_powder": { elem1: "chicken_raw", elem2: null, color1: "#e88e8e", chance: 0.2 }
-};
+});
+
 elements.cookedmeat.reactions.black_pepper = { elem1: "cookedmeat", elem2: null, color1: "#5e3e2b", chance: 0.2 };
 elements.cookedmeat.reactions.chili_powder = { elem1: "cookedmeat", elem2: null, color1: "#8a3131", chance: 0.2 };
