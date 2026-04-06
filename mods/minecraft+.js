@@ -1,261 +1,238 @@
 // ==========================================
 // Sandboxels x Minecraft Total Conversion 
-// Bug-Free Master File: Terrain, Mobs, Items & Procedural Variants
+// Bug-Free Master File: Terrain, Multi-Pixel Mobs & Items
 // ==========================================
 
 /* ==========================================
-   1. CORE PHYSICS & VANILLA INTEGRATION
+   1. FLUIDS & CORE PHYSICS
    ========================================== */
-// Safely add reactions to vanilla water so it interacts with our Minecraft lava
+// Only prefixing elements that clash with vanilla Sandboxels
 if (!elements.water.reactions) elements.water.reactions = {};
-elements.water.reactions.mc_lava = { elem1: "steam", elem2: "mc_cobblestone" };
+elements.water.reactions.mc_lava = { elem1: "steam", elem2: "cobblestone" };
 
-/* ==========================================
-   2. FLUIDS & GRAVITY BLOCKS
-   ========================================== */
 elements.mc_water = {
-    color: "#3F76E4", behavior: behaviors.LIQUID, category: "MC Blocks", state: "liquid", density: 1000,
-    reactions: { "mc_lava": { elem1: "steam", elem2: "mc_cobblestone", chance: 1.0 } }
+    color: "#3F76E4", behavior: behaviors.LIQUID, category: "Minecraft", state: "liquid", density: 1000,
+    reactions: { "mc_lava": { elem1: "steam", elem2: "cobblestone", chance: 1.0 } }
 };
 elements.mc_lava = {
-    color: ["#D95100", "#FF8C00"], behavior: behaviors.LIQUID, category: "MC Blocks", state: "liquid", density: 3000, temp: 1200,
-    reactions: { "mc_water": { elem1: "mc_obsidian", elem2: "steam", chance: 1.0 }, "water": { elem1: "mc_obsidian", elem2: "steam", chance: 1.0 } }
+    color: ["#D95100", "#FF8C00"], behavior: behaviors.LIQUID, category: "Minecraft", state: "liquid", density: 3000, temp: 1200,
+    reactions: { "mc_water": { elem1: "obsidian", elem2: "steam", chance: 1.0 }, "water": { elem1: "obsidian", elem2: "steam", chance: 1.0 } }
 };
-elements.mc_sand = { color: "#DBD3A0", behavior: behaviors.POWDER, category: "MC Blocks", state: "solid", density: 1600 };
-elements.mc_red_sand = { color: "#A95821", behavior: behaviors.POWDER, category: "MC Blocks", state: "solid", density: 1600 };
-elements.mc_gravel = { color: "#837F7E", behavior: behaviors.POWDER, category: "MC Blocks", state: "solid", density: 1700 };
 
 /* ==========================================
-   3. TERRAIN & ENVIRONMENT BLOCKS
+   2. TERRAIN & ENVIRONMENT BLOCKS
    ========================================== */
-elements.mc_dirt = { color: "#866043", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 1200 };
-elements.mc_coarse_dirt = { color: "#77553A", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 1250 };
-elements.mc_stone = { color: "#7D7D7D", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 2500 };
-elements.mc_cobblestone = { color: "#5A5A5A", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 2400 };
-elements.mc_obsidian = { color: "#161021", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 3500 };
-elements.mc_bedrock = { color: "#1F1F1F", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 99999 };
-elements.mc_netherrack = { color: "#612727", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 2000, burnTime: 99999 }; // Burns forever
-elements.mc_soul_sand = { color: "#544033", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 1500 };
-elements.mc_end_stone = { color: "#DDE0A5", behavior: behaviors.WALL, category: "MC Blocks", state: "solid", density: 2700 };
+elements.mc_sand = { color: "#DBD3A0", behavior: behaviors.POWDER, category: "Minecraft Blocks", state: "solid", density: 1600 };
+elements.mc_dirt = { color: "#866043", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 1200 };
+elements.mc_stone = { color: "#7D7D7D", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 2500 };
+elements.mc_glass = { color: "#C8EDF6", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 2500 };
 
-// Grass logic: spreads to nearby dirt over time
-elements.mc_grass_block = {
-    color: ["#5CB031", "#866043"], 
-    behavior: behaviors.WALL, 
-    category: "MC Blocks", 
+// Unique names don't need the mc_ prefix
+elements.cobblestone = { color: "#5A5A5A", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 2400 };
+elements.obsidian = { color: "#161021", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 3500 };
+elements.bedrock = { color: "#1F1F1F", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 99999 };
+elements.netherrack = { color: "#612727", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 2000, burnTime: 99999 };
+elements.end_stone = { color: "#DDE0A5", behavior: behaviors.WALL, category: "Minecraft Blocks", state: "solid", density: 2700 };
+
+/* ==========================================
+   3. ITEMS, XP, & MUSIC DISCS
+   ========================================== */
+elements.xp_orb = {
+    color: ["#80FF20", "#D0FF40"], 
+    behavior: behaviors.POWDER, // Acts like a heavy powder to fall fast
+    category: "Minecraft Items", 
+    density: 2000, // Very heavy so it drops quickly
     state: "solid", 
-    density: 1250,
+    glow: true, 
     tick: function(pixel) {
-        if (pixelTicks % 40 === 0) {
-            let tx = pixel.x + (Math.random() < 0.5 ? 1 : -1);
-            let ty = pixel.y + Math.floor(Math.random() * 3) - 1;
-            if (isEmpty(tx, ty - 1) && !isEmpty(tx, ty)) {
-                let target = getPixel(tx, ty);
-                if (target && target.element === "mc_dirt") {
-                    target.element = "mc_grass_block";
+        // Flash neon colors rapidly
+        pixel.color = Math.random() < 0.5 ? "#80FF20" : "#D0FF40";
+        // Extra downward momentum
+        if (isEmpty(pixel.x, pixel.y + 1)) tryMove(pixel, pixel.x, pixel.y + 1);
+    }
+};
+
+elements.bottle_o_enchanting = {
+    color: "#A5E358",
+    behavior: behaviors.POWDER,
+    category: "Minecraft Items",
+    state: "solid",
+    density: 1500,
+    tick: function(pixel) {
+        // If the pixel exists, and cannot move down, down-left, or down-right, it has hit the ground
+        if (!isEmpty(pixel.x, pixel.y + 1) && !isEmpty(pixel.x - 1, pixel.y + 1) && !isEmpty(pixel.x + 1, pixel.y + 1)) {
+            // Check if the thing below it isn't another bottle (to prevent mid-air collision breaks)
+            let below = pixelMap[pixel.x] && pixelMap[pixel.x][pixel.y + 1];
+            if (below && below.element !== "bottle_o_enchanting") {
+                // Shatter into XP
+                pixel.element = "xp_orb";
+                for (let i = 0; i < 4; i++) {
+                    let rx = pixel.x + Math.floor(Math.random() * 5) - 2;
+                    let ry = pixel.y - Math.floor(Math.random() * 4);
+                    if (isEmpty(rx, ry)) tryCreate("xp_orb", rx, ry);
                 }
             }
         }
     }
 };
 
-/* ==========================================
-   4. PROCEDURAL GENERATION: WOODS, ORES & COLORS
-   This generates hundreds of blocks automatically 
-   without breaking the token limit!
-   ========================================== */
-
-// Woods
-const mcWoods = {
-    "oak": { log: "#6A5232", plank: "#A2834E", leaf: "#48B529" },
-    "spruce": { log: "#392A1A", plank: "#705334", leaf: "#305730" },
-    "birch": { log: "#DFDFDB", plank: "#C3B37B", leaf: "#62A44B" },
-    "jungle": { log: "#594319", plank: "#A27551", leaf: "#30A01E" },
-    "acacia": { log: "#625D56", plank: "#A55D28", leaf: "#86A238" },
-    "dark_oak": { log: "#2A2116", plank: "#412B15", leaf: "#31761F" }
+// Consolidated Music Disc
+elements.music_disc = {
+    color: ["#55FF55", "#FF5555", "#5555FF", "#FFFF55"],
+    behavior: behaviors.POWDER,
+    category: "Minecraft Items",
+    state: "solid",
+    density: 1000
 };
-for (let wood in mcWoods) {
-    elements["mc_" + wood + "_log"] = { color: mcWoods[wood].log, behavior: behaviors.WALL, category: "MC Woods", state: "solid", density: 700, burnTime: 400 };
-    elements["mc_" + wood + "_planks"] = { color: mcWoods[wood].plank, behavior: behaviors.WALL, category: "MC Woods", state: "solid", density: 600, burnTime: 300 };
-    elements["mc_" + wood + "_leaves"] = { color: mcWoods[wood].leaf, behavior: behaviors.WALL, category: "MC Woods", state: "solid", density: 300, burnTime: 100 };
-}
 
-// Ores & Mineral Blocks
-const mcOres = {
-    "coal": { ore: "#1D1D1D", block: "#111111", item: "#222222" },
-    "iron": { ore: "#D8AF93", block: "#E2E2E2", item: "#E2E2E2" },
-    "gold": { ore: "#FCEE4B", block: "#FCEE4B", item: "#FCEE4B" },
-    "diamond": { ore: "#4AEDD9", block: "#68EBD8", item: "#4AEDD9" },
-    "emerald": { ore: "#17DD62", block: "#41F384", item: "#17DD62" },
-    "redstone": { ore: "#AA0F0A", block: "#9E160A", item: "#AA0F0A" },
-    "lapis": { ore: "#2149A6", block: "#1C4195", item: "#2149A6" }
+elements.jukebox = {
+    color: "#5E3A24",
+    behavior: behaviors.WALL,
+    category: "Minecraft Blocks",
+    state: "solid",
+    density: 600,
+    reactions: {
+        "music_disc": { elem1: "jukebox_playing", elem2: null } // Consumes disc and starts playing
+    }
 };
-for (let ore in mcOres) {
-    elements["mc_" + ore + "_ore"] = { color: ["#7D7D7D", mcOres[ore].ore], behavior: behaviors.WALL, category: "MC Ores", state: "solid", density: 2800 };
-    elements["mc_" + ore + "_block"] = { color: mcOres[ore].block, behavior: behaviors.WALL, category: "MC Ores", state: "solid", density: 4000 };
-    elements["mc_" + ore + "_item"] = { color: mcOres[ore].item, behavior: behaviors.POWDER, category: "MC Items", state: "solid", density: 2000 };
-}
 
-// The 16 Colors (Wool, Stained Glass, Concrete, Terracotta)
-const mcColors = ["white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"];
-const mcHex = ["#E9ECEC", "#F07613", "#BD44B3", "#3AAFD9", "#F8C627", "#70B919", "#ED8DAC", "#3E4447", "#8E8E86", "#158991", "#792AAC", "#35399D", "#724728", "#546D1B", "#A12722", "#141519"];
-
-for (let i = 0; i < mcColors.length; i++) {
-    let name = mcColors[i];
-    let hex = mcHex[i];
-    
-    // Wool
-    elements["mc_" + name + "_wool"] = { color: hex, behavior: behaviors.WALL, category: "MC Wool", state: "solid", density: 400, burnTime: 150 };
-    // Stained Glass
-    elements["mc_" + name + "_stained_glass"] = { color: hex, behavior: behaviors.WALL, category: "MC Glass", state: "solid", density: 2500 };
-    // Terracotta
-    elements["mc_" + name + "_terracotta"] = { color: hex, behavior: behaviors.WALL, category: "MC Terracotta", state: "solid", density: 2000 };
-    // Concrete
-    elements["mc_" + name + "_concrete"] = { color: hex, behavior: behaviors.WALL, category: "MC Concrete", state: "solid", density: 2500 };
-    
-    // Concrete Powder (Falls, turns into concrete on touching water)
-    elements["mc_" + name + "_concrete_powder"] = { 
-        color: hex, behavior: behaviors.POWDER, category: "MC Concrete", state: "solid", density: 1600,
-        reactions: { "mc_water": { elem1: "mc_" + name + "_concrete", elem2: null }, "water": { elem1: "mc_" + name + "_concrete", elem2: null } }
-    };
-}
-
-/* ==========================================
-   5. SATISFYING XP ORBS & ITEMS
-   ========================================== */
-elements.mc_xp_orb = {
-    color: ["#80FF20", "#D0FF40"], 
-    behavior: behaviors.GAS, 
-    category: "MC Entities", 
-    density: 10, 
-    state: "gas", 
-    glow: true, 
+elements.jukebox_playing = {
+    color: "#7E4A2E",
+    behavior: behaviors.WALL,
+    category: "states",
+    hidden: true,
+    state: "solid",
     tick: function(pixel) {
-        // Flash neon colors
-        pixel.color = Math.random() < 0.5 ? "#80FF20" : "#D0FF40";
-        // Gently drift downward over time to settle
-        if (Math.random() < 0.15) {
-            tryMove(pixel, pixel.x + (Math.random() < 0.5 ? 1 : -1), pixel.y + 1);
+        // Emits colorful notes upward
+        if (Math.random() < 0.05 && isEmpty(pixel.x, pixel.y - 1)) {
+            tryCreate("music_note", pixel.x, pixel.y - 1);
         }
     }
 };
 
-elements.mc_gunpowder = { color: "#555555", behavior: behaviors.POWDER, category: "MC Items", state: "solid", density: 900, burnTime: 10, stateHigh: "explosion", tempHigh: 150 };
-elements.mc_slimeball = { color: "#68B451", behavior: behaviors.POWDER, category: "MC Items", state: "solid", density: 1100, bounce: 0.8 };
-elements.mc_ender_pearl = { color: "#1A8778", behavior: behaviors.POWDER, category: "MC Items", state: "solid", density: 2000 };
+elements.music_note = {
+    color: ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"],
+    behavior: behaviors.GAS,
+    category: "states",
+    hidden: true,
+    density: 5,
+    tick: function(pixel) {
+        tryMove(pixel, pixel.x + (Math.random() < 0.5 ? 1 : -1), pixel.y - 1);
+        if (Math.random() < 0.1) pixel.element = "air"; // Fade out
+    }
+};
 
 /* ==========================================
-   6. INTERACTIVE MOBS (2-PIXEL ZOMBIE AI)
+   4. MULTI-PIXEL MOBS & AI
    ========================================== */
-elements.mc_zombie = {
-    color: "#4A4A9C", // Blue Shirt
+
+// --- 2-Pixel Zombie ---
+elements.zombie = {
+    color: "#4A4A9C", // Blue Shirt (Base/Legs)
     behavior: behaviors.POWDER,
-    category: "MC Mobs",
+    category: "Minecraft Mobs",
     state: "solid",
     density: 1100,
     tick: function(pixel) {
-        // Spawn head above body on first tick
-        if (!pixel.headSpawned) {
-            if (isEmpty(pixel.x, pixel.y - 1)) {
-                tryCreate("mc_zombie_head", pixel.x, pixel.y - 1);
-                pixel.headSpawned = true;
-            }
-        }
-        
-        // Burn in daylight (if near top of screen and nothing above it)
-        if (pixel.y < 20 && Math.random() < 0.02 && isEmpty(pixel.x, pixel.y - 1)) {
-            pixel.burning = true;
-        }
+        let oldX = pixel.x;
+        let oldY = pixel.y;
+        let moved = false;
 
-        // Basic wandering AI
+        // Simple wandering AI
         if (Math.random() < 0.05) {
             let dir = Math.random() < 0.5 ? 1 : -1;
             if (tryMove(pixel, pixel.x + dir, pixel.y)) {
-                // Moved sideways
-            } else if (isEmpty(pixel.x + dir, pixel.y - 1)) {
-                tryMove(pixel, pixel.x + dir, pixel.y - 1); // Jump over 1 block
+                moved = true;
+            } else if (isEmpty(pixel.x + dir, pixel.y - 1) && tryMove(pixel, pixel.x + dir, pixel.y - 1)) {
+                moved = true; // Jumped up a block
+            }
+        }
+
+        // Head Synchronization
+        if (moved || !pixel.headSpawned) {
+            // If it had a head, delete the old head from the previous coordinate
+            if (pixel.headSpawned && pixelMap[oldX] && pixelMap[oldX][oldY - 1] && pixelMap[oldX][oldY - 1].element === "zombie_head") {
+                pixelMap[oldX][oldY - 1].element = "air"; 
+            }
+            // Spawn the new head directly above the current coordinate
+            if (isEmpty(pixel.x, pixel.y - 1)) {
+                tryCreate("zombie_head", pixel.x, pixel.y - 1);
+                pixel.headSpawned = true;
             }
         }
     }
 };
 
-// The head is tied to the body
-elements.mc_zombie_head = {
+elements.zombie_head = {
     color: "#4A7129", // Green Head
-    behavior: behaviors.POWDER,
-    category: "states", // Hidden from normal menus
+    behavior: behaviors.WALL, // Driven entirely by the body below it
+    category: "states", 
+    hidden: true,
     state: "solid",
     density: 1100,
-    hidden: true,
     tick: function(pixel) {
-        let body = getPixel(pixel.x, pixel.y + 1);
-        if (!body || body.element !== "mc_zombie") {
-            pixel.element = "blood"; // "Die" if the body is destroyed
+        // If the body below it is destroyed or missing, the head turns to blood
+        let body = pixelMap[pixel.x] && pixelMap[pixel.x][pixel.y + 1];
+        if (!body || body.element !== "zombie") {
+            pixel.element = "blood";
         }
     }
 };
 
-elements.mc_creeper = {
-    color: ["#3EAA34", "#000000"],
+// --- 3-Pixel Enderman ---
+elements.enderman = {
+    color: "#161616", // Legs/Base
     behavior: behaviors.POWDER,
-    category: "MC Mobs",
-    density: 1000,
+    category: "Minecraft Mobs",
     state: "solid",
+    density: 1200,
     tick: function(pixel) {
-        // Wander AI
-        if (Math.random() < 0.05) {
+        let oldX = pixel.x;
+        let oldY = pixel.y;
+        let moved = false;
+
+        // Teleport logic (randomly skips to a new block)
+        if (Math.random() < 0.01) {
+            let tx = pixel.x + Math.floor(Math.random() * 20) - 10;
+            let ty = pixel.y + Math.floor(Math.random() * 20) - 10;
+            // Enderman needs 3 empty vertical blocks to teleport
+            if (isEmpty(tx, ty) && isEmpty(tx, ty - 1) && isEmpty(tx, ty - 2)) {
+                if (tryMove(pixel, tx, ty)) moved = true;
+            }
+        } 
+        // Normal wander
+        else if (Math.random() < 0.05) {
             let dir = Math.random() < 0.5 ? 1 : -1;
-            if (!tryMove(pixel, pixel.x + dir, pixel.y) && isEmpty(pixel.x + dir, pixel.y - 1)) {
-                tryMove(pixel, pixel.x + dir, pixel.y - 1);
+            if (tryMove(pixel, pixel.x + dir, pixel.y)) moved = true;
+        }
+
+        // Body and Head Synchronization
+        if (moved || !pixel.partsSpawned) {
+            if (pixel.partsSpawned) {
+                // Erase old torso and head
+                if (pixelMap[oldX] && pixelMap[oldX][oldY - 1] && pixelMap[oldX][oldY - 1].element === "enderman_torso") pixelMap[oldX][oldY - 1].element = "air";
+                if (pixelMap[oldX] && pixelMap[oldX][oldY - 2] && pixelMap[oldX][oldY - 2].element === "enderman_head") pixelMap[oldX][oldY - 2].element = "air";
             }
-        }
-        // Explode if touching fire/lava
-        for (let i = -1; i <= 1; i++) {
-            for (let j = -1; j <= 1; j++) {
-                let n = getPixel(pixel.x + i, pixel.y + j);
-                if (n && (n.element === "fire" || n.element === "mc_lava" || n.burning)) {
-                    pixel.element = "explosion";
-                }
-            }
+            // Create new torso and head
+            if (isEmpty(pixel.x, pixel.y - 1)) tryCreate("enderman_torso", pixel.x, pixel.y - 1);
+            if (isEmpty(pixel.x, pixel.y - 2)) tryCreate("enderman_head", pixel.x, pixel.y - 2);
+            pixel.partsSpawned = true;
         }
     }
 };
 
-/* ==========================================
-   7. TOOLS & SPAWNING
-   ========================================== */
-elements.mc_flint_and_steel = {
-    color: "#A1A1A1",
-    category: "MC Tools",
-    tool: function(pixel) {
-        if (pixel.burnTime || pixel.element === "mc_netherrack") {
-            pixel.burning = true;
-        } else if (isEmpty(pixel.x, pixel.y - 1)) {
-            tryCreate("fire", pixel.x, pixel.y - 1);
-        }
+elements.enderman_torso = {
+    color: "#111111", behavior: behaviors.WALL, category: "states", hidden: true, state: "solid",
+    tick: function(pixel) {
+        let legs = pixelMap[pixel.x] && pixelMap[pixel.x][pixel.y + 1];
+        if (!legs || legs.element !== "enderman") pixel.element = "smoke";
     }
 };
 
-elements.mc_spawn_zombie = {
-    color: ["#006400", "#4A4A9C"],
-    category: "MC Tools",
-    tool: function(pixel) {
-        if (isEmpty(pixel.x, pixel.y) || pixel.element === "air") {
-            tryCreate("mc_zombie", pixel.x, pixel.y);
-        } else {
-            pixel.element = "mc_zombie";
-        }
-    }
-};
-
-elements.mc_bottle_o_enchanting = {
-    color: "#A5E358",
-    category: "MC Tools",
-    tool: function(pixel) {
-        for (let i = 0; i < 5; i++) {
-            let px = pixel.x + Math.floor(Math.random() * 5) - 2;
-            let py = pixel.y + Math.floor(Math.random() * 5) - 2;
-            if (isEmpty(px, py)) tryCreate("mc_xp_orb", px, py);
-        }
+elements.enderman_head = {
+    color: ["#161616", "#CC00FF"], behavior: behaviors.WALL, category: "states", hidden: true, state: "solid", glow: true,
+    tick: function(pixel) {
+        let torso = pixelMap[pixel.x] && pixelMap[pixel.x][pixel.y + 1];
+        if (!torso || torso.element !== "enderman_torso") pixel.element = "smoke";
     }
 };
