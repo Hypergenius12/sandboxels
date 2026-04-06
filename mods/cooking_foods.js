@@ -1,25 +1,18 @@
-/* == Master Chef Mod - Complete Unified Edition (Debugged & Enhanced) == */
-// Adds new raw ingredients, complex multi-step reactions, and a dedicated "Dishes" tab.
-// Ensure you do a HARD REFRESH (Ctrl+F5 or Cmd+Shift+R) after saving!
+/* == Master Chef Mod - Complete Unified Edition (Fruit Juice Update) == */
 
 // ==========================================
 // 1. SMART ELEMENT INITIALIZER 
 // ==========================================
-// This helper function safely adds elements, automatically injecting
-// burn temperatures, freezing points, and breaking physics without overriding vanilla elements.
 function addFood(name, data) {
     if (!elements[name]) {
-        // Automatically add burning mechanics to solids if not explicitly defined
         if (data.state === "solid" && !data.tempHigh) {
             data.tempHigh = 250;
             data.stateHigh = "ash";
         }
-        // Automatically add freezing mechanics to liquids if not explicitly defined
         if (data.state === "liquid" && !data.tempLow) {
             data.tempLow = 0;
             data.stateLow = "ice";
         }
-        // Give sturdy foods a physical crumbling mechanic
         if (data.behavior === behaviors.STURDYPOWDER && !data.breakInto) {
             data.breakInto = "crumb"; 
         }
@@ -28,27 +21,34 @@ function addFood(name, data) {
 }
 
 // ==========================================
-// 2. RAW INGREDIENTS & SPICES
+// 2. RAW INGREDIENTS, SPICES & FRUITS
 // ==========================================
-addFood("onion", { color: "#e6e6fa", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 });
+// JUICES
+addFood("strawberry_juice", { color: "#e83151", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1040 });
+addFood("apple_juice", { color: "#dcb23d", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1040 });
+addFood("lemon_juice", { color: "#fffacd", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1020 });
+
+// FRUITS (Notice the breakInto property!)
+addFood("strawberry", { color: "#ff3333", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900, breakInto: "strawberry_juice" });
+addFood("apple", { color: "#ff4d4d", behavior: behaviors.POWDER, category: "food", state: "solid", density: 950, breakInto: "apple_juice" });
+addFood("lemon", { color: "#fff000", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900, breakInto: "lemon_juice" });
+
+// OTHER INGREDIENTS
+addFood("onion", { color: "#e6e6fa", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800, breakInto: "sauce" });
 addFood("garlic", { color: "#f3eec3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800 });
 addFood("mushroom", { color: "#d9c8b4", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600 });
 addFood("bacon_raw", { color: "#ff9999", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1000, tempHigh: 110, stateHigh: "bacon_cooked" });
 addFood("bacon_cooked", { color: "#8b4513", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 950 });
-addFood("pasta_raw", { color: "#ffebb5", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1200 });
+addFood("pasta_raw", { color: "#ffebb5", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1200, breakInto: "flour" });
 addFood("pasta_cooked", { color: "#f5d678", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1100 });
-addFood("strawberry", { color: "#ff3333", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 });
-addFood("apple", { color: "#ff4d4d", behavior: behaviors.POWDER, category: "food", state: "solid", density: 950 });
 addFood("olive_oil", { color: "#d4db84", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 910, viscosity: 100, burn: 60, burnTime: 300, tempHigh: 280, stateHigh: "fire" });
-addFood("salmon", { color: "#fa8072", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 100, stateHigh: "cookedmeat" });
+addFood("salmon", { color: "#fa8072", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 100, stateHigh: "cookedmeat", breakInto: "blood" });
 addFood("milk", { color: "#fdfff0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1030 });
 addFood("cream", { color: "#ffffe0", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010, viscosity: 200 });
 addFood("vanilla_extract", { color: "#4a3018", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 980 });
 addFood("cocoa_powder", { color: "#5c3a21", behavior: behaviors.POWDER, category: "food", state: "solid", density: 500, breakInto: "dust" });
 addFood("baking_soda", { color: "#ffffff", behavior: behaviors.POWDER, category: "food", state: "solid", density: 800, breakInto: "dust" });
 addFood("vinegar", { color: "#e3e3c8", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1010 });
-addFood("lemon", { color: "#fff000", behavior: behaviors.POWDER, category: "food", state: "solid", density: 900 });
-addFood("lemon_juice", { color: "#fffacd", behavior: behaviors.LIQUID, category: "liquids", state: "liquid", density: 1020 });
 addFood("honey", { color: "#ffc300", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1420, viscosity: 50000 });
 addFood("maple_syrup", { color: "#bb5d19", behavior: behaviors.LIQUID, category: "food", state: "liquid", density: 1370, viscosity: 10000 });
 addFood("cinnamon", { color: "#d2691e", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600, breakInto: "dust" });
@@ -56,12 +56,21 @@ addFood("black_pepper", { color: "#363636", behavior: behaviors.POWDER, category
 addFood("chili_powder", { color: "#c42a2a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 600, breakInto: "dust" });
 addFood("tortilla", { color: "#f2e3c6", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 900 });
 addFood("corn_chip", { color: "#e8c351", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 850 });
-addFood("sausage_raw", { color: "#cc7a7a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 110, stateHigh: "sausage_cooked" });
+addFood("sausage_raw", { color: "#cc7a7a", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 110, stateHigh: "sausage_cooked", breakInto: "blood" });
 addFood("sausage_cooked", { color: "#8a4f4f", behavior: behaviors.STURDYPOWDER, category: "food", state: "solid", density: 1000 });
-addFood("chicken_raw", { color: "#ffccb3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 120, stateHigh: "cookedmeat" });
+addFood("chicken_raw", { color: "#ffccb3", behavior: behaviors.POWDER, category: "food", state: "solid", density: 1050, tempHigh: 120, stateHigh: "cookedmeat", breakInto: "blood" });
 
 // ==========================================
-// 3. INTERMEDIARY FOODS (Hidden from UI)
+// 3. APPLY BREAK PHYSICS TO VANILLA FOODS
+// ==========================================
+// Hooks into existing Sandboxels elements so they smash realistically too!
+if (elements.grape) elements.grape.breakInto = "juice";
+if (elements.tomato) elements.tomato.breakInto = "ketchup"; // Or you could use "sauce"
+if (elements.potato) elements.potato.breakInto = "mashedpotato";
+if (elements.corn) elements.corn.breakInto = "corn_seed";
+
+// ==========================================
+// 4. INTERMEDIARY FOODS & DISHES
 // ==========================================
 addFood("blt_base", { color: "#b36b3b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
 addFood("blt_almost", { color: "#6bb33b", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
@@ -79,9 +88,6 @@ addFood("cinnamon_dough", { color: "#ba9f7b", behavior: behaviors.STURDYPOWDER, 
 addFood("baked_cinnamon_roll", { color: "#9e7746", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true });
 addFood("choco_icecream", { color: "#99736c", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", hidden: true, tempHigh: 30, stateHigh: "chocolate_milk" });
 
-// ==========================================
-// 4. FINAL DISHES 
-// ==========================================
 addFood("pizza_dough", { color: "#ffe4b5", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("pizza", { color: "#d9643a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("salad", { color: "#4caf50", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", breakInto: "lettuce" });
@@ -99,7 +105,7 @@ addFood("sushi", { color: "#ffffff", behavior: behaviors.STURDYPOWDER, category:
 addFood("apple_pie", { color: "#e59c3a", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("strawberry_tart", { color: "#e86f68", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("garlic_bread", { color: "#e8d082", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
-addFood("fries", { color: "#f4c63f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
+addFood("fries", { color: "#f4c63f", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid", breakInto: "mashedpotato" });
 addFood("grilled_cheese", { color: "#e8a923", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("blt_sandwich", { color: "#d67c52", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
 addFood("pbj_sandwich", { color: "#955c9e", behavior: behaviors.STURDYPOWDER, category: "dishes", state: "solid" });
@@ -140,28 +146,22 @@ addFood("mashed_potatoes_gravy", { color: "#e8dca2", behavior: behaviors.STURDYP
 // ==========================================
 // 5. SAFELY INITIALIZE DICTIONARIES
 // ==========================================
-// We must defensively inject an empty reactions object into ANY element we plan on modifying.
 const elementsToHook = [
-    // Vanilla targets
     "water", "salt", "sugar", "flour", "broth", "egg", "yolk", "dough", "batter", 
     "butter", "cheese", "chocolate", "grape", "herb", "lettuce", "pickle", "tomato", 
     "sauce", "pumpkin", "corn", "potato", "bakedpotato", "mashedpotato", "yeast", 
     "bread", "toast", "rice", "coffee", "nut", "jelly", "yogurt", "icecream", "icing", 
     "beans", "meat", "cookedmeat", "ice", "curedmeat", "foam", "carbon_dioxide",
-    // Mod targets
     "pizza_dough", "burger", "cheeseburger", "salad", "pasta_cooked", "spaghetti_bolognese",
     "blt_base", "blt_almost", "pb_bread", "meat_broth", "bean_sauce", "sushi_rice",
     "meat_taco", "bean_burrito", "alfredo_base", "noodle_broth", "eggy_bread", "sausage_toast",
     "baked_cinnamon_roll", "choco_icecream", "cookie_dough", "milk", "lemon_juice",
     "pancake", "waffle", "nachos", "pasta_raw", "olive_oil", "lemon", "baking_soda",
-    "chicken_raw", "garlic", "onion", "mushroom"
+    "chicken_raw", "garlic", "onion", "mushroom", "strawberry_juice", "apple_juice"
 ];
 
 elementsToHook.forEach(el => {
-    // Only attempt to hook if the element actually exists
-    if (elements[el]) {
-        if (!elements[el].reactions) elements[el].reactions = {};
-    }
+    if (elements[el] && !elements[el].reactions) elements[el].reactions = {};
 });
 
 // ==========================================
@@ -176,10 +176,10 @@ elements.salt.reactions.meat = { elem1: null, elem2: "curedmeat", chance: 0.1 };
 // --- Frying & Oils ---
 Object.assign(elements.olive_oil.reactions, {
     "potato": { elem1: "olive_oil", elem2: "fries", tempMin: 150, chance: 0.8 },
-    "batter": { elem1: "olive_oil", elem2: "pancake", tempMin: 160, chance: 0.7 }, // Changed to pancake to avoid missing element ref
+    "batter": { elem1: "olive_oil", elem2: "pancake", tempMin: 160, chance: 0.7 },
     "meat": { elem1: "olive_oil", elem2: "cookedmeat", tempMin: 140, chance: 0.8 },
     "bacon_raw": { elem1: "olive_oil", elem2: "bacon_cooked", tempMin: 140, chance: 0.8 },
-    "water": { elem1: "fire", elem2: "steam", tempMin: 100, chance: 0.5 } // Grease fire
+    "water": { elem1: "fire", elem2: "steam", tempMin: 100, chance: 0.5 }
 });
 
 // --- Burgers, Sandwiches & Pizza ---
@@ -262,6 +262,8 @@ elements.choco_icecream.reactions.strawberry = { elem1: "ice_cream_sundae", elem
 elements.egg.reactions.cheese = { elem1: "omelet", elem2: null, tempMin: 70, chance: 0.2 };
 
 // --- Beverages & Mixers ---
+// Make sure to add juice interactions!
+elements.strawberry_juice.reactions.milk = { elem1: "milk", elem2: null, color1: "#ffb6c1", chance: 0.3 }; // Strawberry milk
 elements.lemon.reactions.water = { elem1: "lemon_juice", elem2: "lemon_juice", chance: 0.05 }; 
 elements.lemon_juice.reactions.sugar = { elem1: "lemonade", elem2: null, chance: 0.5 };
 elements.lemonade.reactions.ice = { elem1: "lemonade", elem2: "lemonade", temp2: 0, chance: 0.1 }; 
@@ -276,7 +278,6 @@ elements.milk.reactions.honey = { elem1: "milk", elem2: null, color1: "#faebd7",
 // --- Baking Soda Physics ---
 elements.baking_soda.reactions.vinegar = { elem1: "foam", elem2: "carbon_dioxide", chance: 1.0 };
 elements.baking_soda.reactions.lemon_juice = { elem1: "foam", elem2: "carbon_dioxide", chance: 1.0 };
-// This successfully deploys your attr2 parameter manipulation to simulate dynamic bubbling foam physics!
 elements.baking_soda.reactions.dough = { elem1: null, elem2: "dough", attr2: { "foam": 20 }, tempMin: 80, chance: 0.1 };
 
 // --- Spices & Aromatics ---
