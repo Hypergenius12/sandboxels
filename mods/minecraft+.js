@@ -102,40 +102,6 @@ for (let ore in mcOres) {
 }
 
 /* ==========================================
-   4. REDSTONE & PISTONS (Memory Safe Updates)
-   ========================================== */
-elements.mc_redstone_dust = { color: ["#AA0F0A", "#800906"], behavior: behaviors.POWDER, category: "Minecraft", density: 1500, conductive: true };
-elements.mc_redstone_block = { 
-    color: "#9E160A", behavior: behaviors.WALL, category: "Minecraft", density: 2500, conductive: true,
-    tick: function(pixel) { pixel.charge = 1; } 
-};
-
-elements.mc_piston = {
-    color: ["#7D7D7D", "#A2834E"], behavior: behaviors.WALL, category: "Minecraft", density: 2000, conductive: true,
-    tick: function(pixel) {
-        if (pixel.charge) {
-            if (isEmpty(pixel.x, pixel.y - 1, false)) {
-                tryCreate("mc_piston_head", pixel.x, pixel.y - 1);
-            } else {
-                let target = getPixel(pixel.x, pixel.y - 1);
-                if (target && target.element !== "mc_piston_head") {
-                    if (isEmpty(pixel.x, pixel.y - 2, false)) {
-                        changePixel(target.element, pixel.x, pixel.y - 2);
-                        changePixel("mc_piston_head", pixel.x, pixel.y - 1);
-                    }
-                }
-            }
-        } else {
-            let target = getPixel(pixel.x, pixel.y - 1);
-            if (target && target.element === "mc_piston_head") {
-                tryDelete(pixel.x, pixel.y - 1);
-            }
-        }
-    }
-};
-elements.mc_piston_head = { color: "#8A6F41", behavior: behaviors.WALL, category: "states", hidden: true, state: "solid" };
-
-/* ==========================================
    5. WORKING TORCHES & END ITEMS
    ========================================== */
 elements.mc_torch = { 
