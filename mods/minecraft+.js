@@ -1,6 +1,6 @@
 // ==========================================
 // Sandboxels x Minecraft Core Mod
-// Version: 3D Bevels, Fixed Textures, Physics & Trees
+// Version: Fixed rendering, Hash-based Ticks & Smelting
 // ==========================================
 
 // 1. ADVANCED TICK FUNCTIONS
@@ -12,13 +12,11 @@ function shinyBlockTick(pixel, inner, outer, highlight, shadow) {
     let r1 = isEmpty(pixel.x + 1, pixel.y);
     let b1 = isEmpty(pixel.x, pixel.y + 1);
 
-    // 1. Draw outer border
     if (l1 || t1 || r1 || b1) {
         pixel.color = outer; 
         return;
     }
 
-    // 2. Distance checks for the inner bevels
     let l2 = isEmpty(pixel.x - 2, pixel.y);
     let t2 = isEmpty(pixel.x, pixel.y - 2);
     let l3 = isEmpty(pixel.x - 3, pixel.y);
@@ -29,7 +27,6 @@ function shinyBlockTick(pixel, inner, outer, highlight, shadow) {
     let r3 = isEmpty(pixel.x + 3, pixel.y);
     let b3 = isEmpty(pixel.x, pixel.y + 3);
 
-    // 3. Highlight (Top-Left) and Shadow (Bottom-Right) L-shapes
     let isHighlightL = (t2 && (l2 || l3)) || (l2 && (t2 || t3));
     let isShadowL = (b2 && (r2 || r3)) || (r2 && (b2 || b3));
 
@@ -42,7 +39,6 @@ function shinyBlockTick(pixel, inner, outer, highlight, shadow) {
     }
 }
 
-// Basic solid outline for things like glass
 function outlineTick(pixel, inner, outer) {
     if (isEmpty(pixel.x, pixel.y - 1) || isEmpty(pixel.x, pixel.y + 1) || isEmpty(pixel.x - 1, pixel.y) || isEmpty(pixel.x + 1, pixel.y)) {
         pixel.color = outer;
@@ -51,55 +47,45 @@ function outlineTick(pixel, inner, outer) {
     }
 }
 
-// Slime Block Physics: Pushes powders upwards
 function slimeTick(pixel) {
     outlineTick(pixel, "#7bcf61", "#5c9e47");
     let up = pixelMap[pixel.x]?.[pixel.y - 1];
     if (up && elements[up.element] && elements[up.element].behavior === behaviors.POWDER) {
-        if (!up.handled) {
-            up.vy = -3; // Bounces powders up!
-        }
+        if (!up.handled) up.vy = -3;
     }
 }
 
-// Honey Block Physics: Slows down passing entities
 function honeyTick(pixel) {
     outlineTick(pixel, "#ffc824", "#e59410");
-    // Check pixels immediately above and to the sides
     for (let dx = -1; dx <= 1; dx++) {
         let neighbor = pixelMap[pixel.x + dx]?.[pixel.y - 1];
         if (neighbor && elements[neighbor.element]) {
             let cat = elements[neighbor.element].behavior;
             if (cat === behaviors.POWDER || cat === behaviors.LIQUID) {
-                // High chance to skip their tick entirely, slowing them down heavily
-                if (Math.random() < 0.85) {
-                    neighbor.handled = true;
-                }
+                if (Math.random() < 0.85) neighbor.handled = true;
             }
         }
     }
 }
 
-// Chest Logic: Grabs an item above, drops it if the chest falls (smashed)
 function chestTick(pixel) {
     if (!pixel.stored) {
         let up = pixelMap[pixel.x]?.[pixel.y - 1];
         if (up && elements[up.element].behavior === behaviors.POWDER && up.element !== "mc_chest") {
             pixel.stored = up.element;
             deletePixel(up.x, up.y);
-            pixel.color = "#8b643a"; // Lighter color to indicate it is full
+            pixel.color = "#8b643a"; 
         }
     } else {
-        // If block below is broken and chest begins to fall, release item
         if (isEmpty(pixel.x, pixel.y + 1)) {
             createPixel(pixel.stored, pixel.x, pixel.y + 1);
             pixel.stored = null;
-            pixel.color = "#5e4429"; // Return to original color
+            pixel.color = "#5e4429"; 
         }
     }
 }
 
-// Multilayered Grass Block
+// Multilayered Grass Block (Coordinate Hashing fixes the strobe flickering!)
 function grassBlockTick(pixel) {
     let topEmpty = isEmpty(pixel.x, pixel.y - 1);
     let secondEmpty = isEmpty(pixel.x, pixel.y - 2);
@@ -107,35 +93,44 @@ function grassBlockTick(pixel) {
     if (topEmpty) {
         pixel.color = "#4B712F"; // Layer 1: Pure Grass
     } else if (secondEmpty) {
-        pixel.color = Math.random() < 0.5 ? "#4B712F" : "#866043"; // Layer 2: Mixed Grass & Dirt
+        let hash = (pixel.x * 7 + pixel.y * 11) % 2; // Locked to grid coordinates
+        pixel.color = hash === 0 ? "#4B712F" : "#866043"; // Layer 2: Mixed Grass & Dirt
     } else {
-        pixel.color = ["#866043", "#75543b"][Math.floor(Math.random() * 2)]; // Layer 3: Solid Dirt
+        let hash = (pixel.x * 13 + pixel.y * 17) % 2; // Locked to grid coordinates
+        pixel.color = hash === 0 ? "#866043" : "#75543b"; // Layer 3: Solid Dirt
     }
 }
 
-// Consolidated Leaves
+// Coordinate Hashing ensures holes cannot be "filled in" when dragged over!
 function leafTick(pixel) {
     if (!pixel.leafHoled) {
         pixel.leafHoled = true;
-        if (Math.random() < 0.20) deletePixel(pixel.x, pixel.y);
+        let hash = (pixel.x * 37 + pixel.y * 13) % 100;
+        if (hash < 22) { // 22% of the exact coordinate grid is ALWAYS empty
+            deletePixel(pixel.x, pixel.y);
+        }
     }
 }
 
-// Cactus Spikes
+// Fixed Cactus Spikes: Top corners + Staggered sides
 function cactusTick(pixel) {
     let l = isEmpty(pixel.x - 1, pixel.y);
     let r = isEmpty(pixel.x + 1, pixel.y);
     let t = isEmpty(pixel.x, pixel.y - 1);
     
-    // Top-Left or Top-Right outer pixel gets a white spike
-    if ((t && l) || (t && r)) {
-        pixel.color = "#ffffff";
+    if (t && l) {
+        pixel.color = "#ffffff"; // Top Left corner
+    } else if (t && r) {
+        pixel.color = "#ffffff"; // Top Right corner
+    } else if (l && pixel.y % 3 === 0) {
+        pixel.color = "#ffffff"; // Left side staggered spike
+    } else if (r && pixel.y % 3 === 1) {
+        pixel.color = "#ffffff"; // Right side staggered spike
     } else {
         pixel.color = "#1e5917";
     }
 }
 
-// Sapling Growth Hook
 function saplingTick(pixel) {
     if (Math.random() < 0.01) {
         let below = pixelMap[pixel.x]?.[pixel.y + 1];
@@ -143,19 +138,13 @@ function saplingTick(pixel) {
             changePixel(pixel, "mc_oak_log");
             let trunkHeight = 5 + Math.floor(Math.random() * 4);
             
-            // Generate Trunk
             for (let i = 1; i <= trunkHeight; i++) {
-                if (isEmpty(pixel.x, pixel.y - i)) {
-                    createPixel("mc_oak_log", pixel.x, pixel.y - i);
-                }
+                if (isEmpty(pixel.x, pixel.y - i)) createPixel("mc_oak_log", pixel.x, pixel.y - i);
             }
-            // Generate Leaf Block Shape
             for (let dx = -3; dx <= 3; dx++) {
                 for (let dy = trunkHeight - 2; dy <= trunkHeight + 2; dy++) {
                     if (Math.abs(dx) + Math.abs(dy - trunkHeight) <= 4) {
-                        if (isEmpty(pixel.x + dx, pixel.y - dy)) {
-                            createPixel("mc_leaves", pixel.x + dx, pixel.y - dy);
-                        }
+                        if (isEmpty(pixel.x + dx, pixel.y - dy)) createPixel("mc_leaves", pixel.x + dx, pixel.y - dy);
                     }
                 }
             }
@@ -174,7 +163,7 @@ function cropTick(pixel) {
 
 function tntTick(pixel) {
     if (pixel.burning || pixel.temp > 150) {
-        explodeAt(pixel.x, pixel.y, 16, "fire,smoke"); // Significantly larger explosion!
+        explodeAt(pixel.x, pixel.y, 16, "fire,smoke");
         deletePixel(pixel.x, pixel.y);
     }
 }
@@ -210,59 +199,42 @@ const mcBlocks = {
     "mc_pumpkin": { name: "Pumpkin", color: "#db7a14", behavior: behaviors.WALL },
     "mc_ice": { name: "Ice", color: "#a5d5e8", behavior: behaviors.WALL, tempHigh: 5, stateHigh: "mc_water" },
     "mc_packed_ice": { name: "Packed Ice", color: "#8abde0", behavior: behaviors.WALL, tempHigh: 20, stateHigh: "mc_water" },
-    "mc_sponge": { name: "Sponge", color: "#ded147", behavior: behaviors.WALL }, 
+    "mc_sponge": { name: "Sponge", color: "#ded147", behavior: behaviors.WALL, burn: 60, burnTime: 40 }, 
 
-    // --- HD TEXTURE PATTERNS (8x8 Grids) ---
+    // --- HD TEXTURE PATTERNS ---
     "mc_cobblestone": { 
         name: "Cobblestone", color: "#7a7a7a", behavior: behaviors.WALL,
-        colorPattern: [ 
-            "bccbdeed", "cbbeddec", "cddecbbc", "deedbccb",
-            "deedbccb", "cddecbbc", "cbbeddec", "bccbdeed"
-        ],
+        colorPattern: [ "bccbdeed", "cbbeddec", "cddecbbc", "deedbccb", "deedbccb", "cddecbbc", "cbbeddec", "bccbdeed" ],
         colorKey: { "b": "#7a7a7a", "c": "#6b6b6b", "d": "#5e5e5e", "e": "#474747" }
     },
     "mc_stone_bricks": { 
         name: "Stone Bricks", color: "#7d7d7d", behavior: behaviors.WALL,
-        colorPattern: [ 
-            "ddddeeed", "ddcdeeed", "ddecddbb", "eeeeeeee",
-            "edddddde", "eddcdeee", "bbddecdd", "eeeeeeee"
-        ],
+        colorPattern: [ "ddddeeed", "ddcdeeed", "ddecddbb", "eeeeeeee", "edddddde", "eddcdeee", "bbddecdd", "eeeeeeee" ],
         colorKey: { "b": "#7a7a7a", "c": "#6b6b6b", "d": "#7d7d7d", "e": "#5e5e5e" }
     },
     "mc_deepslate": { 
         name: "Deepslate", color: "#3b3b40", behavior: behaviors.WALL,
-        colorPattern: [ 
-            "ccddddee", "eeddccdd", "ddccddcc", "eeddddee",
-            "ddccddcc", "eeddccdd", "ccddddee", "ddccddcc"
-        ],
+        colorPattern: [ "ccddddee", "eeddccdd", "ddccddcc", "eeddddee", "ddccddcc", "eeddccdd", "ccddddee", "ddccddcc" ],
         colorKey: { "c": "#27272b", "d": "#3b3b40", "e": "#4f4f54" }
     },
     "mc_bookshelf": {
         name: "Bookshelf", color: "#a18251", behavior: behaviors.WALL, burn: 80, burnTime: 40,
-        colorPattern: [
-            "wwwwwwww", "wwwwwdww", "rrbbggww", "rrbbggww",
-            "wwwwwwww", "wwdwwwww", "ggbbrrww", "ggbbrrww"
-        ],
+        colorPattern: [ "wwwwwwww", "wwwwwdww", "rrbbggww", "rrbbggww", "wwwwwwww", "wwdwwwww", "ggbbrrww", "ggbbrrww" ],
         colorKey: { "w": "#856a42", "r": "#c43c3c", "b": "#3c50c4", "g": "#459e4e", "d": "#6e522d" }
     },
     "mc_tnt": { 
         name: "TNT", color: "#d12828", behavior: behaviors.WALL, tick: tntTick,
-        colorPattern: [ 
-            "rrrrrrrr", "rdrrdrrd", "wwwwwwww", "wbwbwwbw",
-            "wwwwwwww", "rdrrdrrd", "rrrrrrrr", "rdrrdrrd"
-        ],
+        colorPattern: [ "rrrrrrrr", "rdrrdrrd", "wwwwwwww", "wbwbwwbw", "wwwwwwww", "rdrrdrrd", "rrrrrrrr", "rdrrdrrd" ],
         colorKey: { "r": "#d12828", "d": "#9c1b1b", "w": "#e8e8e8", "b": "#242424" }
     },
 
     // --- FIXED TEXTURES ---
     "mc_oak_planks": { 
         name: "Oak Planks", color: "#a18251", behavior: behaviors.WALL, burn: 50, burnTime: 80,
-        colorPattern: ["oooo", "oooo", "dddd"], // Restored linear planks!
+        colorPattern: ["oooo", "oooo", "dddd"], 
         colorKey: { "o": "#a18251", "d": "#856a42" } 
     },
-    "mc_glowstone": { 
-        name: "Glowstone", color: ["#fceb42", "#e0b643", "#f2cb63"], behavior: behaviors.WALL // Restored solid noise pattern!
-    },
+    "mc_glowstone": { name: "Glowstone", color: ["#fceb42", "#e0b643", "#f2cb63"], behavior: behaviors.WALL },
     "mc_amethyst_block": {
         name: "Amethyst Block", color: "#9a5cc6", behavior: behaviors.WALL,
         colorPattern: ["ppld", "ldpp", "plpd", "dplp"],
@@ -314,37 +286,44 @@ for (let id in mcBlocks) {
     elements[id].category = "Minecraft"; 
 }
 
-// 4. THE MINECRAFT REACTIONS ENGINE (100% Fixed & Guaranteed)
+// 4. THE MINECRAFT REACTIONS ENGINE
 
 // Water Reactions
 if (!elements.mc_water.reactions) elements.mc_water.reactions = {};
-// Water falling onto Lava cools it into Cobblestone
 elements.mc_water.reactions.mc_lava = { elem1: "steam", elem2: "mc_cobblestone" }; 
 elements.mc_water.reactions.mc_dirt = { elem1: null, elem2: "mc_mud" }; 
 elements.mc_water.reactions.mc_concrete_powder = { elem1: null, elem2: "mc_concrete" }; 
-elements.mc_water.reactions.mc_sponge = { elem1: null, elem2: null }; // Sponge deletes water
+elements.mc_water.reactions.mc_sponge = { elem1: null, elem2: null };
 
-// Lava Reactions
+// Lava Reactions (Fixed to burn flammables on contact!)
 if (!elements.mc_lava.reactions) elements.mc_lava.reactions = {};
-// Lava diving deep into Water solidifies into Obsidian
 elements.mc_lava.reactions.mc_water = { elem1: "mc_obsidian", elem2: "steam" }; 
-elements.mc_lava.reactions.mc_sand = { elem1: null, elem2: "mc_glass" }; // Lava smelts Sand!
+elements.mc_lava.reactions.mc_sand = { elem1: null, elem2: "mc_glass" };
+elements.mc_lava.reactions.mc_oak_log = { elem1: "mc_lava", elem2: "fire" };
+elements.mc_lava.reactions.mc_oak_planks = { elem1: "mc_lava", elem2: "fire" };
+elements.mc_lava.reactions.mc_leaves = { elem1: "mc_lava", elem2: "fire" };
+elements.mc_lava.reactions.mc_sponge = { elem1: "mc_lava", elem2: "fire" };
+elements.mc_lava.reactions.mc_wool = { elem1: "mc_lava", elem2: "fire" };
+elements.mc_lava.reactions.mc_bookshelf = { elem1: "mc_lava", elem2: "fire" };
 
 // Bone Meal Agriculture
 if (!elements.mc_bone_meal.reactions) elements.mc_bone_meal.reactions = {};
 elements.mc_bone_meal.reactions.mc_dirt = { elem1: null, elem2: "mc_grass_block" };
 elements.mc_bone_meal.reactions.mc_wheat_seeds = { elem1: null, elem2: "mc_wheat" };
 
-// Furnace Smelting Engine
+// Furnace Smelting Engine (Fixed to output respective Minecraft Blocks!)
 if (!elements.mc_furnace.reactions) elements.mc_furnace.reactions = {};
-elements.mc_furnace.reactions.mc_iron_ore = { elem2: "iron" };         // Base Sandboxels Iron
-elements.mc_furnace.reactions.mc_gold_ore = { elem2: "gold" };         // Base Sandboxels Gold
-elements.mc_furnace.reactions.mc_copper_ore = { elem2: "copper" };     // Base Sandboxels Copper
+elements.mc_furnace.reactions.mc_iron_ore = { elem2: "mc_block_of_iron" };         
+elements.mc_furnace.reactions.mc_gold_ore = { elem2: "mc_block_of_gold" };         
+elements.mc_furnace.reactions.mc_copper_ore = { elem2: "mc_block_of_copper" };     
+elements.mc_furnace.reactions.mc_diamond_ore = { elem2: "mc_block_of_diamond" };     
+elements.mc_furnace.reactions.mc_emerald_ore = { elem2: "mc_block_of_emerald" };     
+elements.mc_furnace.reactions.mc_redstone_ore = { elem2: "mc_redstone_dust" };     
 elements.mc_furnace.reactions.mc_sand = { elem2: "mc_glass" };
-elements.mc_furnace.reactions.mc_cobblestone = { elem2: "stone" };     // Base Sandboxels Stone
-elements.mc_furnace.reactions.mc_oak_log = { elem2: "charcoal" };      // Base Sandboxels Charcoal
+elements.mc_furnace.reactions.mc_cobblestone = { elem2: "stone" };     
+elements.mc_furnace.reactions.mc_oak_log = { elem2: "charcoal" };      
 
-// Fire Reactions (Hooks safely into Sandboxels base fire)
+// Fire Reactions
 if (elements.fire) {
     if (!elements.fire.reactions) elements.fire.reactions = {};
     elements.fire.reactions.mc_oak_planks = { elem1: "smoke", elem2: "mc_ash" };
