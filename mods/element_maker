@@ -1,0 +1,112 @@
+// AI Element Maker Mod
+// Adds a tool that uses OpenRouter to generate and inject Sandboxels elements dynamically.
+
+let isGeneratingElement = false;
+
+// 1. Define the Tool
+elements.ai_maker = {
+    color: ["#4287f5", "#00ffcc", "#ff00ff"],
+    category: "tools",
+    state: "solid",
+    desc: "Click the canvas to prompt the AI to generate a brand new element.",
+    // We leave the standard tool function empty so it doesn't spam on drag
+    tool: function(pixel) {} 
+};
+
+// 2. Hook into the Canvas Click Event
+document.addEventListener("mousedown", function(e) {
+    // Check if our tool is equipped and we aren't currently waiting for the API
+    if (currentElement === "ai_maker" && !isGeneratingElement) {
+        // Ensure the user is actually clicking the game canvas
+        if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
+            handleAIGeneration();
+        }
+    }
+});
+
+// 3. The Core Generation Logic
+async function handleAIGeneration() {
+    let userIdea = prompt("What kind of element do you want the AI to create?\n(e.g., 'A gas that turns everything into ice', 'Explosive bouncy powder')");
+    
+    if (!userIdea || userIdea.trim() === "") {
+        return; // User canceled or entered nothing
+    }
+
+    isGeneratingElement = true;
+    console.log(`[AI Mod] Requesting element: ${userIdea}...`);
+    
+    // Replace with a brief visual indicator in-game if desired
+    document.body.style.cursor = "wait"; 
+
+    const apiKey = "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";
+    
+    // Strict instructions so the AI outputs only code that Sandboxels can parse
+    const systemPrompt = `You are a programmatic element generator for the javascript game Sandboxels.
+The user will provide a concept. You must write a single valid JavaScript object assignment appending to the global 'elements' object.
+
+CRITICAL RULES:
+1. Provide ONLY raw valid JavaScript code. NO markdown formatting, NO backticks, NO explanations.
+2. The element name must be lowercase, have no spaces (use underscores), and MUST NOT overwrite vanilla elements (e.g., do not name it 'water', 'sand', 'fire').
+3. You must use standard Sandboxels properties (color, behavior, category, state, density).
+4. If appropriate, include a 'reactions' object or 'tick' function.
+
+Example Output:
+elements.hyper_crystal = {
+    color: "#00ffff",
+    behavior: behaviors.POWDER,
+    category: "powders",
+    state: "solid",
+    density: 1500,
+    reactions: {
+        "water": { elem1: null, elem2: "ice" }
+    }
+};`;
+
+    try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                // Using a reliable, fast model via OpenRouter
+                model: "meta-llama/llama-3.1-8b-instruct:free", 
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: `Create an element based on this idea: ${userIdea}` }
+                ],
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!data.choices || !data.choices[0]) {
+            throw new Error("Invalid response from OpenRouter");
+        }
+
+        let code = data.choices[0].message.content.trim();
+        
+        // Failsafe sanitization: Strip markdown blocks if the AI disobeys instructions
+        code = code.replace(/^```javascript/i, "")
+                   .replace(/^```js/i, "")
+                   .replace(/^```/i, "")
+                   .replace(/```$/i, "")
+                   .trim();
+
+        console.log("[AI Mod] Executing generated code:\n", code);
+
+        // Inject the generated element into the global game context
+        window.eval(code);
+        
+        alert(`Successfully generated and injected your element!\nCheck the category menus or use the search bar to find it.`);
+
+    } catch (error) {
+        console.error("[AI Mod] Element Generation Error:", error);
+        alert("Failed to generate element. Check the browser console (F12) for details.");
+    } finally {
+        isGeneratingElement = false;
+        document.body.style.cursor = "default";
+    }
+}
