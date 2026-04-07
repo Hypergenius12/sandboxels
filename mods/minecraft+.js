@@ -1,1110 +1,172 @@
-// Sandboxels Minecraft full additive mod (broad blocks/items only)
-// No redstone logic, no stairs/slabs/tools, no entities, no maps.
-// Paste as a single mod file.
+// ==========================================
+// Sandboxels x Minecraft Total Conversion 
+// Version: Textured Base Materials Update
+// ==========================================
 
-(function () {
-  if (typeof elements === "undefined" || typeof behaviors === "undefined") return;
+/* ==========================================
+   1. CORE LIQUIDS & THERMODYNAMICS
+   ========================================== */
+if (!elements.water.reactions) elements.water.reactions = {};
+elements.water.reactions.mc_lava = { elem1: "steam", elem2: "mc_cobblestone" };
 
-  function def(name, obj) {
-    if (!elements[name]) elements[name] = obj;
-  }
+elements.mc_water = {
+    color: "rgba(63, 118, 228, 0.7)", 
+    behavior: behaviors.LIQUID, category: "Minecraft", state: "liquid", density: 1000,
+    reactions: { "mc_lava": { elem1: "steam", elem2: "mc_cobblestone" } }
+};
 
-  function block(name, color, density, extra={}) {
-    def(name, Object.assign({ color, behavior: behaviors.WALL, category: "Minecraft", state: "solid", density }, extra));
-  }
+elements.mc_lava = {
+    color: ["#E65C00", "#FF8C00", "#D95100", "#FF6600"], 
+    behavior: behaviors.LIQUID, category: "Minecraft", state: "liquid", density: 3000, temp: 1200,
+    reactions: { "mc_water": { elem1: "mc_obsidian", elem2: "steam" } },
+    glow: true
+};
 
-  function powder(name, color, density, extra={}) {
-    def(name, Object.assign({ color, behavior: behaviors.POWDER, category: "Minecraft", state: "solid", density }, extra));
-  }
+/* ==========================================
+   2. TEXTURED TERRAIN & BUILDING BLOCKS
+   ========================================== */
+const mcTerrain = {
+    "dirt": { color: ["#866043", "#7A563C", "#6D4C35"], type: behaviors.POWDER, density: 1200 },
+    "coarse_dirt": { color: ["#77553A", "#654832", "#5C412C"], type: behaviors.POWDER, density: 1250 },
+    "mud": { color: ["#3E2D25", "#33251E", "#47342B"], type: behaviors.POWDER, density: 1400 },
+    "clay": { color: ["#9EA4B0", "#8D949F", "#A9AFB9"], type: behaviors.POWDER, density: 1500 },
+    "sand": { color: ["#DBD3A0", "#D1C998", "#C7BFA1", "#E3DBA8"], type: behaviors.POWDER, density: 1600 },
+    "red_sand": { color: ["#A95821", "#9C511E", "#B86024", "#C66327"], type: behaviors.POWDER, density: 1600 },
+    "gravel": { color: ["#837F7E", "#7A7675", "#8C8887", "#6E6A6A"], type: behaviors.POWDER, density: 1700 },
+    "cobblestone": { color: ["#757575", "#616161", "#424242", "#545454", "#828282"], type: behaviors.WALL, density: 2400 },
+    "stone": { color: ["#7D7D7D", "#757575", "#707070"], type: behaviors.WALL, density: 2500 },
+    "stone_bricks": { color: ["#707070", "#686868", "#585858", "#484848"], type: behaviors.WALL, density: 2500 },
+    "bricks": { color: ["#964A44", "#8B433D", "#793A35", "#A4524B", "#C3B1A9"], type: behaviors.WALL, density: 2200 },
+    "obsidian": { color: ["#161021", "#1C142B", "#100B1A", "#251B38"], type: behaviors.WALL, density: 3500 },
+    "bedrock": { color: ["#1F1F1F", "#171717", "#262626", "#0F0F0F"], type: behaviors.WALL, density: 99999 },
+    "netherrack": { color: ["#612727", "#522121", "#732E2E", "#421A1A"], type: behaviors.WALL, density: 2000, burn: 99999 },
+    "soul_sand": { color: ["#544033", "#4A382C", "#5E4839", "#3D2E24"], type: behaviors.POWDER, density: 1500 },
+    "end_stone": { color: ["#DDE0A4", "#D1D498", "#C4C78D"], type: behaviors.WALL, density: 2500 },
+    "purpur_block": { color: ["#A97AA9", "#9A6A9A", "#B68AB6"], type: behaviors.WALL, density: 2400 },
+    "prismarine": { color: ["#5E9B95", "#518580", "#6BAEAA"], type: behaviors.WALL, density: 2500 },
+    "diorite": { color: ["#B8B8BA", "#A6A6A8", "#C9C9CB", "#8E8E90"], type: behaviors.WALL, density: 2600 },
+    "granite": { color: ["#925E4D", "#825445", "#A26955", "#70483B"], type: behaviors.WALL, density: 2600 },
+    "andesite": { color: ["#838384", "#757576", "#909091"], type: behaviors.WALL, density: 2500 },
+    "tuff": { color: ["#6C6D66", "#5C5D57", "#7B7C74"], type: behaviors.WALL, density: 2400 },
+    "calcite": { color: ["#D8D6CD", "#C8C6BD", "#E7E5DC"], type: behaviors.WALL, density: 2500 },
+    "basalt": { color: ["#4F5057", "#43444A", "#5D5E65"], type: behaviors.WALL, density: 2700 },
+    "blackstone": { color: ["#2A2429", "#1E1A1D", "#352D33"], type: behaviors.WALL, density: 2700 },
+    "glass": { color: "rgba(200, 237, 246, 0.3)", type: behaviors.WALL, density: 2500 },
+    "glowstone": { color: ["#E5BB5D", "#F0C86E", "#D4A949", "#CC9423"], type: behaviors.WALL, density: 2200, glow: true },
+    "sea_lantern": { color: ["#ACD6D2", "#99C7C3", "#BEE4E0", "#E8FAF8"], type: behaviors.WALL, density: 2500, glow: true },
+    "tnt": { color: ["#E53935", "#D32F2F", "#FFFFFF"], type: behaviors.WALL, density: 1500, burn: 10 }
+};
 
-  function liquid(name, color, density, extra={}) {
-    def(name, Object.assign({ color, behavior: behaviors.LIQUID, category: "Minecraft", state: "liquid", density }, extra));
-  }
+for (let id in mcTerrain) {
+    let props = mcTerrain[id];
+    elements["mc_" + id] = {
+        color: props.color, behavior: props.type, category: "Minecraft", density: props.density
+    };
+    if (props.burn) elements["mc_" + id].burnTime = props.burn;
+    if (props.glow) elements["mc_" + id].glow = true;
+}
 
-  function gas(name, color, extra={}) {
-    def(name, Object.assign({ color, behavior: behaviors.GAS, category: "Minecraft", state: "gas", density: 1 }, extra));
-  }
+/* ==========================================
+   3. WOODS & PLANTS
+   ========================================== */
+const mcWoods = {
+    "oak": { log: ["#6A5232", "#5C462A"], plank: ["#A2834E", "#8A6F41", "#B39257"], leaf: ["#48B529", "#3A9621"] },
+    "spruce": { log: ["#392A1A", "#2E2114"], plank: ["#705334", "#5C442A", "#82613D"], leaf: ["#305730", "#254225"] },
+    "birch": { log: ["#DFDFDB", "#D0D0CC", "#262626"], plank: ["#C3B37B", "#B0A16D", "#D4C489"], leaf: ["#62A44B", "#4F853D"] },
+    "jungle": { log: ["#554419", "#473815"], plank: ["#A07350", "#8A6345", "#B8865D"], leaf: ["#30A126", "#26821E"] },
+    "acacia": { log: ["#666056", "#524D45"], plank: ["#A85A32", "#8F4D2A", "#C2683A"], leaf: ["#48B529", "#3A9621"] },
+    "dark_oak": { log: ["#3C2E1A", "#2D2213"], plank: ["#422B14", "#33210F", "#52361A"], leaf: ["#2C6E1A", "#215213"] },
+    "cherry": { log: ["#2B1B18", "#1A100F"], plank: ["#E2A5A5", "#C99191", "#F5B5B5"], leaf: ["#FFB6C1", "#FF9EAD"] }
+};
 
-  if (elements.water) {
-    if (!elements.water.reactions) elements.water.reactions = {};
-    if (!elements.water.reactions.mc_lava) elements.water.reactions.mc_lava = { elem1: "steam", elem2: "mc_cobblestone", chance: 1 };
-  }
-  if (elements.lava) {
-    if (!elements.lava.reactions) elements.lava.reactions = {};
-    if (!elements.lava.reactions.mc_water) elements.lava.reactions.mc_water = { elem1: "mc_obsidian", elem2: "steam", chance: 1 };
-  }
+for (let wood in mcWoods) {
+    elements["mc_" + wood + "_log"] = { color: mcWoods[wood].log, behavior: behaviors.WALL, category: "Minecraft", density: 700, burnTime: 200 };
+    elements["mc_" + wood + "_planks"] = { color: mcWoods[wood].plank, behavior: behaviors.WALL, category: "Minecraft", density: 600, burnTime: 150 };
+    elements["mc_" + wood + "_leaves"] = { color: mcWoods[wood].leaf, behavior: behaviors.POWDER, category: "Minecraft", density: 300, burnTime: 50 };
+}
 
-  liquid("mc_water", ["#3F76E4", "#4B8CFF", "#2E66C9"], 1000, { reactions: { mc_lava: { elem1: "steam", elem2: "mc_cobblestone", chance: 1 } } });
-  liquid("mc_lava", ["#E65C00", "#FF8C00", "#D95100"], 3000, { temp: 1200, reactions: { mc_water: { elem1: "mc_obsidian", elem2: "steam", chance: 1 }, water: { elem1: "mc_obsidian", elem2: "steam", chance: 1 } } });
-  block("mc_stone", ["#7D7D7D", "#757575"], 2500, {});
-  block("mc_cobblestone", ["#757575", "#616161", "#545454"], 2400, {});
-  block("mc_mossy_cobblestone", ["#6B755A", "#59614A"], 2400, {});
-  block("mc_stone_bricks", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_cracked_stone_bricks", ["#8A8A8A", "#787878"], 2500, {});
-  block("mc_mossy_stone_bricks", ["#6F7660", "#5A614D"], 2500, {});
-  block("mc_chiseled_stone_bricks", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_diorite", ["#B8B8BA", "#AFAFB1"], 2600, {});
-  block("mc_andesite", ["#838384", "#767678"], 2500, {});
-  block("mc_granite", ["#925E4D", "#825543"], 2600, {});
-  block("mc_calcite", ["#D8D6CD", "#CFCBC2"], 2500, {});
-  block("mc_tuff", ["#6C6D66", "#5F605A"], 2400, {});
-  block("mc_polished_tuff", ["#7A7B73", "#676860"], 2400, {});
-  block("mc_tuff_bricks", ["#70716A", "#62635D"], 2400, {});
-  block("mc_dripstone_block", ["#8A6E57", "#7A614D"], 2600, {});
-  block("mc_deepslate", ["#4A4A4A", "#3E3E3E"], 3000, {});
-  block("mc_cobbled_deepslate", ["#505050", "#434343"], 3000, {});
-  block("mc_polished_deepslate", ["#4B4B4B", "#3F3F3F"], 3000, {});
-  block("mc_deepslate_bricks", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_cracked_deepslate_bricks", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_deepslate_tiles", ["#33343A", "#28292E"], 3000, {});
-  block("mc_cracked_deepslate_tiles", ["#33343A", "#28292E"], 3000, {});
-  block("mc_chiseled_deepslate", ["#383838", "#2C2C2C"], 3000, {});
-  block("mc_reinforced_deepslate", ["#2C2C2C", "#232323"], 5000, {});
-  block("mc_basalt", ["#4F5057", "#42424A"], 2700, {});
-  block("mc_smooth_basalt", ["#484952", "#3B3C45"], 2700, {});
-  block("mc_blackstone", ["#343036", "#2A262B"], 2800, {});
-  block("mc_polished_blackstone", ["#4A454C", "#3E3940"], 2800, {});
-  block("mc_polished_blackstone_bricks", ["#4B464D", "#403A42"], 2800, {});
-  block("mc_cracked_polished_blackstone_bricks", ["#4B464D", "#403A42"], 2800, {});
-  block("mc_gilded_blackstone", ["#4A454C", "#D6B03A"], 2800, {});
-  block("mc_netherrack", ["#612727", "#522121", "#732E2E"], 2000, {});
-  block("mc_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-  block("mc_cracked_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-  block("mc_chiseled_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-  block("mc_nether_wart_block", ["#8B1D27", "#6E1620"], 1800, {});
-  block("mc_warped_wart_block", ["#1E6A63", "#154A46"], 1800, {});
-  block("mc_soul_sand", ["#544033", "#4A382C"], 1500, {});
-  block("mc_soul_soil", ["#5A4638", "#4A372C"], 1500, {});
-  block("mc_magma_block", ["#893717", "#A54722"], 2800, { temp: 300, glow: true });
-  block("mc_obsidian", ["#161021", "#1C142B", "#100B1A"], 3500, {});
-  block("mc_crying_obsidian", ["#2B1143", "#1E0A33"], 3500, { glow: true });
-  block("mc_end_stone", ["#DDE0A4", "#CBD089"], 2500, {});
-  block("mc_end_stone_bricks", ["#E2E3B0", "#D0D18F"], 2500, {});
-  block("mc_prismarine", ["#4C8B82", "#3E746C"], 2800, {});
-  block("mc_prismarine_bricks", ["#5E9B95", "#4A807A"], 2800, {});
-  block("mc_dark_prismarine", ["#335C57", "#274743"], 2800, {});
-  block("mc_quartz_block", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_chiseled_quartz_block", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_quartz_pillar", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_quartz_bricks", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_sandstone", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_cut_sandstone", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_chiseled_sandstone", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_smooth_sandstone", ["#D8C58B", "#CBB67D"], 2400, {});
-  block("mc_red_sandstone", ["#BA6430", "#A85827"], 2400, {});
-  block("mc_cut_red_sandstone", ["#BA6430", "#A85827"], 2400, {});
-  block("mc_chiseled_red_sandstone", ["#BA6430", "#A85827"], 2400, {});
-  block("mc_smooth_red_sandstone", ["#B86526", "#A95720"], 2400, {});
-  powder("mc_clay", ["#9EA4B0", "#8F95A1"], 1700, {});
-  block("mc_terracotta", ["#B57A52", "#A56D49"], 2000, {});
-  block("mc_bricks", ["#A95E4B", "#8F4D3E"], 2400, {});
-  powder("mc_mud", ["#5A3E2B", "#4E3527"], 1400, {});
-  block("mc_packed_mud", ["#6B4A35", "#5E4030"], 1600, {});
-  block("mc_mud_bricks", ["#7A5A45", "#6B4D3D"], 1800, {});
-  block("mc_rooted_dirt", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_coarse_dirt", ["#77553A", "#644632"], 1250, {});
-  block("mc_podzol", ["#6B4A26", "#5A3D20"], 1300, {});
-  block("mc_dirt", ["#866043", "#7A563C", "#6D4C35"], 1200, {});
-  block("mc_dirt_path", ["#8A6846", "#74573D"], 1250, {});
-  block("mc_grass_block", ["#669D40", "#558437"], 1300, {});
-  block("mc_mycelium", ["#6C5963", "#5A4A53"], 1250, {});
-  block("mc_moss_block", ["#5C7A34", "#4E682C"], 1200, {});
-  block("mc_moss_carpet", ["#5B7330", "#496028"], 900, {});
-  powder("mc_suspicious_sand", ["#D7CBA8", "#CBBF96"], 1500, {});
-  powder("mc_suspicious_gravel", ["#8A8684", "#797574"], 1700, {});
-  powder("mc_snow", ["#FFFFFF", "#F4FBFB"], 500, { tempHigh: 0, stateHigh: "mc_water" });
-  block("mc_snow_block", ["#F4FBFB", "#EAF7F7"], 600, { tempHigh: 0, stateHigh: "mc_water" });
-  block("mc_ice", ["#DFF4FF", "#CFEAFF"], 900, { tempHigh: 0, stateHigh: "mc_water" });
-  block("mc_packed_ice", ["#A9D9FF", "#8FC8F0"], 900, { tempHigh: 0, stateHigh: "mc_water" });
-  block("mc_blue_ice", ["#7291F0", "#5C7FE8"], 900, { tempHigh: 0, stateHigh: "mc_water" });
-  powder("mc_powder_snow", ["#F1FBFB", "#E8F5F5"], 500, { tempHigh: 0, stateHigh: "mc_water" });
-  block("mc_glass", "rgba(200, 237, 246, 0.4)", 2500, {});
-  block("mc_glass_pane", "rgba(200, 237, 246, 0.4)", 2500, {});
-  block("mc_tinted_glass", "rgba(35, 30, 40, 0.8)", 2500, {});
-  block("mc_glowstone", ["#E5BB5D", "#F0C86E", "#D4A949"], 2200, { glow: true });
-  block("mc_sea_lantern", ["#ACD6D2", "#95C6C2"], 2500, { glow: true });
-  block("mc_shroomlight", ["#EE8E4D", "#D97A3A"], 2500, { glow: true });
-  block("mc_lantern", ["#5B514A", "#4B433D"], 1000, { glow: true });
-  block("mc_soul_lantern", ["#4E5C5D", "#3F4A4B"], 1000, { glow: true });
-  block("mc_beacon", ["#69BDB8", "#57A7A1"], 2500, { glow: true });
-  block("mc_ochre_froglight", ["#E6D37A", "#D6C363"], 1000, { glow: true });
-  block("mc_verdant_froglight", ["#B8D4AD", "#9FBE94"], 1000, { glow: true });
-  block("mc_pearlescent_froglight", ["#F2C6E0", "#E3ADC9"], 1000, { glow: true });
-  block("mc_honey_block", "rgba(250,195,50,0.8)", 1500, {});
-  block("mc_honeycomb_block", ["#E6B033", "#D59D22"], 1500, {});
-  block("mc_slime_block", ["#78D151", "#5FB23A"], 1500, {});
-  block("mc_cobweb", ["#E0E0E0", "#CFCFCF"], 10, {});
-  block("mc_amethyst_block", ["#7B5A9A", "#5F4580"], 2400, { glow: true });
-  block("mc_budding_amethyst", ["#7F5A9A", "#61457A"], 2400, {});
-  block("mc_amethyst_cluster", ["#A883CC", "#8A68B3"], 2400, { glow: true });
-  block("mc_large_amethyst_bud", ["#B191D5", "#9778C0"], 2400, { glow: true });
-  block("mc_medium_amethyst_bud", ["#B191D5", "#9778C0"], 2400, { glow: true });
-  block("mc_small_amethyst_bud", ["#B191D5", "#9778C0"], 2400, { glow: true });
-  powder("mc_dragon_egg", ["#140B1A", "#CC00FF"], 3000, {});
-  block("mc_end_rod", ["#FFFFFF", "#F4F4F4"], 1000, { glow: true });
-  block("mc_sculk", ["#0B1F27", "#081821"], 1000, { glow: true });
-  block("mc_sculk_vein", ["#12404D", "#0D2F38"], 1000, { glow: true });
-  block("mc_sculk_catalyst", ["#0B262F", "#081D25"], 1000, { glow: true });
-  block("mc_sculk_sensor", ["#063A45", "#052F38"], 1000, { glow: true });
-  block("mc_sculk_shrieker", ["#06323B", "#05262D"], 1000, { glow: true });
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
-  powder("mc_trial_key", ["#9FA6B2", "#79808B"], 2400, {});
-  powder("mc_ominous_trial_key", ["#5C4A7D", "#42345F"], 2400, { glow: true });
-  powder("mc_breeze_rod", ["#D6F2FF", "#A8DFFF"], 1800, { glow: true });
-  powder("mc_ominous_bottle", ["#B69B45", "#8D7632"], 1500, {});
-  gas("mc_wind_charge", ["#D8F4FF", "#BCEBFF"], { glow: true });
-  block("mc_chiseled_copper", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_grate", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_bulb", ["#C77A53", "#A65F43"], 2600, { glow: true });
-  block("mc_copper_bars", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chest", ["#C77A53", "#A65F43"], 3200, {});
-  block("mc_copper_lantern", ["#C77A53", "#A65F43"], 1000, { glow: true });
-  block("mc_copper_torch", ["#C77A53", "#A65F43"], 500, { glow: true });
-  block("mc_copper_door", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_trapdoor", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chain", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_waxed_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_waxed_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_oak_log", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_oak_planks", ["#A2834E", "#8A6F41"], 600, { burnTime: 300 });
-  block("mc_oak_leaves", "rgba(72, 181, 41, 0.85)", 300, { burnTime: 100 });
-  powder("mc_oak_sapling", ["#7CA54D", "#62883E"], 100, { burnTime: 20 });
-  block("mc_oak_wood", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_spruce_log", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_spruce_planks", ["#705334", "#5C442A"], 600, { burnTime: 300 });
-  block("mc_spruce_leaves", "rgba(48, 87, 48, 0.85)", 300, { burnTime: 100 });
-  powder("mc_spruce_sapling", ["#698A45", "#567138"], 100, { burnTime: 20 });
-  block("mc_spruce_wood", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_birch_log", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_birch_planks", ["#C3B37B", "#B0A16D"], 600, { burnTime: 300 });
-  block("mc_birch_leaves", "rgba(98, 164, 75, 0.85)", 300, { burnTime: 100 });
-  powder("mc_birch_sapling", ["#8AB15D", "#729246"], 100, { burnTime: 20 });
-  block("mc_birch_wood", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_jungle_log", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_jungle_planks", ["#B68B58", "#9E7547"], 600, { burnTime: 300 });
-  block("mc_jungle_leaves", "rgba(77, 135, 56, 0.85)", 300, { burnTime: 100 });
-  powder("mc_jungle_sapling", ["#77A65A", "#5F8A45"], 100, { burnTime: 20 });
-  block("mc_jungle_wood", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_acacia_log", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_acacia_planks", ["#A85A32", "#8E4B2A"], 600, { burnTime: 300 });
-  block("mc_acacia_leaves", "rgba(92, 145, 58, 0.85)", 300, { burnTime: 100 });
-  powder("mc_acacia_sapling", ["#84A85A", "#688544"], 100, { burnTime: 20 });
-  block("mc_acacia_wood", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_dark_oak_log", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_dark_oak_planks", ["#4A3624", "#3C2B1D"], 600, { burnTime: 300 });
-  block("mc_dark_oak_leaves", "rgba(38, 74, 32, 0.85)", 300, { burnTime: 100 });
-  powder("mc_dark_oak_sapling", ["#6F8A48", "#587037"], 100, { burnTime: 20 });
-  block("mc_dark_oak_wood", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_mangrove_log", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_planks", ["#8D5A3F", "#734530"], 600, { burnTime: 300 });
-  block("mc_mangrove_leaves", "rgba(65,110,50,0.85)", 300, { burnTime: 100 });
-  powder("mc_mangrove_sapling", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_mangrove_wood", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_roots", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_muddy_mangrove_roots", ["#6C4A35", "#5A3E2B"], 1400, {});
-  powder("mc_mangrove_propagule", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_cherry_log", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_cherry_planks", ["#E8B3B3", "#D89C9C"], 600, { burnTime: 300 });
-  block("mc_cherry_leaves", "rgba(255,170,200,0.8)", 300, { burnTime: 100 });
-  powder("mc_cherry_sapling", ["#F6BDD1", "#EFAAC4"], 100, { burnTime: 20 });
-  block("mc_cherry_wood", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_bamboo_block", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  block("mc_bamboo_planks", ["#A8C66C", "#97B85B"], 600, { burnTime: 300 });
-  block("mc_bamboo_mosaic", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  powder("mc_bamboo_sapling", ["#9FCD66", "#87B94A"], 100, { burnTime: 20 });
-  block("mc_pale_oak_log", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_pale_oak_planks", ["#E5DDCF", "#D4C9B7"], 600, { burnTime: 300 });
-  block("mc_pale_oak_leaves", "rgba(183,201,160,0.8)", 300, { burnTime: 100 });
-  powder("mc_pale_oak_sapling", ["#DCE3C1", "#C9D2A8"], 100, { burnTime: 20 });
-  block("mc_pale_oak_wood", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
+const mcFlora = {
+    "grass": "#5C8B3B", "fern": "#4B712F", "dead_bush": "#6A4A28", 
+    "sugar_cane": ["#8BB74A", "#79A13D"], "bamboo": ["#548821", "#446E1A"], 
+    "cactus": ["#0F5D18", "#0B4512", "#13751E"], "kelp": "#528A32",
+    "crimson_fungus": ["#932021", "#731A1A"], "warped_fungus": ["#167E86", "#126268"]
+};
 
-  powder("mc_coal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_charcoal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_iron_ingot", ["#D8AF93", "#C59D82"], 4000, {});
-  powder("mc_gold_ingot", ["#FCEE4B", "#E2CE42"], 4000, {});
-  powder("mc_copper_ingot", ["#C06B50", "#B05E45"], 3500, {});
-  powder("mc_diamond", ["#4AEDD9", "#3CD0BE"], 4000, {});
-  powder("mc_emerald", ["#17DD62", "#11B94F"], 4000, {});
-  powder("mc_lapis_lazuli", ["#1D47A6", "#173A88"], 3500, {});
-  powder("mc_quartz", ["#EAE7DF", "#D9D2C6"], 3000, {});
-  powder("mc_redstone_dust", ["#AA0F0A", "#800906"], 1500, {});
-  powder("mc_glowstone_dust", ["#FFD800", "#E8C100"], 1500, { glow: true });
-  powder("mc_prismarine_shard", ["#5E9B95", "#4A807A"], 2000, {});
-  powder("mc_prismarine_crystals", ["#8FD5C9", "#6FBDB0"], 2000, { glow: true });
-  powder("mc_amethyst_shard", ["#A883CC", "#8A68B3"], 2000, {});
-  powder("mc_ghast_tear", ["#E0E0E0", "#CFCFCF"], 2000, {});
-  powder("mc_blaze_rod", ["#F0CD31", "#D8B82A"], 2000, { glow: true });
-  powder("mc_blaze_powder", ["#F0CD31", "#D8B82A"], 1500, {});
-  powder("mc_magma_cream", ["#A14220", "#8B391B"], 1500, {});
-  powder("mc_ender_pearl", "rgba(26, 135, 120, 0.8)", 2000, {});
-  powder("mc_eye_of_ender", ["#169C75", "#127A5C"], 2000, {});
-  powder("mc_slimeball", ["#6ABB44", "#58A138"], 1500, {});
-  powder("mc_honeycomb", ["#E6B033", "#D59D22"], 1500, {});
-  powder("mc_bone", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_bone_meal", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_string", ["#D3D3D3", "#BFC0C0"], 1200, {});
-  powder("mc_feather", ["#E5E5E5", "#D9D9D9"], 200, {});
-  powder("mc_flint", ["#3B3939", "#2F2E2E"], 2500, {});
-  powder("mc_leather", ["#C65C35", "#A94C2F"], 1200, {});
-  powder("mc_ink_sac", ["#1F1F23", "#111114"], 2500, {});
-  powder("mc_glow_ink_sac", ["#6EB0A3", "#589285"], 2500, { glow: true });
-  powder("mc_heart_of_the_sea", ["#3690D0", "#2A78AD"], 2500, { glow: true });
-  powder("mc_nautilus_shell", ["#D9C9B4", "#BFAF9B"], 2200, {});
-  powder("mc_turtle_shell", ["#A7BC74", "#8EA35B"], 2000, {});
-  powder("mc_scute", ["#547535", "#415A28"], 2000, {});
-  powder("mc_egg", ["#E0CCA7", "#CAB894"], 1200, {});
-  powder("mc_saddle", ["#9E3C1B", "#843215"], 1200, {});
-  powder("mc_name_tag", ["#D7D2BE", "#BFB9A8"], 1200, {});
-  powder("mc_lead", ["#8B8B8B", "#747474"], 1200, {});
-  powder("mc_book", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_written_book", ["#773922", "#63301D"], 500, {});
-  powder("mc_book_and_quill", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_paper", ["#E8E7E4", "#D7D5D0"], 500, {});
-  powder("mc_apple", ["#D52618", "#B71E15"], 1200, {});
-  powder("mc_golden_apple", ["#E5D241", "#C5B72E"], 1200, {});
-  powder("mc_enchanted_golden_apple", ["#E5D241", "#C5B72E"], 1200, { glow: true });
-  powder("mc_bread", ["#D7AE6A", "#BF9550"], 1200, {});
-  powder("mc_cookie", ["#E09756", "#CC8446"], 1200, {});
-  powder("mc_melon_slice", ["#D13134", "#B6282B"], 1200, {});
-  powder("mc_pumpkin_pie", ["#C47738", "#AB662F"], 1200, {});
-  powder("mc_sweet_berries", ["#921319", "#7A1015"], 1000, {});
-  powder("mc_glistering_melon_slice", ["#DEB82E", "#C7A125"], 1200, { glow: true });
-  powder("mc_carrot", ["#EFA12B", "#D68D22"], 1200, {});
-  powder("mc_potato", ["#C19C4A", "#A98335"], 1200, {});
-  powder("mc_baked_potato", ["#B78334", "#A06F28"], 1200, {});
-  powder("mc_poisonous_potato", ["#8B7A3C", "#746633"], 1200, {});
-  powder("mc_beetroot", ["#A33535", "#8A2D2D"], 1200, {});
-  powder("mc_beetroot_seeds", ["#A33535", "#8A2D2D"], 1000, {});
-  powder("mc_wheat_seeds", ["#6A9B35", "#5A862C"], 1000, {});
-  powder("mc_melon_seeds", ["#D8D2A0", "#C1BB8D"], 1000, {});
-  powder("mc_pumpkin_seeds", ["#E4D19E", "#CFBF8C"], 1000, {});
-  powder("mc_bowl", ["#875C34", "#734C2A"], 800, {});
-  liquid("mc_beetroot_soup", ["#8F161A", "#751216"], 1100, {});
-  liquid("mc_mushroom_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_rabbit_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_milk", "#FFFFFF", 1000, {});
-  powder("mc_tropical_fish", ["#E6732B", "#C96021"], 1200, {});
-  powder("mc_pufferfish", ["#DEB544", "#C7A13A"], 1200, {});
-  powder("mc_cod", ["#CDB9A7", "#B79F8D"], 1200, {});
-  powder("mc_salmon", ["#E69A7A", "#D07E5B"], 1200, {});
-  powder("mc_chicken", ["#F0C4B4", "#DFAF9F"], 1200, {});
-  powder("mc_beef", ["#9D5D48", "#844C3A"], 1200, {});
-  powder("mc_porkchop", ["#E59A8D", "#D3867C"], 1200, {});
-  powder("mc_mutton", ["#D88D7A", "#C77866"], 1200, {});
-  powder("mc_rabbit", ["#D49E87", "#C18872"], 1200, {});
-  powder("mc_nether_star", ["#E2F0E9", "#CFDDD6"], 2000, { glow: true });
-  powder("mc_netherite_scrap", ["#563A2E", "#463024"], 5000, {});
-  powder("mc_netherite_ingot", ["#454141", "#2F2C2C"], 6000, {});
-  block("mc_ancient_debris", ["#5A3F34", "#7A5646"], 3500, {});
+for (let plant in mcFlora) {
+    elements["mc_" + plant] = { color: mcFlora[plant], behavior: behaviors.POWDER, category: "Minecraft", burnTime: 40 };
+}
 
-  powder("mc_trial_key", ["#9FA6B2", "#79808B"], 2400, {});
-  powder("mc_ominous_trial_key", ["#5C4A7D", "#42345F"], 2400, { glow: true });
-  powder("mc_breeze_rod", ["#D6F2FF", "#A8DFFF"], 1800, { glow: true });
-  powder("mc_ominous_bottle", ["#B69B45", "#8D7632"], 1500, {});
-  gas("mc_wind_charge", ["#D8F4FF", "#BCEBFF"], { glow: true });
+/* ==========================================
+   4. ORES, MINERALS & ITEMS
+   ========================================== */
+const mcOres = {
+    "coal": { ore: "#1D1D1D", item: "#111111" }, 
+    "iron": { ore: "#D8AF93", item: "#E2E2E2" }, 
+    "gold": { ore: "#FCEE4B", item: "#FCEE4B" }, 
+    "copper": { ore: "#C06B50", item: "#D67A5E" },
+    "diamond": { ore: "#4AEDD9", item: "#68EBD8" }, 
+    "emerald": { ore: "#17DD62", item: "#41F384" },
+    "lapis": { ore: "#1D47A6", item: "#2657C6" },
+    "redstone": { ore: "#AA0F0A", item: "#9E160A" },
+    "netherite": { ore: "#453B3B", item: "#383030" }
+};
 
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
+for (let ore in mcOres) {
+    elements["mc_" + ore + "_item"] = { color: mcOres[ore].item, behavior: behaviors.POWDER, category: "Minecraft", density: 3000 };
+    elements["mc_" + ore + "_block"] = { color: [mcOres[ore].item, mcOres[ore].ore], behavior: behaviors.WALL, category: "Minecraft", density: 4000 };
+    
+    // Base stone ore generator
+    if (ore !== "netherite") {
+        elements["mc_" + ore + "_ore"] = { 
+            color: ["#7D7D7D", "#757575", mcOres[ore].ore], behavior: behaviors.WALL, category: "Minecraft", density: 2800
+        };
+        // Deepslate variant
+        elements["mc_deepslate_" + ore + "_ore"] = { 
+            color: ["#3D3D43", "#2F2F34", mcOres[ore].ore], behavior: behaviors.WALL, category: "Minecraft", density: 3200
+        };
+    }
+}
+// Ancient Debris
+elements.mc_ancient_debris = { color: ["#5E423A", "#4A332D", "#6E4C43"], behavior: behaviors.WALL, category: "Minecraft", density: 3500 };
 
-  block("mc_chiseled_copper", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_grate", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_bulb", ["#C77A53", "#A65F43"], 2600, { glow: true });
-  block("mc_copper_bars", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chest", ["#C77A53", "#A65F43"], 3200, {});
-  block("mc_copper_lantern", ["#C77A53", "#A65F43"], 1000, { glow: true });
-  block("mc_copper_torch", ["#C77A53", "#A65F43"], 500, { glow: true });
-  block("mc_copper_door", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_trapdoor", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chain", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_waxed_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_waxed_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
+/* ==========================================
+   5. PROCEDURAL COLORED BLOCKS
+   ========================================== */
+const mcColors = ["white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"];
+const mcHex = ["#E9ECEC", "#F07613", "#BD44B3", "#3AAFD9", "#F8C627", "#70B919", "#ED8DAC", "#3E4447", "#8E8E86", "#158991", "#792AAC", "#35399D", "#724728", "#546D1B", "#A12722", "#141519"];
 
-  block("mc_oak_log", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_oak_planks", ["#A2834E", "#8A6F41"], 600, { burnTime: 300 });
-  block("mc_oak_leaves", "rgba(72, 181, 41, 0.85)", 300, { burnTime: 100 });
-  powder("mc_oak_sapling", ["#7CA54D", "#62883E"], 100, { burnTime: 20 });
-  block("mc_oak_wood", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_spruce_log", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_spruce_planks", ["#705334", "#5C442A"], 600, { burnTime: 300 });
-  block("mc_spruce_leaves", "rgba(48, 87, 48, 0.85)", 300, { burnTime: 100 });
-  powder("mc_spruce_sapling", ["#698A45", "#567138"], 100, { burnTime: 20 });
-  block("mc_spruce_wood", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_birch_log", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_birch_planks", ["#C3B37B", "#B0A16D"], 600, { burnTime: 300 });
-  block("mc_birch_leaves", "rgba(98, 164, 75, 0.85)", 300, { burnTime: 100 });
-  powder("mc_birch_sapling", ["#8AB15D", "#729246"], 100, { burnTime: 20 });
-  block("mc_birch_wood", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_jungle_log", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_jungle_planks", ["#B68B58", "#9E7547"], 600, { burnTime: 300 });
-  block("mc_jungle_leaves", "rgba(77, 135, 56, 0.85)", 300, { burnTime: 100 });
-  powder("mc_jungle_sapling", ["#77A65A", "#5F8A45"], 100, { burnTime: 20 });
-  block("mc_jungle_wood", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_acacia_log", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_acacia_planks", ["#A85A32", "#8E4B2A"], 600, { burnTime: 300 });
-  block("mc_acacia_leaves", "rgba(92, 145, 58, 0.85)", 300, { burnTime: 100 });
-  powder("mc_acacia_sapling", ["#84A85A", "#688544"], 100, { burnTime: 20 });
-  block("mc_acacia_wood", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_dark_oak_log", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_dark_oak_planks", ["#4A3624", "#3C2B1D"], 600, { burnTime: 300 });
-  block("mc_dark_oak_leaves", "rgba(38, 74, 32, 0.85)", 300, { burnTime: 100 });
-  powder("mc_dark_oak_sapling", ["#6F8A48", "#587037"], 100, { burnTime: 20 });
-  block("mc_dark_oak_wood", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_mangrove_log", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_planks", ["#8D5A3F", "#734530"], 600, { burnTime: 300 });
-  block("mc_mangrove_leaves", "rgba(65,110,50,0.85)", 300, { burnTime: 100 });
-  powder("mc_mangrove_sapling", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_mangrove_wood", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_roots", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_muddy_mangrove_roots", ["#6C4A35", "#5A3E2B"], 1400, {});
-  powder("mc_mangrove_propagule", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_cherry_log", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_cherry_planks", ["#E8B3B3", "#D89C9C"], 600, { burnTime: 300 });
-  block("mc_cherry_leaves", "rgba(255,170,200,0.8)", 300, { burnTime: 100 });
-  powder("mc_cherry_sapling", ["#F6BDD1", "#EFAAC4"], 100, { burnTime: 20 });
-  block("mc_cherry_wood", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_bamboo_block", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  block("mc_bamboo_planks", ["#A8C66C", "#97B85B"], 600, { burnTime: 300 });
-  block("mc_bamboo_mosaic", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  powder("mc_bamboo_sapling", ["#9FCD66", "#87B94A"], 100, { burnTime: 20 });
-  block("mc_pale_oak_log", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_pale_oak_planks", ["#E5DDCF", "#D4C9B7"], 600, { burnTime: 300 });
-  block("mc_pale_oak_leaves", "rgba(183,201,160,0.8)", 300, { burnTime: 100 });
-  powder("mc_pale_oak_sapling", ["#DCE3C1", "#C9D2A8"], 100, { burnTime: 20 });
-  block("mc_pale_oak_wood", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
+for (let i = 0; i < mcColors.length; i++) {
+    let name = "mc_" + mcColors[i];
+    let hex = mcHex[i];
+    
+    // Wool (Slightly textured)
+    elements[name + "_wool"] = { color: [hex, hex, "#00000011"], behavior: behaviors.WALL, category: "Minecraft", burnTime: 80 };
+    
+    // Terracotta (Flat, slightly muted)
+    elements[name + "_terracotta"] = { color: hex, behavior: behaviors.WALL, category: "Minecraft", density: 2000 };
+    
+    // Concrete & Powder
+    elements[name + "_concrete"] = { color: hex, behavior: behaviors.WALL, category: "Minecraft", density: 2500 };
+    elements[name + "_concrete_powder"] = { color: [hex, "#00000009"], behavior: behaviors.POWDER, category: "Minecraft", density: 1600 };
+    
+    // Stained Glass
+    let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    elements[name + "_stained_glass"] = { color: `rgba(${r}, ${g}, ${b}, 0.5)`, behavior: behaviors.WALL, category: "Minecraft" };
+}
 
-  powder("mc_coal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_charcoal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_iron_ingot", ["#D8AF93", "#C59D82"], 4000, {});
-  powder("mc_gold_ingot", ["#FCEE4B", "#E2CE42"], 4000, {});
-  powder("mc_copper_ingot", ["#C06B50", "#B05E45"], 3500, {});
-  powder("mc_diamond", ["#4AEDD9", "#3CD0BE"], 4000, {});
-  powder("mc_emerald", ["#17DD62", "#11B94F"], 4000, {});
-  powder("mc_lapis_lazuli", ["#1D47A6", "#173A88"], 3500, {});
-  powder("mc_quartz", ["#EAE7DF", "#D9D2C6"], 3000, {});
-  powder("mc_redstone_dust", ["#AA0F0A", "#800906"], 1500, {});
-  powder("mc_glowstone_dust", ["#FFD800", "#E8C100"], 1500, { glow: true });
-  powder("mc_prismarine_shard", ["#5E9B95", "#4A807A"], 2000, {});
-  powder("mc_prismarine_crystals", ["#8FD5C9", "#6FBDB0"], 2000, { glow: true });
-  powder("mc_amethyst_shard", ["#A883CC", "#8A68B3"], 2000, {});
-  powder("mc_ghast_tear", ["#E0E0E0", "#CFCFCF"], 2000, {});
-  powder("mc_blaze_rod", ["#F0CD31", "#D8B82A"], 2000, { glow: true });
-  powder("mc_blaze_powder", ["#F0CD31", "#D8B82A"], 1500, {});
-  powder("mc_magma_cream", ["#A14220", "#8B391B"], 1500, {});
-  powder("mc_ender_pearl", "rgba(26, 135, 120, 0.8)", 2000, {});
-  powder("mc_eye_of_ender", ["#169C75", "#127A5C"], 2000, {});
-  powder("mc_slimeball", ["#6ABB44", "#58A138"], 1500, {});
-  powder("mc_honeycomb", ["#E6B033", "#D59D22"], 1500, {});
-  powder("mc_bone", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_bone_meal", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_string", ["#D3D3D3", "#BFC0C0"], 1200, {});
-  powder("mc_feather", ["#E5E5E5", "#D9D9D9"], 200, {});
-  powder("mc_flint", ["#3B3939", "#2F2E2E"], 2500, {});
-  powder("mc_leather", ["#C65C35", "#A94C2F"], 1200, {});
-  powder("mc_ink_sac", ["#1F1F23", "#111114"], 2500, {});
-  powder("mc_glow_ink_sac", ["#6EB0A3", "#589285"], 2500, { glow: true });
-  powder("mc_heart_of_the_sea", ["#3690D0", "#2A78AD"], 2500, { glow: true });
-  powder("mc_nautilus_shell", ["#D9C9B4", "#BFAF9B"], 2200, {});
-  powder("mc_turtle_shell", ["#A7BC74", "#8EA35B"], 2000, {});
-  powder("mc_scute", ["#547535", "#415A28"], 2000, {});
-  powder("mc_egg", ["#E0CCA7", "#CAB894"], 1200, {});
-  powder("mc_saddle", ["#9E3C1B", "#843215"], 1200, {});
-  powder("mc_name_tag", ["#D7D2BE", "#BFB9A8"], 1200, {});
-  powder("mc_lead", ["#8B8B8B", "#747474"], 1200, {});
-  powder("mc_book", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_written_book", ["#773922", "#63301D"], 500, {});
-  powder("mc_book_and_quill", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_paper", ["#E8E7E4", "#D7D5D0"], 500, {});
-  powder("mc_apple", ["#D52618", "#B71E15"], 1200, {});
-  powder("mc_golden_apple", ["#E5D241", "#C5B72E"], 1200, {});
-  powder("mc_enchanted_golden_apple", ["#E5D241", "#C5B72E"], 1200, { glow: true });
-  powder("mc_bread", ["#D7AE6A", "#BF9550"], 1200, {});
-  powder("mc_cookie", ["#E09756", "#CC8446"], 1200, {});
-  powder("mc_melon_slice", ["#D13134", "#B6282B"], 1200, {});
-  powder("mc_pumpkin_pie", ["#C47738", "#AB662F"], 1200, {});
-  powder("mc_sweet_berries", ["#921319", "#7A1015"], 1000, {});
-  powder("mc_glistering_melon_slice", ["#DEB82E", "#C7A125"], 1200, { glow: true });
-  powder("mc_carrot", ["#EFA12B", "#D68D22"], 1200, {});
-  powder("mc_potato", ["#C19C4A", "#A98335"], 1200, {});
-  powder("mc_baked_potato", ["#B78334", "#A06F28"], 1200, {});
-  powder("mc_poisonous_potato", ["#8B7A3C", "#746633"], 1200, {});
-  powder("mc_beetroot", ["#A33535", "#8A2D2D"], 1200, {});
-  powder("mc_beetroot_seeds", ["#A33535", "#8A2D2D"], 1000, {});
-  powder("mc_wheat_seeds", ["#6A9B35", "#5A862C"], 1000, {});
-  powder("mc_melon_seeds", ["#D8D2A0", "#C1BB8D"], 1000, {});
-  powder("mc_pumpkin_seeds", ["#E4D19E", "#CFBF8C"], 1000, {});
-  powder("mc_bowl", ["#875C34", "#734C2A"], 800, {});
-  liquid("mc_beetroot_soup", ["#8F161A", "#751216"], 1100, {});
-  liquid("mc_mushroom_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_rabbit_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_milk", "#FFFFFF", 1000, {});
-  powder("mc_tropical_fish", ["#E6732B", "#C96021"], 1200, {});
-  powder("mc_pufferfish", ["#DEB544", "#C7A13A"], 1200, {});
-  powder("mc_cod", ["#CDB9A7", "#B79F8D"], 1200, {});
-  powder("mc_salmon", ["#E69A7A", "#D07E5B"], 1200, {});
-  powder("mc_chicken", ["#F0C4B4", "#DFAF9F"], 1200, {});
-  powder("mc_beef", ["#9D5D48", "#844C3A"], 1200, {});
-  powder("mc_porkchop", ["#E59A8D", "#D3867C"], 1200, {});
-  powder("mc_mutton", ["#D88D7A", "#C77866"], 1200, {});
-  powder("mc_rabbit", ["#D49E87", "#C18872"], 1200, {});
-  powder("mc_nether_star", ["#E2F0E9", "#CFDDD6"], 2000, { glow: true });
-  powder("mc_netherite_scrap", ["#563A2E", "#463024"], 5000, {});
-  powder("mc_netherite_ingot", ["#454141", "#2F2C2C"], 6000, {});
-  block("mc_ancient_debris", ["#5A3F34", "#7A5646"], 3500, {});
-  powder("mc_trial_key", ["#9FA6B2", "#79808B"], 2400, {});
-  powder("mc_ominous_trial_key", ["#5C4A7D", "#42345F"], 2400, { glow: true });
-  powder("mc_breeze_rod", ["#D6F2FF", "#A8DFFF"], 1800, { glow: true });
-  powder("mc_ominous_bottle", ["#B69B45", "#8D7632"], 1500, {});
-  gas("mc_wind_charge", ["#D8F4FF", "#BCEBFF"], { glow: true });
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
-  block("mc_chiseled_copper", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_grate", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_bulb", ["#C77A53", "#A65F43"], 2600, { glow: true });
-  block("mc_copper_bars", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chest", ["#C77A53", "#A65F43"], 3200, {});
-  block("mc_copper_lantern", ["#C77A53", "#A65F43"], 1000, { glow: true });
-  block("mc_copper_torch", ["#C77A53", "#A65F43"], 500, { glow: true });
-  block("mc_copper_door", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_trapdoor", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chain", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_waxed_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_waxed_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_oak_log", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_oak_planks", ["#A2834E", "#8A6F41"], 600, { burnTime: 300 });
-  block("mc_oak_leaves", "rgba(72, 181, 41, 0.85)", 300, { burnTime: 100 });
-  powder("mc_oak_sapling", ["#7CA54D", "#62883E"], 100, { burnTime: 20 });
-  block("mc_oak_wood", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_spruce_log", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_spruce_planks", ["#705334", "#5C442A"], 600, { burnTime: 300 });
-  block("mc_spruce_leaves", "rgba(48, 87, 48, 0.85)", 300, { burnTime: 100 });
-  powder("mc_spruce_sapling", ["#698A45", "#567138"], 100, { burnTime: 20 });
-  block("mc_spruce_wood", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_birch_log", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_birch_planks", ["#C3B37B", "#B0A16D"], 600, { burnTime: 300 });
-  block("mc_birch_leaves", "rgba(98, 164, 75, 0.85)", 300, { burnTime: 100 });
-  powder("mc_birch_sapling", ["#8AB15D", "#729246"], 100, { burnTime: 20 });
-  block("mc_birch_wood", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_jungle_log", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_jungle_planks", ["#B68B58", "#9E7547"], 600, { burnTime: 300 });
-  block("mc_jungle_leaves", "rgba(77, 135, 56, 0.85)", 300, { burnTime: 100 });
-  powder("mc_jungle_sapling", ["#77A65A", "#5F8A45"], 100, { burnTime: 20 });
-  block("mc_jungle_wood", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_acacia_log", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_acacia_planks", ["#A85A32", "#8E4B2A"], 600, { burnTime: 300 });
-  block("mc_acacia_leaves", "rgba(92, 145, 58, 0.85)", 300, { burnTime: 100 });
-  powder("mc_acacia_sapling", ["#84A85A", "#688544"], 100, { burnTime: 20 });
-  block("mc_acacia_wood", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_dark_oak_log", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_dark_oak_planks", ["#4A3624", "#3C2B1D"], 600, { burnTime: 300 });
-  block("mc_dark_oak_leaves", "rgba(38, 74, 32, 0.85)", 300, { burnTime: 100 });
-  powder("mc_dark_oak_sapling", ["#6F8A48", "#587037"], 100, { burnTime: 20 });
-  block("mc_dark_oak_wood", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_mangrove_log", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_planks", ["#8D5A3F", "#734530"], 600, { burnTime: 300 });
-  block("mc_mangrove_leaves", "rgba(65,110,50,0.85)", 300, { burnTime: 100 });
-  powder("mc_mangrove_sapling", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_mangrove_wood", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_roots", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_muddy_mangrove_roots", ["#6C4A35", "#5A3E2B"], 1400, {});
-  powder("mc_mangrove_propagule", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_cherry_log", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_cherry_planks", ["#E8B3B3", "#D89C9C"], 600, { burnTime: 300 });
-  block("mc_cherry_leaves", "rgba(255,170,200,0.8)", 300, { burnTime: 100 });
-  powder("mc_cherry_sapling", ["#F6BDD1", "#EFAAC4"], 100, { burnTime: 20 });
-  block("mc_cherry_wood", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_bamboo_block", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  block("mc_bamboo_planks", ["#A8C66C", "#97B85B"], 600, { burnTime: 300 });
-  block("mc_bamboo_mosaic", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  powder("mc_bamboo_sapling", ["#9FCD66", "#87B94A"], 100, { burnTime: 20 });
-  block("mc_pale_oak_log", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_pale_oak_planks", ["#E5DDCF", "#D4C9B7"], 600, { burnTime: 300 });
-  block("mc_pale_oak_leaves", "rgba(183,201,160,0.8)", 300, { burnTime: 100 });
-  powder("mc_pale_oak_sapling", ["#DCE3C1", "#C9D2A8"], 100, { burnTime: 20 });
-  block("mc_pale_oak_wood", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  powder("mc_coal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_charcoal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_iron_ingot", ["#D8AF93", "#C59D82"], 4000, {});
-  powder("mc_gold_ingot", ["#FCEE4B", "#E2CE42"], 4000, {});
-  powder("mc_copper_ingot", ["#C06B50", "#B05E45"], 3500, {});
-  powder("mc_diamond", ["#4AEDD9", "#3CD0BE"], 4000, {});
-  powder("mc_emerald", ["#17DD62", "#11B94F"], 4000, {});
-  powder("mc_lapis_lazuli", ["#1D47A6", "#173A88"], 3500, {});
-  powder("mc_quartz", ["#EAE7DF", "#D9D2C6"], 3000, {});
-  powder("mc_redstone_dust", ["#AA0F0A", "#800906"], 1500, {});
-  powder("mc_glowstone_dust", ["#FFD800", "#E8C100"], 1500, { glow: true });
-  powder("mc_prismarine_shard", ["#5E9B95", "#4A807A"], 2000, {});
-  powder("mc_prismarine_crystals", ["#8FD5C9", "#6FBDB0"], 2000, { glow: true });
-  powder("mc_amethyst_shard", ["#A883CC", "#8A68B3"], 2000, {});
-  powder("mc_ghast_tear", ["#E0E0E0", "#CFCFCF"], 2000, {});
-  powder("mc_blaze_rod", ["#F0CD31", "#D8B82A"], 2000, { glow: true });
-  powder("mc_blaze_powder", ["#F0CD31", "#D8B82A"], 1500, {});
-  powder("mc_magma_cream", ["#A14220", "#8B391B"], 1500, {});
-  powder("mc_ender_pearl", "rgba(26, 135, 120, 0.8)", 2000, {});
-  powder("mc_eye_of_ender", ["#169C75", "#127A5C"], 2000, {});
-  powder("mc_slimeball", ["#6ABB44", "#58A138"], 1500, {});
-  powder("mc_honeycomb", ["#E6B033", "#D59D22"], 1500, {});
-  powder("mc_bone", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_bone_meal", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_string", ["#D3D3D3", "#BFC0C0"], 1200, {});
-  powder("mc_feather", ["#E5E5E5", "#D9D9D9"], 200, {});
-  powder("mc_flint", ["#3B3939", "#2F2E2E"], 2500, {});
-  powder("mc_leather", ["#C65C35", "#A94C2F"], 1200, {});
-  powder("mc_ink_sac", ["#1F1F23", "#111114"], 2500, {});
-  powder("mc_glow_ink_sac", ["#6EB0A3", "#589285"], 2500, { glow: true });
-  powder("mc_heart_of_the_sea", ["#3690D0", "#2A78AD"], 2500, { glow: true });
-  powder("mc_nautilus_shell", ["#D9C9B4", "#BFAF9B"], 2200, {});
-  powder("mc_turtle_shell", ["#A7BC74", "#8EA35B"], 2000, {});
-  powder("mc_scute", ["#547535", "#415A28"], 2000, {});
-  powder("mc_egg", ["#E0CCA7", "#CAB894"], 1200, {});
-  powder("mc_saddle", ["#9E3C1B", "#843215"], 1200, {});
-  powder("mc_name_tag", ["#D7D2BE", "#BFB9A8"], 1200, {});
-  powder("mc_lead", ["#8B8B8B", "#747474"], 1200, {});
-  powder("mc_book", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_written_book", ["#773922", "#63301D"], 500, {});
-  powder("mc_book_and_quill", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_paper", ["#E8E7E4", "#D7D5D0"], 500, {});
-  powder("mc_apple", ["#D52618", "#B71E15"], 1200, {});
-  powder("mc_golden_apple", ["#E5D241", "#C5B72E"], 1200, {});
-  powder("mc_enchanted_golden_apple", ["#E5D241", "#C5B72E"], 1200, { glow: true });
-  powder("mc_bread", ["#D7AE6A", "#BF9550"], 1200, {});
-  powder("mc_cookie", ["#E09756", "#CC8446"], 1200, {});
-  powder("mc_melon_slice", ["#D13134", "#B6282B"], 1200, {});
-  powder("mc_pumpkin_pie", ["#C47738", "#AB662F"], 1200, {});
-  powder("mc_sweet_berries", ["#921319", "#7A1015"], 1000, {});
-  powder("mc_glistering_melon_slice", ["#DEB82E", "#C7A125"], 1200, { glow: true });
-  powder("mc_carrot", ["#EFA12B", "#D68D22"], 1200, {});
-  powder("mc_potato", ["#C19C4A", "#A98335"], 1200, {});
-  powder("mc_baked_potato", ["#B78334", "#A06F28"], 1200, {});
-  powder("mc_poisonous_potato", ["#8B7A3C", "#746633"], 1200, {});
-  powder("mc_beetroot", ["#A33535", "#8A2D2D"], 1200, {});
-  powder("mc_beetroot_seeds", ["#A33535", "#8A2D2D"], 1000, {});
-  powder("mc_wheat_seeds", ["#6A9B35", "#5A862C"], 1000, {});
-  powder("mc_melon_seeds", ["#D8D2A0", "#C1BB8D"], 1000, {});
-  powder("mc_pumpkin_seeds", ["#E4D19E", "#CFBF8C"], 1000, {});
-  powder("mc_bowl", ["#875C34", "#734C2A"], 800, {});
-  liquid("mc_beetroot_soup", ["#8F161A", "#751216"], 1100, {});
-  liquid("mc_mushroom_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_rabbit_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_milk", "#FFFFFF", 1000, {});
-  powder("mc_tropical_fish", ["#E6732B", "#C96021"], 1200, {});
-  powder("mc_pufferfish", ["#DEB544", "#C7A13A"], 1200, {});
-  powder("mc_cod", ["#CDB9A7", "#B79F8D"], 1200, {});
-  powder("mc_salmon", ["#E69A7A", "#D07E5B"], 1200, {});
-  powder("mc_chicken", ["#F0C4B4", "#DFAF9F"], 1200, {});
-  powder("mc_beef", ["#9D5D48", "#844C3A"], 1200, {});
-  powder("mc_porkchop", ["#E59A8D", "#D3867C"], 1200, {});
-  powder("mc_mutton", ["#D88D7A", "#C77866"], 1200, {});
-  powder("mc_rabbit", ["#D49E87", "#C18872"], 1200, {});
-  powder("mc_nether_star", ["#E2F0E9", "#CFDDD6"], 2000, { glow: true });
-  powder("mc_netherite_scrap", ["#563A2E", "#463024"], 5000, {});
-  powder("mc_netherite_ingot", ["#454141", "#2F2C2C"], 6000, {});
-  block("mc_ancient_debris", ["#5A3F34", "#7A5646"], 3500, {});
-  powder("mc_trial_key", ["#9FA6B2", "#79808B"], 2400, {});
-  powder("mc_ominous_trial_key", ["#5C4A7D", "#42345F"], 2400, { glow: true });
-  powder("mc_breeze_rod", ["#D6F2FF", "#A8DFFF"], 1800, { glow: true });
-  powder("mc_ominous_bottle", ["#B69B45", "#8D7632"], 1500, {});
-  gas("mc_wind_charge", ["#D8F4FF", "#BCEBFF"], { glow: true });
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
-  block("mc_chiseled_copper", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_grate", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_bulb", ["#C77A53", "#A65F43"], 2600, { glow: true });
-  block("mc_copper_bars", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chest", ["#C77A53", "#A65F43"], 3200, {});
-  block("mc_copper_lantern", ["#C77A53", "#A65F43"], 1000, { glow: true });
-  block("mc_copper_torch", ["#C77A53", "#A65F43"], 500, { glow: true });
-  block("mc_copper_door", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_trapdoor", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chain", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_waxed_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_waxed_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_oak_log", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_oak_planks", ["#A2834E", "#8A6F41"], 600, { burnTime: 300 });
-  block("mc_oak_leaves", "rgba(72, 181, 41, 0.85)", 300, { burnTime: 100 });
-  powder("mc_oak_sapling", ["#7CA54D", "#62883E"], 100, { burnTime: 20 });
-  block("mc_oak_wood", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_spruce_log", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_spruce_planks", ["#705334", "#5C442A"], 600, { burnTime: 300 });
-  block("mc_spruce_leaves", "rgba(48, 87, 48, 0.85)", 300, { burnTime: 100 });
-  powder("mc_spruce_sapling", ["#698A45", "#567138"], 100, { burnTime: 20 });
-  block("mc_spruce_wood", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_birch_log", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_birch_planks", ["#C3B37B", "#B0A16D"], 600, { burnTime: 300 });
-  block("mc_birch_leaves", "rgba(98, 164, 75, 0.85)", 300, { burnTime: 100 });
-  powder("mc_birch_sapling", ["#8AB15D", "#729246"], 100, { burnTime: 20 });
-  block("mc_birch_wood", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_jungle_log", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_jungle_planks", ["#B68B58", "#9E7547"], 600, { burnTime: 300 });
-  block("mc_jungle_leaves", "rgba(77, 135, 56, 0.85)", 300, { burnTime: 100 });
-  powder("mc_jungle_sapling", ["#77A65A", "#5F8A45"], 100, { burnTime: 20 });
-  block("mc_jungle_wood", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_acacia_log", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_acacia_planks", ["#A85A32", "#8E4B2A"], 600, { burnTime: 300 });
-  block("mc_acacia_leaves", "rgba(92, 145, 58, 0.85)", 300, { burnTime: 100 });
-  powder("mc_acacia_sapling", ["#84A85A", "#688544"], 100, { burnTime: 20 });
-  block("mc_acacia_wood", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_dark_oak_log", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_dark_oak_planks", ["#4A3624", "#3C2B1D"], 600, { burnTime: 300 });
-  block("mc_dark_oak_leaves", "rgba(38, 74, 32, 0.85)", 300, { burnTime: 100 });
-  powder("mc_dark_oak_sapling", ["#6F8A48", "#587037"], 100, { burnTime: 20 });
-  block("mc_dark_oak_wood", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_mangrove_log", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_planks", ["#8D5A3F", "#734530"], 600, { burnTime: 300 });
-  block("mc_mangrove_leaves", "rgba(65,110,50,0.85)", 300, { burnTime: 100 });
-  powder("mc_mangrove_sapling", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_mangrove_wood", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_roots", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_muddy_mangrove_roots", ["#6C4A35", "#5A3E2B"], 1400, {});
-  powder("mc_mangrove_propagule", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_cherry_log", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_cherry_planks", ["#E8B3B3", "#D89C9C"], 600, { burnTime: 300 });
-  block("mc_cherry_leaves", "rgba(255,170,200,0.8)", 300, { burnTime: 100 });
-  powder("mc_cherry_sapling", ["#F6BDD1", "#EFAAC4"], 100, { burnTime: 20 });
-  block("mc_cherry_wood", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_bamboo_block", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  block("mc_bamboo_planks", ["#A8C66C", "#97B85B"], 600, { burnTime: 300 });
-  block("mc_bamboo_mosaic", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  powder("mc_bamboo_sapling", ["#9FCD66", "#87B94A"], 100, { burnTime: 20 });
-  block("mc_pale_oak_log", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_pale_oak_planks", ["#E5DDCF", "#D4C9B7"], 600, { burnTime: 300 });
-  block("mc_pale_oak_leaves", "rgba(183,201,160,0.8)", 300, { burnTime: 100 });
-  powder("mc_pale_oak_sapling", ["#DCE3C1", "#C9D2A8"], 100, { burnTime: 20 });
-  block("mc_pale_oak_wood", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  powder("mc_coal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_charcoal", ["#1D1D1D", "#111111"], 3000, {});
-  powder("mc_iron_ingot", ["#D8AF93", "#C59D82"], 4000, {});
-  powder("mc_gold_ingot", ["#FCEE4B", "#E2CE42"], 4000, {});
-  powder("mc_copper_ingot", ["#C06B50", "#B05E45"], 3500, {});
-  powder("mc_diamond", ["#4AEDD9", "#3CD0BE"], 4000, {});
-  powder("mc_emerald", ["#17DD62", "#11B94F"], 4000, {});
-  powder("mc_lapis_lazuli", ["#1D47A6", "#173A88"], 3500, {});
-  powder("mc_quartz", ["#EAE7DF", "#D9D2C6"], 3000, {});
-  powder("mc_redstone_dust", ["#AA0F0A", "#800906"], 1500, {});
-  powder("mc_glowstone_dust", ["#FFD800", "#E8C100"], 1500, { glow: true });
-  powder("mc_prismarine_shard", ["#5E9B95", "#4A807A"], 2000, {});
-  powder("mc_prismarine_crystals", ["#8FD5C9", "#6FBDB0"], 2000, { glow: true });
-  powder("mc_amethyst_shard", ["#A883CC", "#8A68B3"], 2000, {});
-  powder("mc_ghast_tear", ["#E0E0E0", "#CFCFCF"], 2000, {});
-  powder("mc_blaze_rod", ["#F0CD31", "#D8B82A"], 2000, { glow: true });
-  powder("mc_blaze_powder", ["#F0CD31", "#D8B82A"], 1500, {});
-  powder("mc_magma_cream", ["#A14220", "#8B391B"], 1500, {});
-  powder("mc_ender_pearl", "rgba(26, 135, 120, 0.8)", 2000, {});
-  powder("mc_eye_of_ender", ["#169C75", "#127A5C"], 2000, {});
-  powder("mc_slimeball", ["#6ABB44", "#58A138"], 1500, {});
-  powder("mc_honeycomb", ["#E6B033", "#D59D22"], 1500, {});
-  powder("mc_bone", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_bone_meal", ["#E0DECA", "#CFCAB6"], 2500, {});
-  powder("mc_string", ["#D3D3D3", "#BFC0C0"], 1200, {});
-  powder("mc_feather", ["#E5E5E5", "#D9D9D9"], 200, {});
-  powder("mc_flint", ["#3B3939", "#2F2E2E"], 2500, {});
-  powder("mc_leather", ["#C65C35", "#A94C2F"], 1200, {});
-  powder("mc_ink_sac", ["#1F1F23", "#111114"], 2500, {});
-  powder("mc_glow_ink_sac", ["#6EB0A3", "#589285"], 2500, { glow: true });
-  powder("mc_heart_of_the_sea", ["#3690D0", "#2A78AD"], 2500, { glow: true });
-  powder("mc_nautilus_shell", ["#D9C9B4", "#BFAF9B"], 2200, {});
-  powder("mc_turtle_shell", ["#A7BC74", "#8EA35B"], 2000, {});
-  powder("mc_scute", ["#547535", "#415A28"], 2000, {});
-  powder("mc_egg", ["#E0CCA7", "#CAB894"], 1200, {});
-  powder("mc_saddle", ["#9E3C1B", "#843215"], 1200, {});
-  powder("mc_name_tag", ["#D7D2BE", "#BFB9A8"], 1200, {});
-  powder("mc_lead", ["#8B8B8B", "#747474"], 1200, {});
-  powder("mc_book", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_written_book", ["#773922", "#63301D"], 500, {});
-  powder("mc_book_and_quill", ["#8D623F", "#744C31"], 500, {});
-  powder("mc_paper", ["#E8E7E4", "#D7D5D0"], 500, {});
-  powder("mc_apple", ["#D52618", "#B71E15"], 1200, {});
-  powder("mc_golden_apple", ["#E5D241", "#C5B72E"], 1200, {});
-  powder("mc_enchanted_golden_apple", ["#E5D241", "#C5B72E"], 1200, { glow: true });
-  powder("mc_bread", ["#D7AE6A", "#BF9550"], 1200, {});
-  powder("mc_cookie", ["#E09756", "#CC8446"], 1200, {});
-  powder("mc_melon_slice", ["#D13134", "#B6282B"], 1200, {});
-  powder("mc_pumpkin_pie", ["#C47738", "#AB662F"], 1200, {});
-  powder("mc_sweet_berries", ["#921319", "#7A1015"], 1000, {});
-  powder("mc_glistering_melon_slice", ["#DEB82E", "#C7A125"], 1200, { glow: true });
-  powder("mc_carrot", ["#EFA12B", "#D68D22"], 1200, {});
-  powder("mc_potato", ["#C19C4A", "#A98335"], 1200, {});
-  powder("mc_baked_potato", ["#B78334", "#A06F28"], 1200, {});
-  powder("mc_poisonous_potato", ["#8B7A3C", "#746633"], 1200, {});
-  powder("mc_beetroot", ["#A33535", "#8A2D2D"], 1200, {});
-  powder("mc_beetroot_seeds", ["#A33535", "#8A2D2D"], 1000, {});
-  powder("mc_wheat_seeds", ["#6A9B35", "#5A862C"], 1000, {});
-  powder("mc_melon_seeds", ["#D8D2A0", "#C1BB8D"], 1000, {});
-  powder("mc_pumpkin_seeds", ["#E4D19E", "#CFBF8C"], 1000, {});
-  powder("mc_bowl", ["#875C34", "#734C2A"], 800, {});
-  liquid("mc_beetroot_soup", ["#8F161A", "#751216"], 1100, {});
-  liquid("mc_mushroom_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_rabbit_stew", ["#A8704D", "#8F5F41"], 1100, {});
-  liquid("mc_milk", "#FFFFFF", 1000, {});
-  powder("mc_tropical_fish", ["#E6732B", "#C96021"], 1200, {});
-  powder("mc_pufferfish", ["#DEB544", "#C7A13A"], 1200, {});
-  powder("mc_cod", ["#CDB9A7", "#B79F8D"], 1200, {});
-  powder("mc_salmon", ["#E69A7A", "#D07E5B"], 1200, {});
-  powder("mc_chicken", ["#F0C4B4", "#DFAF9F"], 1200, {});
-  powder("mc_beef", ["#9D5D48", "#844C3A"], 1200, {});
-  powder("mc_porkchop", ["#E59A8D", "#D3867C"], 1200, {});
-  powder("mc_mutton", ["#D88D7A", "#C77866"], 1200, {});
-  powder("mc_rabbit", ["#D49E87", "#C18872"], 1200, {});
-  powder("mc_nether_star", ["#E2F0E9", "#CFDDD6"], 2000, { glow: true });
-  powder("mc_netherite_scrap", ["#563A2E", "#463024"], 5000, {});
-  powder("mc_netherite_ingot", ["#454141", "#2F2C2C"], 6000, {});
-  block("mc_ancient_debris", ["#5A3F34", "#7A5646"], 3500, {});
-  powder("mc_trial_key", ["#9FA6B2", "#79808B"], 2400, {});
-  powder("mc_ominous_trial_key", ["#5C4A7D", "#42345F"], 2400, { glow: true });
-  powder("mc_breeze_rod", ["#D6F2FF", "#A8DFFF"], 1800, { glow: true });
-  powder("mc_ominous_bottle", ["#B69B45", "#8D7632"], 1500, {});
-  gas("mc_wind_charge", ["#D8F4FF", "#BCEBFF"], { glow: true });
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
-  block("mc_chiseled_copper", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_grate", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_bulb", ["#C77A53", "#A65F43"], 2600, { glow: true });
-  block("mc_copper_bars", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chest", ["#C77A53", "#A65F43"], 3200, {});
-  block("mc_copper_lantern", ["#C77A53", "#A65F43"], 1000, { glow: true });
-  block("mc_copper_torch", ["#C77A53", "#A65F43"], 500, { glow: true });
-  block("mc_copper_door", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_trapdoor", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_chain", ["#C77A53", "#A65F43"], 2600, {});
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_waxed_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_waxed_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-  block("mc_oak_log", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_oak_planks", ["#A2834E", "#8A6F41"], 600, { burnTime: 300 });
-  block("mc_oak_leaves", "rgba(72, 181, 41, 0.85)", 300, { burnTime: 100 });
-  powder("mc_oak_sapling", ["#7CA54D", "#62883E"], 100, { burnTime: 20 });
-  block("mc_oak_wood", ["#6A5232", "#5C462A"], 700, { burnTime: 400 });
-  block("mc_spruce_log", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_spruce_planks", ["#705334", "#5C442A"], 600, { burnTime: 300 });
-  block("mc_spruce_leaves", "rgba(48, 87, 48, 0.85)", 300, { burnTime: 100 });
-  powder("mc_spruce_sapling", ["#698A45", "#567138"], 100, { burnTime: 20 });
-  block("mc_spruce_wood", ["#392A1A", "#2E2114"], 700, { burnTime: 400 });
-  block("mc_birch_log", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_birch_planks", ["#C3B37B", "#B0A16D"], 600, { burnTime: 300 });
-  block("mc_birch_leaves", "rgba(98, 164, 75, 0.85)", 300, { burnTime: 100 });
-  powder("mc_birch_sapling", ["#8AB15D", "#729246"], 100, { burnTime: 20 });
-  block("mc_birch_wood", ["#DFDFDB", "#D0D0CC"], 700, { burnTime: 400 });
-  block("mc_jungle_log", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_jungle_planks", ["#B68B58", "#9E7547"], 600, { burnTime: 300 });
-  block("mc_jungle_leaves", "rgba(77, 135, 56, 0.85)", 300, { burnTime: 100 });
-  powder("mc_jungle_sapling", ["#77A65A", "#5F8A45"], 100, { burnTime: 20 });
-  block("mc_jungle_wood", ["#6A4A30", "#5A3C25"], 700, { burnTime: 400 });
-  block("mc_acacia_log", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_acacia_planks", ["#A85A32", "#8E4B2A"], 600, { burnTime: 300 });
-  block("mc_acacia_leaves", "rgba(92, 145, 58, 0.85)", 300, { burnTime: 100 });
-  powder("mc_acacia_sapling", ["#84A85A", "#688544"], 100, { burnTime: 20 });
-  block("mc_acacia_wood", ["#6B3F25", "#5A331E"], 700, { burnTime: 400 });
-  block("mc_dark_oak_log", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_dark_oak_planks", ["#4A3624", "#3C2B1D"], 600, { burnTime: 300 });
-  block("mc_dark_oak_leaves", "rgba(38, 74, 32, 0.85)", 300, { burnTime: 100 });
-  powder("mc_dark_oak_sapling", ["#6F8A48", "#587037"], 100, { burnTime: 20 });
-  block("mc_dark_oak_wood", ["#3D2A1C", "#2F2015"], 700, { burnTime: 400 });
-  block("mc_mangrove_log", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_planks", ["#8D5A3F", "#734530"], 600, { burnTime: 300 });
-  block("mc_mangrove_leaves", "rgba(65,110,50,0.85)", 300, { burnTime: 100 });
-  powder("mc_mangrove_sapling", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_mangrove_wood", ["#6B4633", "#56372A"], 700, { burnTime: 400 });
-  block("mc_mangrove_roots", ["#7A5A41", "#684C38"], 1250, {});
-  block("mc_muddy_mangrove_roots", ["#6C4A35", "#5A3E2B"], 1400, {});
-  powder("mc_mangrove_propagule", ["#89B46C", "#6FA756"], 100, { burnTime: 20 });
-  block("mc_cherry_log", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_cherry_planks", ["#E8B3B3", "#D89C9C"], 600, { burnTime: 300 });
-  block("mc_cherry_leaves", "rgba(255,170,200,0.8)", 300, { burnTime: 100 });
-  powder("mc_cherry_sapling", ["#F6BDD1", "#EFAAC4"], 100, { burnTime: 20 });
-  block("mc_cherry_wood", ["#54352D", "#3B211A"], 700, { burnTime: 400 });
-  block("mc_bamboo_block", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  block("mc_bamboo_planks", ["#A8C66C", "#97B85B"], 600, { burnTime: 300 });
-  block("mc_bamboo_mosaic", ["#A8C66C", "#97B85B"], 700, { burnTime: 200 });
-  powder("mc_bamboo_sapling", ["#9FCD66", "#87B94A"], 100, { burnTime: 20 });
-  block("mc_pale_oak_log", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_pale_oak_planks", ["#E5DDCF", "#D4C9B7"], 600, { burnTime: 300 });
-  block("mc_pale_oak_leaves", "rgba(183,201,160,0.8)", 300, { burnTime: 100 });
-  powder("mc_pale_oak_sapling", ["#DCE3C1", "#C9D2A8"], 100, { burnTime: 20 });
-  block("mc_pale_oak_wood", ["#D8D1C2", "#C7BFAE"], 700, { burnTime: 400 });
-  block("mc_furnace", ["#6A6A6A", "#595959"], 3000, {});
-  block("mc_blast_furnace", ["#4C4B4C", "#3E3D3E"], 3500, {});
-  block("mc_smoker", ["#5A544F", "#4A4541"], 3000, {});
-  block("mc_crafting_table", ["#A56C3B", "#8B5A31"], 1000, {});
-  block("mc_chest", ["#8E6B41", "#7A5A35"], 2000, {});
-  block("mc_trapped_chest", ["#A97A4A", "#8F643D"], 2000, {});
-  block("mc_barrel", ["#8E6B41", "#7A5A35"], 1800, {});
-  block("mc_hopper", ["#4E4E4E", "#3D3D3D"], 3000, {});
-  block("mc_grindstone", ["#6A6A6A", "#575757"], 2400, {});
-  block("mc_stonecutter", ["#6E6D6B", "#5D5C5A"], 2400, {});
-  block("mc_loom", ["#927653", "#7A623F"], 1000, {});
-  block("mc_lectern", ["#98714A", "#7E5C39"], 1000, {});
-  block("mc_brewing_stand", ["#A87232", "#8D5F29"], 1000, {});
-  block("mc_enchanting_table", ["#5F3A48", "#4D2F39"], 3000, {});
-  block("mc_anvil", ["#494949", "#3D3D3D"], 4000, {});
-  block("mc_chipped_anvil", ["#494949", "#3D3D3D"], 4000, {});
-  block("mc_damaged_anvil", ["#494949", "#3D3D3D"], 4000, {});
-  block("mc_bell", ["#EDCD4C", "#D6B63D"], 1000, {});
-  block("mc_ender_chest", ["#243236", "#1D2628"], 3500, {});
-  block("mc_bookshelf", ["#836136", "#6F502C"], 1200, { burnTime: 60 });
-  block("mc_chiseled_book_shelf", ["#836136", "#6F502C"], 1200, { burnTime: 60 });
-  block("mc_glow_lichen", ["#B9D35A", "#9FC14B"], 100, { glow: true });
-  block("mc_spore_blossom", ["#E7A3B1", "#D98EA2"], 200, { burnTime: 20 });
-  powder("mc_hanging_roots", ["#8B6A4F", "#6F543F"], 100, { burnTime: 25 });
-  block("mc_moss_carpet", ["#5B7330", "#496028"], 900, {});
-  powder("mc_red_mushroom", ["#C62E2E", "#A82323"], 1000, { burnTime: 30 });
-  powder("mc_brown_mushroom", ["#8A5B38", "#6F472D"], 1000, { burnTime: 30 });
-  block("mc_red_mushroom_block", ["#C62E2E", "#A82323"], 1000, { burnTime: 50 });
-  block("mc_brown_mushroom_block", ["#8A5B38", "#6F472D"], 1000, { burnTime: 50 });
-  powder("mc_glow_berries", ["#E09C23", "#C9861F"], 1000, { glow: true, burnTime: 30 });
-  powder("mc_sweet_berries", ["#921319", "#7A1015"], 1000, {});
-  powder("mc_kelp", ["#3B7222", "#2F5A1B"], 1200, {});
-  powder("mc_sea_grass", ["#3B7222", "#2F5A1B"], 1200, {});
-  block("mc_sea_pickle", ["#5A641A", "#4A5316"], 1000, { glow: true });
-  block("mc_cactus", ["#0F5D18", "#0B4512"], 1200, {});
-  block("mc_sugar_cane", ["#8BB74A", "#6F943A"], 300, { burnTime: 30 });
-  block("mc_bamboo", ["#548821", "#45701B"], 700, { burnTime: 50 });
-  block("mc_wheat", ["#D9C16A", "#BCA957"], 1000, { burnTime: 30 });
-  block("mc_carrot_crop", ["#EFA12B", "#D68D22"], 1000, {});
-  block("mc_potato_crop", ["#C19C4A", "#A98335"], 1000, {});
-  block("mc_beetroot_crop", ["#A33535", "#8A2D2D"], 1000, {});
-  block("mc_pumpkin", ["#E28B14", "#C57512"], 1200, {});
-  block("mc_melon_block", ["#C9D44A", "#AFC139"], 1200, {});
-  block("mc_mossy_cobblestone_wall", ["#6B755A", "#59614A"], 2400, {});
-  block("mc_mossy_stone_brick_wall", ["#6F7660", "#5A614D"], 2500, {});
-  block("mc_brick_wall", ["#A95E4B", "#8F4D3E"], 2400, {});
-  block("mc_stone_wall", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_end_stone_wall", ["#DDE0A4", "#CBD089"], 2500, {});
-  block("mc_prismarine_wall", ["#4C8B82", "#3E746C"], 2800, {});
-  block("mc_nether_brick_wall", ["#2E1418", "#241115"], 2500, {});
-  block("mc_polished_blackstone_wall", ["#4A454C", "#3E3940"], 2800, {});
-  block("mc_polished_blackstone_brick_wall", ["#4B464D", "#403A42"], 2800, {});
-  block("mc_deepslate_brick_wall", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_deepslate_tile_wall", ["#33343A", "#28292E"], 3000, {});
+/* ==========================================
+   6. MISC ITEMS & MOB DROPS
+   ========================================== */
+const mcMisc = {
+    "stick": "#8B5A2B", "string": "#FFFFFF", "feather": "#E5E5E5", 
+    "gunpowder": ["#525252", "#3D3D3D"], "blaze_rod": ["#F0CD31", "#F29422"],
+    "ender_pearl": "#169C75", "slimeball": "#6ABB44", "magma_cream": "#A14220",
+    "leather": "#C65C35", "bone": "#E0DECA", "apple": "#D52618",
+    "golden_apple": "#E5D241", "wheat": "#A28328", "carrot": "#EFA12B",
+    "potato": "#C19C4A", "melon": "#D13134", "pumpkin": "#E28B14",
+    "snowball": "#FFFFFF", "clay_ball": "#9EA4B0", "flint": "#3B3939"
+};
 
-  block("mc_dirt", ["#866043", "#7A563C", "#6D4C35"], 1200, {});
-  block("mc_grass_block", ["#669D40", "#558437"], 1300, {});
-  block("mc_moss_block", ["#5C7A34", "#4E682C"], 1200, {});
-  block("mc_mycelium", ["#6C5963", "#5A4A53"], 1250, {});
-  block("mc_podzol", ["#6B4A26", "#5A3D20"], 1300, {});
-
-  block("mc_tinted_glass", "rgba(35, 30, 40, 0.8)", 2500, {});
-  block("mc_glass", "rgba(200, 237, 246, 0.4)", 2500, {});
-  block("mc_glass_pane", "rgba(200, 237, 246, 0.4)", 2500, {});
-
-  block("mc_cobblestone_wall", ["#757575", "#616161", "#545454"], 2400, {});
-  block("mc_mossy_cobblestone_wall", ["#6B755A", "#59614A"], 2400, {});
-
-  block("mc_sandstone_wall", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_red_sandstone_wall", ["#BA6430", "#A85827"], 2400, {});
-  block("mc_quartz_wall", ["#EAE7DF", "#D9D2C6"], 2600, {});
-
-  block("mc_end_stone_brick_wall", ["#E2E3B0", "#D0D18F"], 2500, {});
-  block("mc_prismarine_wall", ["#4C8B82", "#3E746C"], 2800, {});
-
-  block("mc_mud", ["#5A3E2B", "#4E3527"], 1400, {});
-  block("mc_packed_mud", ["#6B4A35", "#5E4030"], 1600, {});
-  block("mc_mud_bricks", ["#7A5A45", "#6B4D3D"], 1800, {});
-
-  block("mc_nether_wart_block", ["#8B1D27", "#6E1620"], 1800, {});
-  block("mc_warped_wart_block", ["#1E6A63", "#154A46"], 1800, {});
-
-  block("mc_honey_block", "rgba(250,195,50,0.8)", 1500, {});
-  block("mc_honeycomb_block", ["#E6B033", "#D59D22"], 1500, {});
-  block("mc_slime_block", ["#78D151", "#5FB23A"], 1500, {});
-  block("mc_cobweb", ["#E0E0E0", "#CFCFCF"], 10, {});
-
-  block("mc_dragon_egg", ["#140B1A", "#CC00FF"], 3000, {});
-  block("mc_end_rod", ["#FFFFFF", "#F4F4F4"], 1000, { glow: true });
-
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_waxed_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-
-  block("mc_quartz_block", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_quartz_bricks", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_quartz_pillar", ["#EAE7DF", "#D9D2C6"], 2600, {});
-
-  block("mc_stone_bricks", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_cracked_stone_bricks", ["#8A8A8A", "#787878"], 2500, {});
-  block("mc_mossy_stone_bricks", ["#6F7660", "#5A614D"], 2500, {});
-  block("mc_chiseled_stone_bricks", ["#8C8C8C", "#7B7B7B"], 2500, {});
-
-  block("mc_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-  block("mc_cracked_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-  block("mc_chiseled_nether_bricks", ["#2E1418", "#241115"], 2500, {});
-
-  block("mc_deepslate_bricks", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_cracked_deepslate_bricks", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_deepslate_tiles", ["#33343A", "#28292E"], 3000, {});
-  block("mc_cracked_deepslate_tiles", ["#33343A", "#28292E"], 3000, {});
-  block("mc_chiseled_deepslate", ["#383838", "#2C2C2C"], 3000, {});
-
-  block("mc_prismarine", ["#4C8B82", "#3E746C"], 2800, {});
-  block("mc_prismarine_bricks", ["#5E9B95", "#4A807A"], 2800, {});
-  block("mc_dark_prismarine", ["#335C57", "#274743"], 2800, {});
-
-  block("mc_end_stone", ["#DDE0A4", "#CBD089"], 2500, {});
-  block("mc_end_stone_bricks", ["#E2E3B0", "#D0D18F"], 2500, {});
-
-  block("mc_smooth_sandstone", ["#D8C58B", "#CBB67D"], 2400, {});
-  block("mc_smooth_red_sandstone", ["#B86526", "#A95720"], 2400, {});
-  block("mc_cut_sandstone", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_cut_red_sandstone", ["#BA6430", "#A85827"], 2400, {});
-
-  block("mc_crafter", ["#B77C57", "#8F5D40"], 2800, {});
-  block("mc_vault", ["#A88A54", "#7D6538"], 3200, {});
-  block("mc_trial_spawner", ["#5E6B7A", "#3E4A56"], 3000, {});
-  block("mc_heavy_core", ["#5E4A3C", "#3F322A"], 4500, {});
-
-  block("mc_glowstone", ["#E5BB5D", "#F0C86E", "#D4A949"], 2200, { glow: true });
-  block("mc_sea_lantern", ["#ACD6D2", "#95C6C2"], 2500, { glow: true });
-  block("mc_shroomlight", ["#EE8E4D", "#D97A3A"], 2500, { glow: true });
-  block("mc_lantern", ["#5B514A", "#4B433D"], 1000, { glow: true });
-  block("mc_soul_lantern", ["#4E5C5D", "#3F4A4B"], 1000, { glow: true });
-  block("mc_beacon", ["#69BDB8", "#57A7A1"], 2500, { glow: true });
-
-  block("mc_ochre_froglight", ["#E6D37A", "#D6C363"], 1000, { glow: true });
-  block("mc_verdant_froglight", ["#B8D4AD", "#9FBE94"], 1000, { glow: true });
-  block("mc_pearlescent_froglight", ["#F2C6E0", "#E3ADC9"], 1000, { glow: true });
-
-  powder("mc_sugar_cane", ["#8BB74A", "#6F943A"], 300, { burnTime: 30 });
-  block("mc_cactus", ["#0F5D18", "#0B4512"], 1200, {});
-  powder("mc_bamboo", ["#548821", "#45701B"], 700, { burnTime: 50 });
-  block("mc_wheat", ["#D9C16A", "#BCA957"], 1000, { burnTime: 30 });
-  block("mc_pumpkin", ["#E28B14", "#C57512"], 1200, {});
-  block("mc_melon_block", ["#C9D44A", "#AFC139"], 1200, {});
-  powder("mc_kelp", ["#3B7222", "#2F5A1B"], 1200, {});
-  powder("mc_sea_grass", ["#3B7222", "#2F5A1B"], 1200, {});
-  block("mc_sea_pickle", ["#5A641A", "#4A5316"], 1000, { glow: true });
-  powder("mc_glow_berries", ["#E09C23", "#C9861F"], 1000, { glow: true, burnTime: 30 });
-  block("mc_red_mushroom_block", ["#C62E2E", "#A82323"], 1000, { burnTime: 50 });
-  block("mc_brown_mushroom_block", ["#8A5B38", "#6F472D"], 1000, { burnTime: 50 });
-  powder("mc_red_mushroom", ["#C62E2E", "#A82323"], 1000, { burnTime: 30 });
-  powder("mc_brown_mushroom", ["#8A5B38", "#6F472D"], 1000, { burnTime: 30 });
-
-  block("mc_stone_wall", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_cobblestone_wall", ["#757575", "#616161", "#545454"], 2400, {});
-  block("mc_mossy_cobblestone_wall", ["#6B755A", "#59614A"], 2400, {});
-  block("mc_mossy_stone_brick_wall", ["#6F7660", "#5A614D"], 2500, {});
-  block("mc_brick_wall", ["#A95E4B", "#8F4D3E"], 2400, {});
-  block("mc_end_stone_wall", ["#DDE0A4", "#CBD089"], 2500, {});
-  block("mc_nether_brick_wall", ["#2E1418", "#241115"], 2500, {});
-  block("mc_quartz_wall", ["#EAE7DF", "#D9D2C6"], 2600, {});
-  block("mc_sandstone_wall", ["#D6C28F", "#C8B57F"], 2400, {});
-  block("mc_red_sandstone_wall", ["#BA6430", "#A85827"], 2400, {});
-  block("mc_prismarine_wall", ["#4C8B82", "#3E746C"], 2800, {});
-  block("mc_deepslate_brick_wall", ["#3C3C42", "#313137"], 3000, {});
-  block("mc_deepslate_tile_wall", ["#33343A", "#28292E"], 3000, {});
-  block("mc_polished_blackstone_wall", ["#4A454C", "#3E3940"], 2800, {});
-  block("mc_polished_blackstone_brick_wall", ["#4B464D", "#403A42"], 2800, {});
-
-  block("mc_dirt", ["#866043", "#7A563C", "#6D4C35"], 1200, {});
-  block("mc_grass_block", ["#669D40", "#558437"], 1300, {});
-  block("mc_moss_block", ["#5C7A34", "#4E682C"], 1200, {});
-  block("mc_mycelium", ["#6C5963", "#5A4A53"], 1250, {});
-  block("mc_podzol", ["#6B4A26", "#5A3D20"], 1300, {});
-
-  block("mc_tinted_glass", "rgba(35, 30, 40, 0.8)", 2500, {});
-  block("mc_glass", "rgba(200, 237, 246, 0.4)", 2500, {});
-  block("mc_glass_pane", "rgba(200, 237, 246, 0.4)", 2500, {});
-
-  block("mc_mud", ["#5A3E2B", "#4E3527"], 1400, {});
-  block("mc_packed_mud", ["#6B4A35", "#5E4030"], 1600, {});
-  block("mc_mud_bricks", ["#7A5A45", "#6B4D3D"], 1800, {});
-
-  block("mc_nether_wart_block", ["#8B1D27", "#6E1620"], 1800, {});
-  block("mc_warped_wart_block", ["#1E6A63", "#154A46"], 1800, {});
-
-  block("mc_honey_block", "rgba(250,195,50,0.8)", 1500, {});
-  block("mc_honeycomb_block", ["#E6B033", "#D59D22"], 1500, {});
-  block("mc_slime_block", ["#78D151", "#5FB23A"], 1500, {});
-  block("mc_cobweb", ["#E0E0E0", "#CFCFCF"], 10, {});
-
-  block("mc_dragon_egg", ["#140B1A", "#CC00FF"], 3000, {});
-  block("mc_end_rod", ["#FFFFFF", "#F4F4F4"], 1000, { glow: true });
-
-  block("mc_bookshelf", ["#836136", "#6F502C"], 1200, { burnTime: 60 });
-  block("mc_chiseled_book_shelf", ["#836136", "#6F502C"], 1200, { burnTime: 60 });
-  block("mc_glow_lichen", ["#B9D35A", "#9FC14B"], 100, { glow: true });
-  block("mc_spore_blossom", ["#E7A3B1", "#D98EA2"], 200, { burnTime: 20 });
-  powder("mc_hanging_roots", ["#8B6A4F", "#6F543F"], 100, { burnTime: 25 });
-
-  block("mc_brick_wall", ["#A95E4B", "#8F4D3E"], 2400, {});
-  block("mc_stone_wall", ["#8C8C8C", "#7B7B7B"], 2500, {});
-  block("mc_end_stone_wall", ["#DDE0A4", "#CBD089"], 2500, {});
-  block("mc_moss_carpet", ["#5B7330", "#496028"], 900, {});
-  block("mc_mossy_cobblestone_wall", ["#6B755A", "#59614A"], 2400, {});
-  block("mc_mossy_stone_brick_wall", ["#6F7660", "#5A614D"], 2500, {});
-
-  powder("mc_red_mushroom", ["#C62E2E", "#A82323"], 1000, { burnTime: 30 });
-  powder("mc_brown_mushroom", ["#8A5B38", "#6F472D"], 1000, { burnTime: 30 });
-  block("mc_red_mushroom_block", ["#C62E2E", "#A82323"], 1000, { burnTime: 50 });
-  block("mc_brown_mushroom_block", ["#8A5B38", "#6F472D"], 1000, { burnTime: 50 });
-
-  block("mc_copper_block", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-
-  block("mc_cut_copper", ["#C77A53", "#A65F43"], 3500, {});
-  block("mc_exposed_cut_copper", ["#B96B4F", "#A85F46"], 3500, {});
-  block("mc_weathered_cut_copper", ["#7EA08A", "#688373"], 3500, {});
-  block("mc_oxidized_cut_copper", ["#4E9782", "#3F7E6D"], 3500, {});
-
-})();
+for (let item in mcMisc) {
+    elements["mc_" + item] = { color: mcMisc[item], behavior: behaviors.POWDER, category: "Minecraft", density: 1000 };
+}
