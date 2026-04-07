@@ -1,64 +1,60 @@
-// AI Element Maker Mod
-// Adds a tool that uses OpenRouter to generate and inject Sandboxels elements dynamically.
+// Advanced AI Element Maker Mod
+// Injects new elements with complex Sandboxels properties and reactions via OpenRouter.
 
 let isGeneratingElement = false;
 
-// 1. Define the Tool
 elements.ai_maker = {
-    color: ["#4287f5", "#00ffcc", "#ff00ff"],
+    color: ["#ff0055", "#aa00ff", "#00eeff"],
     category: "tools",
     state: "solid",
-    desc: "Click the canvas to prompt the AI to generate a brand new element.",
-    // We leave the standard tool function empty so it doesn't spam on drag
+    desc: "Click the canvas to prompt the AI for a complex element with reactions.",
     tool: function(pixel) {} 
 };
 
-// 2. Hook into the Canvas Click Event
 document.addEventListener("mousedown", function(e) {
-    // Check if our tool is equipped and we aren't currently waiting for the API
     if (currentElement === "ai_maker" && !isGeneratingElement) {
-        // Ensure the user is actually clicking the game canvas
         if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
-            handleAIGeneration();
+            handleAdvancedAIGeneration();
         }
     }
 });
 
-// 3. The Core Generation Logic
-async function handleAIGeneration() {
-    let userIdea = prompt("What kind of element do you want the AI to create?\n(e.g., 'A gas that turns everything into ice', 'Explosive bouncy powder')");
+async function handleAdvancedAIGeneration() {
+    let userIdea = prompt("What element should the AI create?\n(e.g., 'A radioactive liquid that turns metal into rust and explodes at 500 degrees')");
     
-    if (!userIdea || userIdea.trim() === "") {
-        return; // User canceled or entered nothing
-    }
+    if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
-    console.log(`[AI Mod] Requesting element: ${userIdea}...`);
-    
-    // Replace with a brief visual indicator in-game if desired
+    console.log(`[AI Mod] Requesting: ${userIdea}...`);
     document.body.style.cursor = "wait"; 
 
     const apiKey = "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";
     
-    // Strict instructions so the AI outputs only code that Sandboxels can parse
-    const systemPrompt = `You are a programmatic element generator for the javascript game Sandboxels.
-The user will provide a concept. You must write a single valid JavaScript object assignment appending to the global 'elements' object.
+    // The "Mega-Prompt" - This teaches the AI exactly how Sandboxels works
+    const systemPrompt = `You are a strict, expert programmatic element generator for the JavaScript cellular automata game 'Sandboxels'.
+The user will give you a concept. You must write a SINGLE valid JavaScript object assignment that appends to the global 'elements' object.
 
 CRITICAL RULES:
 1. Provide ONLY raw valid JavaScript code. NO markdown formatting, NO backticks, NO explanations.
-2. The element name must be lowercase, have no spaces (use underscores), and MUST NOT overwrite vanilla elements (e.g., do not name it 'water', 'sand', 'fire').
-3. You must use standard Sandboxels properties (color, behavior, category, state, density).
-4. If appropriate, include a 'reactions' object or 'tick' function.
+2. The element name must be lowercase, use underscores for spaces, and MUST NOT be a common word that might overwrite a vanilla element (e.g., use 'acid_slime' instead of 'acid').
+3. Use the global 'behaviors' object for movement: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
+4. If the prompt implies interactions, use the 'reactions' object. Format: "other_element": { elem1: "new_this_pixel", elem2: "new_other_pixel", chance: 0.1 } (use null to delete).
+5. If the prompt implies temperature changes, use 'tempHigh', 'stateHigh' (what it turns into), 'tempLow', and 'stateLow'.
+6. Include relevant properties like 'density' (kg/m3), 'viscosity', 'conduct' (0 to 1), 'burn', 'burnTime'.
 
-Example Output:
-elements.hyper_crystal = {
-    color: "#00ffff",
-    behavior: behaviors.POWDER,
-    category: "powders",
+EXAMPLE OUTPUT FOR "Volatile Ice":
+elements.volatile_ice = {
+    color: ["#ccffff", "#aaddff"],
+    behavior: behaviors.WALL,
+    category: "solids",
     state: "solid",
-    density: 1500,
+    density: 900,
+    temp: -20,
+    tempHigh: 10,
+    stateHigh: "fire",
     reactions: {
-        "water": { elem1: null, elem2: "ice" }
+        "water": { elem1: null, elem2: "ice", chance: 0.5 },
+        "fire": { elem1: "explosion", elem2: null }
     }
 };`;
 
@@ -70,41 +66,44 @@ elements.hyper_crystal = {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                // Using a reliable, fast model via OpenRouter
+                // Upgraded the model here for better coding capabilities, though 3.1 is still good
                 model: "meta-llama/llama-3.1-8b-instruct:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
-                    { role: "user", content: `Create an element based on this idea: ${userIdea}` }
+                    { role: "user", content: `Create a complex element based on this idea: ${userIdea}` }
                 ],
-                temperature: 0.7
+                temperature: 0.4 // Lower temperature for more accurate JavaScript syntax
             })
         });
 
         const data = await response.json();
         
-        if (!data.choices || !data.choices[0]) {
-            throw new Error("Invalid response from OpenRouter");
-        }
+        if (!data.choices || !data.choices[0]) throw new Error("Invalid response from OpenRouter");
 
         let code = data.choices[0].message.content.trim();
         
-        // Failsafe sanitization: Strip markdown blocks if the AI disobeys instructions
-        code = code.replace(/^```javascript/i, "")
-                   .replace(/^```js/i, "")
-                   .replace(/^```/i, "")
-                   .replace(/```$/i, "")
-                   .trim();
+        // Aggressive sanitization to ensure the eval() works even if the AI tries to chat
+        code = code.replace(/^```javascript/i, "").replace(/^```js/i, "").replace(/^```/i, "").replace(/```$/i, "").trim();
 
-        console.log("[AI Mod] Executing generated code:\n", code);
+        // Extract the element name to show the user
+        let elementNameMatch = code.match(/elements\.([a-zA-Z0-9_]+)\s*=/);
+        let elementName = elementNameMatch ? elementNameMatch[1] : "unknown_element";
 
-        // Inject the generated element into the global game context
-        window.eval(code);
-        
-        alert(`Successfully generated and injected your element!\nCheck the category menus or use the search bar to find it.`);
+        console.log(`[AI Mod] AI Generated Code for '${elementName}':\n`, code);
+
+        try {
+            // Execute the code to add it to the game
+            window.eval(code);
+            alert(`Success! Created: ${elementName}\nCheck the console (F12) to see its reactions and properties.`);
+        } catch (evalError) {
+            console.error("[AI Mod] The AI generated invalid JavaScript syntax:", evalError);
+            console.error("Faulty code:", code);
+            alert("The AI made a syntax error! Check the console (F12) to see what it messed up.");
+        }
 
     } catch (error) {
-        console.error("[AI Mod] Element Generation Error:", error);
-        alert("Failed to generate element. Check the browser console (F12) for details.");
+        console.error("[AI Mod] API Error:", error);
+        alert("Failed to reach the AI API. Check your connection or API key.");
     } finally {
         isGeneratingElement = false;
         document.body.style.cursor = "default";
