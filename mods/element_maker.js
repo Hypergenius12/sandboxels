@@ -1,109 +1,114 @@
-// Advanced AI Element Maker Mod
-// Injects new elements with complex Sandboxels properties and reactions via OpenRouter.
+// AI Element Maker - Professional Template Edition
+// Uses GPT-OSS-120B with a deep technical schematic for Sandboxels.
 
 let isGeneratingElement = false;
 
 elements.ai_maker = {
-    color: ["#ff0055", "#aa00ff", "#00eeff"],
+    color: ["#00ff00", "#ffffff", "#0000ff"],
     category: "tools",
     state: "solid",
-    desc: "Click the canvas to prompt the AI for a complex element with reactions.",
+    desc: "Click the canvas to prompt a Reasoning AI with a full technical template.",
     tool: function(pixel) {} 
 };
 
 document.addEventListener("mousedown", function(e) {
     if (currentElement === "ai_maker" && !isGeneratingElement) {
         if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
-            handleAdvancedAIGeneration();
+            handleAIGeneration();
         }
     }
 });
 
-async function handleAdvancedAIGeneration() {
-    let userIdea = prompt("What element should the AI create?\n(e.g., 'A radioactive liquid that turns metal into rust and explodes at 500 degrees')");
+async function handleAIGeneration() {
+    let userIdea = prompt("Describe your element in detail:\n(Example: 'A heavy purple liquid that sinks in water, freezes into a bouncy solid at -10C, and turns wood into gold on contact')");
     
     if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
-    console.log(`[AI Mod] Requesting: ${userIdea}...`);
+    console.log(`[AI Mod] Sending Template + Idea to GPT-OSS-120B...`);
     document.body.style.cursor = "wait"; 
 
     const apiKey = "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";
     
-    // The "Mega-Prompt" - This teaches the AI exactly how Sandboxels works
-    const systemPrompt = `You are a strict, expert programmatic element generator for the JavaScript cellular automata game 'Sandboxels'.
-The user will give you a concept. You must write a SINGLE valid JavaScript object assignment that appends to the global 'elements' object.
+    // THE LARGE CODE TEMPLATE & INSTRUCTIONS
+    const systemPrompt = `You are the Sandboxels Element Engine. Your goal is to output raw JavaScript that appends a complex element to the 'elements' object.
 
-CRITICAL RULES:
-1. Provide ONLY raw valid JavaScript code. NO markdown formatting, NO backticks, NO explanations.
-2. The element name must be lowercase, use underscores for spaces, and MUST NOT be a common word that might overwrite a vanilla element (e.g., use 'acid_slime' instead of 'acid').
-3. Use the global 'behaviors' object for movement: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
-4. If the prompt implies interactions, use the 'reactions' object. Format: "other_element": { elem1: "new_this_pixel", elem2: "new_other_pixel", chance: 0.1 } (use null to delete).
-5. If the prompt implies temperature changes, use 'tempHigh', 'stateHigh' (what it turns into), 'tempLow', and 'stateLow'.
-6. Include relevant properties like 'density' (kg/m3), 'viscosity', 'conduct' (0 to 1), 'burn', 'burnTime'.
+### TECHNICAL SPECIFICATION:
+1. MOVE LOGIC: Use 'behaviors.POWDER' (gravity), 'behaviors.LIQUID' (flow), 'behaviors.GAS' (float/expand), or 'behaviors.WALL' (static).
+2. REACTIONS: 
+   - Format: "target_element": { elem1: "new_self", elem2: "new_target", chance: 0.05 }
+   - Setting an elem to null deletes it.
+3. HEAT PHYSICS:
+   - 'tempHigh' (Celsius) triggers 'stateHigh' (Element Name).
+   - 'tempLow' (Celsius) triggers 'stateLow' (Element Name).
+4. PROPERTIES:
+   - 'density': Higher numbers sink (Water is 1000).
+   - 'viscosity': For liquids, higher means slower flow.
+   - 'conduct': 0 to 1 (Electricity).
+   - 'burn', 'burnTime', 'burnInto'.
 
-EXAMPLE OUTPUT FOR "Volatile Ice":
-elements.volatile_ice = {
-    color: ["#ccffff", "#aaddff"],
-    behavior: behaviors.WALL,
-    category: "solids",
-    state: "solid",
-    density: 900,
-    temp: -20,
-    tempHigh: 10,
-    stateHigh: "fire",
+### CODE TEMPLATE (MODIFIES THIS):
+elements.unique_name = {
+    color: "#hex",
+    behavior: behaviors.TYPE,
+    category: "category_name",
+    state: "solid/liquid/gas",
+    density: 1000,
     reactions: {
-        "water": { elem1: null, elem2: "ice", chance: 0.5 },
-        "fire": { elem1: "explosion", elem2: null }
-    }
-};`;
+        "water": { elem1: null, elem2: "ice", chance: 0.1 }
+    },
+    tempHigh: 100,
+    stateHigh: "gas_version",
+    tempLow: 0,
+    stateLow: "solid_version"
+};
+
+CRITICAL: Output ONLY the code. No markdown. No backticks. No talk.`;
 
     try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${apiKey}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://sandboxels.r74n.com/",
+                "X-Title": "Sandboxels AI Mod Template"
             },
             body: JSON.stringify({
-                // Upgraded the model here for better coding capabilities, though 3.1 is still good
-                model: "meta-llama/llama-3.1-8b-instruct:free", 
+                model: "openai/gpt-oss-120b:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
-                    { role: "user", content: `Create a complex element based on this idea: ${userIdea}` }
+                    { role: "user", content: `GENERATE ELEMENT CODE FOR: ${userIdea}` }
                 ],
-                temperature: 0.4 // Lower temperature for more accurate JavaScript syntax
+                temperature: 0.2 // Very low temperature ensures it follows the template strictly
             })
         });
 
         const data = await response.json();
         
-        if (!data.choices || !data.choices[0]) throw new Error("Invalid response from OpenRouter");
+        if (data.error) {
+            console.error("[AI Mod] API Error:", data.error);
+            alert(`Error: ${data.error.message}`);
+            return;
+        }
 
         let code = data.choices[0].message.content.trim();
         
-        // Aggressive sanitization to ensure the eval() works even if the AI tries to chat
-        code = code.replace(/^```javascript/i, "").replace(/^```js/i, "").replace(/^```/i, "").replace(/```$/i, "").trim();
+        // Clean any code blocks the AI might have used despite instructions
+        code = code.replace(/```javascript/gi, "").replace(/```js/gi, "").replace(/```/gi, "").trim();
 
-        // Extract the element name to show the user
-        let elementNameMatch = code.match(/elements\.([a-zA-Z0-9_]+)\s*=/);
-        let elementName = elementNameMatch ? elementNameMatch[1] : "unknown_element";
-
-        console.log(`[AI Mod] AI Generated Code for '${elementName}':\n`, code);
+        console.log("[AI Mod] Generated Code:\n", code);
 
         try {
-            // Execute the code to add it to the game
             window.eval(code);
-            alert(`Success! Created: ${elementName}\nCheck the console (F12) to see its reactions and properties.`);
+            alert("New element synthesized and added to the menu!");
         } catch (evalError) {
-            console.error("[AI Mod] The AI generated invalid JavaScript syntax:", evalError);
-            console.error("Faulty code:", code);
-            alert("The AI made a syntax error! Check the console (F12) to see what it messed up.");
+            console.error("[AI Mod] Eval Error:", evalError);
+            alert("The AI generated code with a syntax error. See console for details.");
         }
 
     } catch (error) {
-        console.error("[AI Mod] API Error:", error);
-        alert("Failed to reach the AI API. Check your connection or API key.");
+        console.error("[AI Mod] Network Error:", error);
     } finally {
         isGeneratingElement = false;
         document.body.style.cursor = "default";
