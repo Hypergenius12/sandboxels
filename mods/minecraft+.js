@@ -1,26 +1,36 @@
 // ==========================================
 // Sandboxels x Minecraft Core Mod
-// Version: Beveled Ores, Smart Textures & Expansions
+// Version: Organic Textures, L-Bevels & Reactions Engine
 // ==========================================
 
 // 1. ADVANCED TICK FUNCTIONS
-// Beveled Shiny Block: Bright in the Top-Left corner, dark outline elsewhere
-function shinyBlockTick(pixel, inner, outer, highlight) {
-    let leftAir = isEmpty(pixel.x - 1, pixel.y);
-    let topAir = isEmpty(pixel.x, pixel.y - 1);
-    let rightAir = isEmpty(pixel.x + 1, pixel.y);
-    let bottomAir = isEmpty(pixel.x, pixel.y + 1);
 
-    // Top-Left corner gets the bright shine
-    if (leftAir && topAir) {
-        pixel.color = highlight; 
-    } 
-    // Other exposed edges get the dark shadow outline
-    else if (leftAir || topAir || rightAir || bottomAir) {
+// Perfect Beveled Shiny Block: Rotated L, 2 pixels inside, bright color variant
+function shinyBlockTick(pixel, inner, outer, highlight) {
+    let l1 = isEmpty(pixel.x - 1, pixel.y);
+    let t1 = isEmpty(pixel.x, pixel.y - 1);
+    let r1 = isEmpty(pixel.x + 1, pixel.y);
+    let b1 = isEmpty(pixel.x, pixel.y + 1);
+
+    // 1. Draw the dark outer border
+    if (l1 || t1 || r1 || b1) {
         pixel.color = outer; 
-    } 
-    // Inside stays the core color
-    else {
+        return;
+    }
+
+    // 2. Calculate if we are exactly 2 or 3 pixels from the top-left edge
+    let l2 = isEmpty(pixel.x - 2, pixel.y);
+    let t2 = isEmpty(pixel.x, pixel.y - 2);
+    let l3 = isEmpty(pixel.x - 3, pixel.y);
+    let t3 = isEmpty(pixel.x, pixel.y - 3);
+
+    // 3. The Rotated "L" Shape Check
+    // True if at (2,2), (3,2), or (2,3) relative to the air gap
+    let isL = (t2 && (l2 || l3)) || (l2 && (t2 || t3));
+
+    if (isL) {
+        pixel.color = highlight; // Use the bright element color, NOT white!
+    } else {
         pixel.color = inner;
     }
 }
@@ -58,12 +68,13 @@ function cropTick(pixel) {
     }
 }
 
-// 2. THE ELEMENT DATABASE
+// 2. MASSIVE ELEMENT DATABASE (Kept EVERYTHING + Added more)
 const mcBlocks = {
     // --- FLUIDS & GASES ---
     "water": { color: "#3F76E4", behavior: behaviors.LIQUID, state: "liquid", density: 1000 },
     "lava": { color: "#E65C00", behavior: behaviors.LIQUID, state: "liquid", density: 3000, temp: 1200 },
     "dragon_breath": { color: "#c631a0", behavior: behaviors.GAS, state: "gas", density: 1.5, temp: 300 },
+    "smoke": { color: "#545454", behavior: behaviors.GAS, state: "gas", density: 0.8 }, // Added Smoke
 
     // --- POWDERS ---
     "sand": { color: ["#dbd3a0", "#d1c890"], behavior: behaviors.POWDER },
@@ -71,53 +82,49 @@ const mcBlocks = {
     "gravel": { color: ["#82807f", "#737170", "#636160"], behavior: behaviors.POWDER },
     "dirt": { color: ["#866043", "#75543b"], behavior: behaviors.POWDER },
     "farmland": { color: "#5e3e26", behavior: behaviors.POWDER },
+    "mud": { color: ["#3d291b", "#332217"], behavior: behaviors.POWDER }, // Added Mud
+    "ash": { color: "#9c9c9c", behavior: behaviors.POWDER }, // Added Ash
     "redstone_dust": { color: "#d11111", behavior: behaviors.POWDER, conduct: 1 },
     "glowstone_dust": { color: "#fceb42", behavior: behaviors.POWDER },
     "bone_meal": { color: "#fcfcfc", behavior: behaviors.POWDER },
     "wheat_seeds": { color: "#3dc44a", behavior: behaviors.POWDER, tick: cropTick },
     "wheat": { color: ["#e3ca54", "#d1b638"], behavior: behaviors.WALL },
 
-    // --- HD TEXTURE PATTERNS (8x8 Grids) ---
+    // --- HD TEXTURE PATTERNS (8x8 Grids - Made much more organic/natural) ---
     "cobblestone": { 
         color: "#7a7a7a", behavior: behaviors.WALL,
-        colorPattern: [
-            "ccddbbce", "ecddbbcc",
-            "bbccddee", "bbecddee",
-            "eeddccbb", "eeddcebb",
-            "cebbeedd", "ccbbeedd"
+        colorPattern: [ // Wavy, interlocking organic lumps
+            "bccbdeed", "cbbeddec", "cddecbbc", "deedbccb",
+            "deedbccb", "cddecbbc", "cbbeddec", "bccbdeed"
         ],
         colorKey: { "b": "#7a7a7a", "c": "#6b6b6b", "d": "#5e5e5e", "e": "#474747" }
     },
     "stone_bricks": { 
         color: "#7d7d7d", behavior: behaviors.WALL,
-        colorPattern: [
-            "ddddddee", "ddddcdee",
-            "ddecddbb", "ddccddbb",
-            "eeeeeeee", "eeeeeeee",
-            "ddddeedd", "ddcdeedd"
+        colorPattern: [ // Clear mortar lines with staggered bricks
+            "ddddeeed", "ddcdeeed", "ddecddbb", "eeeeeeee",
+            "edddddde", "eddcdeee", "bbddecdd", "eeeeeeee"
         ],
         colorKey: { "b": "#7a7a7a", "c": "#6b6b6b", "d": "#7d7d7d", "e": "#5e5e5e" }
     },
     "bookshelf": {
         color: "#a18251", behavior: behaviors.WALL, burn: 80, burnTime: 40,
         colorPattern: [
-            "wwwwwwww", "wwwwwwww",
-            "rrbbggww", "rrbbggww",
-            "wwwwwwww", "wwwwwwww",
-            "ggbbrrww", "ggbbrrww"
+            "wwwwwwww", "wwwwwdww", "rrbbggww", "rrbbggww",
+            "wwwwwwww", "wwdwwwww", "ggbbrrww", "ggbbrrww"
         ],
-        colorKey: { "w": "#856a42", "r": "#c43c3c", "b": "#3c50c4", "g": "#459e4e" }
+        colorKey: { "w": "#856a42", "r": "#c43c3c", "b": "#3c50c4", "g": "#459e4e", "d": "#6e522d" }
     },
 
     // --- STANDARD TEXTURES (4x4 Grids) ---
     "oak_planks": { 
         color: "#a18251", behavior: behaviors.WALL, burn: 50, burnTime: 80,
-        colorPattern: ["oooo", "oooo", "dddd", "dddd"],
-        colorKey: { "o": "#a18251", "d": "#856a42" } 
+        colorPattern: ["oooe", "oooe", "eeoe", "oooo"],
+        colorKey: { "o": "#a18251", "e": "#856a42" } 
     },
     "deepslate": { 
         color: "#3b3b40", behavior: behaviors.WALL,
-        colorPattern: ["cddc", "dccd", "cdcd", "dcdc"], // Layered rocky noise
+        colorPattern: ["dcdc", "cdcd", "dcdc", "cdcd"], // Layered rocky noise
         colorKey: { "c": "#3b3b40", "d": "#27272b" }
     },
     "glowstone": { 
@@ -140,13 +147,12 @@ const mcBlocks = {
     "emerald_ore": { color: ["#7a7a7a", "#1fc442", "#7a7a7a", "#7a7a7a"], behavior: behaviors.WALL },
     "copper_ore": { color: ["#7a7a7a", "#e0734a", "#7a7a7a", "#5de0a1"], behavior: behaviors.WALL },
 
-    // --- BEVELED SHINY BLOCKS (Top-Left Highlight) ---
-    // Usage: (pixel, innerColor, shadowColor, highlightColor)
-    "block_of_diamond": { color: "#5de0cf", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#5de0cf", "#2da697", "#ffffff"); } },
-    "block_of_gold": { color: "#fceb42", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#fceb42", "#d4c533", "#ffffff"); } },
-    "block_of_iron": { color: "#e3e3e3", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e3e3e3", "#b0b0b0", "#ffffff"); } },
-    "block_of_emerald": { color: "#1fc442", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#1fc442", "#13852b", "#a8ffb0"); } },
-    "block_of_copper": { color: "#e0734a", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e0734a", "#a34a29", "#ffaa8a"); } },
+    // --- BEVELED SHINY BLOCKS (L-Shape, InnerColor, OuterColor, BRIGHT Highlight) ---
+    "block_of_diamond": { color: "#5de0cf", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#5de0cf", "#2da697", "#b3fffa"); } }, // Bright Cyan
+    "block_of_gold": { color: "#fceb42", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#fceb42", "#d4c533", "#ffffa1"); } },     // Bright Yellow
+    "block_of_iron": { color: "#e3e3e3", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e3e3e3", "#b0b0b0", "#ffffff"); } },      // Pure White
+    "block_of_emerald": { color: "#1fc442", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#1fc442", "#13852b", "#8aff9f"); } },   // Bright Green
+    "block_of_copper": { color: "#e0734a", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e0734a", "#a34a29", "#ffb294"); } },    // Bright Orange
 
     // --- OUTLINED BLOCKS ---
     "glass": { color: "#a5e7e8", behavior: behaviors.WALL, tick: function(p) { outlineTick(p, "#c8fcfd", "#ffffff"); } },
@@ -163,6 +169,7 @@ const mcBlocks = {
     "pumpkin": { color: "#db7a14", behavior: behaviors.WALL },
     "ice": { color: "#a5d5e8", behavior: behaviors.WALL, tempHigh: 5, stateHigh: "water" },
     "packed_ice": { color: "#8abde0", behavior: behaviors.WALL, tempHigh: 20, stateHigh: "water" },
+    "sponge": { color: "#ded147", behavior: behaviors.WALL }, // Added sponge
 
     // --- NETHER / END ---
     "netherrack": { color: ["#6b2626", "#591f1f"], behavior: behaviors.WALL },
@@ -171,14 +178,17 @@ const mcBlocks = {
     "end_stone": { color: ["#cddb88", "#bcc97d"], behavior: behaviors.WALL },
     "purpur_block": { color: ["#a172a1", "#946394"], behavior: behaviors.WALL },
     "magma_cream": { color: ["#d98523", "#f2b055"], behavior: behaviors.POWDER },
+    "obsidian": { color: ["#151024", "#1e1633"], behavior: behaviors.WALL, hardness: 0.99 }, // Added Obsidian
+    "bedrock": { color: ["#171717", "#0a0a0a"], behavior: behaviors.WALL, hardness: 1.0 },   // Added Bedrock
 
     // --- UTILITY ---
     "tnt": { color: ["#d12828", "#e8e8e8"], behavior: behaviors.WALL, burn: 100, burnTime: 5, tempHigh: 150, stateHigh: "explosion" },
     "chest": { color: "#5e4429", behavior: behaviors.WALL },
     "furnace": { color: "#5e5e5e", behavior: behaviors.WALL },
+    "wool": { color: "#e8e8e8", behavior: behaviors.WALL, burn: 90, burnTime: 10 } // Added wool
 };
 
-// 3. SMART INJECTION ENGINE (Handles the mc_ prefixes automatically)
+// 3. SMART INJECTION ENGINE (Safely mounts arrays without overriding Sandboxels core logic)
 const getSafeId = (id) => elements[id] ? "mc_" + id : id;
 
 for (let id in mcBlocks) {
@@ -187,10 +197,28 @@ for (let id in mcBlocks) {
     elements[safeId].category = "Minecraft"; 
 }
 
-// 4. THERMODYNAMICS & REACTIONS 
+// 4. THE MINECRAFT REACTIONS ENGINE
+// This safely wires the elements together to create Minecraft mechanics
 let safeWater = getSafeId("water");
 let safeLava = getSafeId("lava");
-let safeCobble = getSafeId("cobblestone");
+let safeDirt = getSafeId("dirt");
+let safeSand = getSafeId("sand");
+let safeSponge = getSafeId("sponge");
 
+// Water Reactions
 if (!elements[safeWater].reactions) elements[safeWater].reactions = {};
-elements[safeWater].reactions[safeLava] = { elem1: "steam", elem2: safeCobble };
+elements[safeWater].reactions[safeLava] = { elem1: getSafeId("obsidian"), elem2: getSafeId("cobblestone") }; // Cobble/Obsidian generator
+elements[safeWater].reactions[safeDirt] = { elem1: null, elem2: getSafeId("mud") }; // Water + Dirt = Mud
+elements[safeWater].reactions[safeSponge] = { elem1: null, elem2: null }; // Sponge deletes water
+
+// Lava Reactions
+if (!elements[safeLava].reactions) elements[safeLava].reactions = {};
+elements[safeLava].reactions[safeSand] = { elem1: null, elem2: getSafeId("glass") }; // Lava smelts Sand into Glass
+
+// Fire Reactions (Safely attach to Sandboxels default fire)
+if (elements.fire) {
+    if (!elements.fire.reactions) elements.fire.reactions = {};
+    elements.fire.reactions[getSafeId("oak_planks")] = { elem1: getSafeId("smoke"), elem2: getSafeId("ash") };
+    elements.fire.reactions[getSafeId("oak_log")] = { elem1: getSafeId("smoke"), elem2: getSafeId("ash") };
+    elements.fire.reactions[getSafeId("wool")] = { elem1: getSafeId("smoke"), elem2: getSafeId("ash") };
+}
