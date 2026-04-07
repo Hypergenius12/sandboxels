@@ -1,16 +1,20 @@
-// AI Element Maker - Professional Template Edition
-// Uses GPT-OSS-120B with a deep technical schematic for Sandboxels.
+// AI Element Maker - GPT-OSS-120B (Updated Key)
+// Tool to generate complex Sandboxels elements using reasoning AI.
 
 let isGeneratingElement = false;
 
-elements.ai_maker = {
-    color: ["#00ff00", "#ffffff", "#0000ff"],
-    category: "tools",
-    state: "solid",
-    desc: "Click the canvas to prompt a Reasoning AI with a full technical template.",
-    tool: function(pixel) {} 
-};
+// 1. Tool Definition
+if (!elements.ai_maker) {
+    elements.ai_maker = {
+        color: ["#ff0055", "#00ffcc", "#ffff00"],
+        category: "tools",
+        state: "solid",
+        desc: "Click the canvas to describe an element and have AI code it into the game.",
+        tool: function(pixel) {} 
+    };
+}
 
+// 2. Click Listener
 document.addEventListener("mousedown", function(e) {
     if (currentElement === "ai_maker" && !isGeneratingElement) {
         if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
@@ -19,51 +23,38 @@ document.addEventListener("mousedown", function(e) {
     }
 });
 
+// 3. Core Generation Function
 async function handleAIGeneration() {
-    let userIdea = prompt("Describe your element in detail:\n(Example: 'A heavy purple liquid that sinks in water, freezes into a bouncy solid at -10C, and turns wood into gold on contact')");
+    // YOUR NEW KEY
+    const apiKey = "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";
     
+    let userIdea = prompt("Describe your new element:\n(e.g. 'A heavy gas that turns water into steam and wood into charcoal')");
     if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
-    console.log(`[AI Mod] Sending Template + Idea to GPT-OSS-120B...`);
     document.body.style.cursor = "wait"; 
+    console.log(`[AI Mod] Contacting GPT-OSS-120B for: "${userIdea}"...`);
 
-    const apiKey = "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";
-    
-    // THE LARGE CODE TEMPLATE & INSTRUCTIONS
-    const systemPrompt = `You are the Sandboxels Element Engine. Your goal is to output raw JavaScript that appends a complex element to the 'elements' object.
+    const systemPrompt = `You are a Sandboxels expert developer.
+Task: Create a new element based on user input. 
+Output ONLY raw JavaScript code adding to the 'elements' object. 
+NO markdown, NO backticks, NO "Here is your code".
 
-### TECHNICAL SPECIFICATION:
-1. MOVE LOGIC: Use 'behaviors.POWDER' (gravity), 'behaviors.LIQUID' (flow), 'behaviors.GAS' (float/expand), or 'behaviors.WALL' (static).
-2. REACTIONS: 
-   - Format: "target_element": { elem1: "new_self", elem2: "new_target", chance: 0.05 }
-   - Setting an elem to null deletes it.
-3. HEAT PHYSICS:
-   - 'tempHigh' (Celsius) triggers 'stateHigh' (Element Name).
-   - 'tempLow' (Celsius) triggers 'stateLow' (Element Name).
-4. PROPERTIES:
-   - 'density': Higher numbers sink (Water is 1000).
-   - 'viscosity': For liquids, higher means slower flow.
-   - 'conduct': 0 to 1 (Electricity).
-   - 'burn', 'burnTime', 'burnInto'.
+Rules:
+- Movement: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
+- Reactions: "target": { elem1: "new_self", elem2: "new_target", chance: 0.1 } (null deletes).
+- Heat: tempHigh/stateHigh, tempLow/stateLow.
+- Density: Water is 1000. 
 
-### CODE TEMPLATE (MODIFIES THIS):
-elements.unique_name = {
-    color: "#hex",
-    behavior: behaviors.TYPE,
-    category: "category_name",
-    state: "solid/liquid/gas",
-    density: 1000,
-    reactions: {
-        "water": { elem1: null, elem2: "ice", chance: 0.1 }
-    },
-    tempHigh: 100,
-    stateHigh: "gas_version",
-    tempLow: 0,
-    stateLow: "solid_version"
-};
-
-CRITICAL: Output ONLY the code. No markdown. No backticks. No talk.`;
+Example:
+elements.custom_slime = {
+    color: "#00ff00",
+    behavior: behaviors.LIQUID,
+    category: "liquids",
+    state: "liquid",
+    density: 1100,
+    reactions: { "dirt": { elem1: null, elem2: "mud" } }
+};`;
 
     try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -72,43 +63,52 @@ CRITICAL: Output ONLY the code. No markdown. No backticks. No talk.`;
                 "Authorization": `Bearer ${apiKey}`,
                 "Content-Type": "application/json",
                 "HTTP-Referer": "https://sandboxels.r74n.com/",
-                "X-Title": "Sandboxels AI Mod Template"
+                "X-Title": "Sandboxels AI Mod Creator"
             },
             body: JSON.stringify({
                 model: "openai/gpt-oss-120b:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
-                    { role: "user", content: `GENERATE ELEMENT CODE FOR: ${userIdea}` }
+                    { role: "user", content: `Create this element: ${userIdea}` }
                 ],
-                temperature: 0.2 // Very low temperature ensures it follows the template strictly
+                temperature: 0.2
             })
         });
+
+        if (response.status === 401) {
+            throw new Error("401 Unauthorized: The API key is still being rejected. Check if the key has been fully activated or if there are spaces in the string.");
+        }
 
         const data = await response.json();
         
         if (data.error) {
-            console.error("[AI Mod] API Error:", data.error);
-            alert(`Error: ${data.error.message}`);
+            console.error("[AI Mod] OpenRouter Error:", data.error);
+            alert(`API Error: ${data.error.message}`);
             return;
         }
 
         let code = data.choices[0].message.content.trim();
         
-        // Clean any code blocks the AI might have used despite instructions
-        code = code.replace(/```javascript/gi, "").replace(/```js/gi, "").replace(/```/gi, "").trim();
+        // Aggressive code cleaning
+        code = code.replace(/```javascript/gi, "")
+                   .replace(/```js/gi, "")
+                   .replace(/```/gi, "")
+                   .split("```")[0] // Take only what's inside the first block if it exists
+                   .trim();
 
         console.log("[AI Mod] Generated Code:\n", code);
 
-        try {
+        if (code.includes("elements.")) {
             window.eval(code);
-            alert("New element synthesized and added to the menu!");
-        } catch (evalError) {
-            console.error("[AI Mod] Eval Error:", evalError);
-            alert("The AI generated code with a syntax error. See console for details.");
+            alert("Success! Your element has been synthesized. Find it in its category or by searching.");
+        } else {
+            console.error("[AI Mod] Invalid output from AI:", code);
+            alert("The AI didn't return valid code. Check the console (F12) to see its response.");
         }
 
     } catch (error) {
-        console.error("[AI Mod] Network Error:", error);
+        console.error("[AI Mod] Error:", error);
+        alert(error.message);
     } finally {
         isGeneratingElement = false;
         document.body.style.cursor = "default";
