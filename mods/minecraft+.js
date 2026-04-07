@@ -1,6 +1,6 @@
 // ==========================================
 // Sandboxels x Minecraft Core Mod
-// Version: Organic Textures, L-Bevels & Reactions Engine
+// Version: Flattened Deepslate, Fixed Lava & Expansion
 // ==========================================
 
 // 1. ADVANCED TICK FUNCTIONS
@@ -12,30 +12,25 @@ function shinyBlockTick(pixel, inner, outer, highlight) {
     let r1 = isEmpty(pixel.x + 1, pixel.y);
     let b1 = isEmpty(pixel.x, pixel.y + 1);
 
-    // 1. Draw the dark outer border
     if (l1 || t1 || r1 || b1) {
         pixel.color = outer; 
         return;
     }
 
-    // 2. Calculate if we are exactly 2 or 3 pixels from the top-left edge
     let l2 = isEmpty(pixel.x - 2, pixel.y);
     let t2 = isEmpty(pixel.x, pixel.y - 2);
     let l3 = isEmpty(pixel.x - 3, pixel.y);
     let t3 = isEmpty(pixel.x, pixel.y - 3);
 
-    // 3. The Rotated "L" Shape Check
-    // True if at (2,2), (3,2), or (2,3) relative to the air gap
     let isL = (t2 && (l2 || l3)) || (l2 && (t2 || t3));
 
     if (isL) {
-        pixel.color = highlight; // Use the bright element color, NOT white!
+        pixel.color = highlight; 
     } else {
         pixel.color = inner;
     }
 }
 
-// Basic solid outline for things like glass/slime
 function outlineTick(pixel, inner, outer) {
     if (isEmpty(pixel.x, pixel.y - 1) || isEmpty(pixel.x, pixel.y + 1) || isEmpty(pixel.x - 1, pixel.y) || isEmpty(pixel.x + 1, pixel.y)) {
         pixel.color = outer;
@@ -44,13 +39,11 @@ function outlineTick(pixel, inner, outer) {
     }
 }
 
-// Grass outline (Green top, dirt sides)
 function grassBlockTick(pixel) {
     if (isEmpty(pixel.x, pixel.y - 1)) pixel.color = "#5b8738";
     else pixel.color = "#866043";
 }
 
-// Leaf transparency (deletes 20% of itself instantly to make holes)
 function leafTick(pixel) {
     if (!pixel.leafHoled) {
         pixel.leafHoled = true;
@@ -58,7 +51,6 @@ function leafTick(pixel) {
     }
 }
 
-// Wheat Growth (Changes seeds to wheat when on dirt/grass)
 function cropTick(pixel) {
     if (Math.random() < 0.005) {
         var below = pixelMap[pixel.x]?.[pixel.y+1];
@@ -68,13 +60,14 @@ function cropTick(pixel) {
     }
 }
 
-// 2. MASSIVE ELEMENT DATABASE (Kept EVERYTHING + Added more)
+// 2. MASSIVE ELEMENT DATABASE
 const mcBlocks = {
     // --- FLUIDS & GASES ---
     "water": { color: "#3F76E4", behavior: behaviors.LIQUID, state: "liquid", density: 1000 },
-    "lava": { color: "#E65C00", behavior: behaviors.LIQUID, state: "liquid", density: 3000, temp: 1200 },
+    // Reverted Lava to the flowing, glowing color array!
+    "lava": { color: ["#E65C00", "#FF8C00", "#D95100"], behavior: behaviors.LIQUID, state: "liquid", density: 3000, temp: 1200 },
     "dragon_breath": { color: "#c631a0", behavior: behaviors.GAS, state: "gas", density: 1.5, temp: 300 },
-    "smoke": { color: "#545454", behavior: behaviors.GAS, state: "gas", density: 0.8 }, // Added Smoke
+    "smoke": { color: "#545454", behavior: behaviors.GAS, state: "gas", density: 0.8 }, 
 
     // --- POWDERS ---
     "sand": { color: ["#dbd3a0", "#d1c890"], behavior: behaviors.POWDER },
@@ -82,15 +75,28 @@ const mcBlocks = {
     "gravel": { color: ["#82807f", "#737170", "#636160"], behavior: behaviors.POWDER },
     "dirt": { color: ["#866043", "#75543b"], behavior: behaviors.POWDER },
     "farmland": { color: "#5e3e26", behavior: behaviors.POWDER },
-    "mud": { color: ["#3d291b", "#332217"], behavior: behaviors.POWDER }, // Added Mud
-    "ash": { color: "#9c9c9c", behavior: behaviors.POWDER }, // Added Ash
+    "mud": { color: ["#3d291b", "#332217"], behavior: behaviors.POWDER }, 
+    "ash": { color: "#9c9c9c", behavior: behaviors.POWDER }, 
     "redstone_dust": { color: "#d11111", behavior: behaviors.POWDER, conduct: 1 },
-    "glowstone_dust": { color: "#fceb42", behavior: behaviors.POWDER },
+    "glowstone_dust": { color: ["#fceb42", "#e0b643"], behavior: behaviors.POWDER },
     "bone_meal": { color: "#fcfcfc", behavior: behaviors.POWDER },
     "wheat_seeds": { color: "#3dc44a", behavior: behaviors.POWDER, tick: cropTick },
-    "wheat": { color: ["#e3ca54", "#d1b638"], behavior: behaviors.WALL },
+    "concrete_powder": { color: "#a8a8a8", behavior: behaviors.POWDER }, // Added for reaction
 
-    // --- HD TEXTURE PATTERNS (8x8 Grids - Made much more organic/natural) ---
+    // --- NATURE BLOCKS ---
+    "wheat": { color: ["#e3ca54", "#d1b638"], behavior: behaviors.WALL },
+    "grass_block": { color: "#4B712F", behavior: behaviors.WALL, tick: grassBlockTick },
+    "oak_leaves": { color: "#296a23", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
+    "birch_leaves": { color: "#4b8c45", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
+    "spruce_leaves": { color: "#1d4d19", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
+    "oak_log": { color: "#362a1c", behavior: behaviors.WALL, burn: 40, burnTime: 100 },
+    "cactus": { color: "#1e5917", behavior: behaviors.WALL, burn: 20 },
+    "pumpkin": { color: "#db7a14", behavior: behaviors.WALL },
+    "ice": { color: "#a5d5e8", behavior: behaviors.WALL, tempHigh: 5, stateHigh: "water" },
+    "packed_ice": { color: "#8abde0", behavior: behaviors.WALL, tempHigh: 20, stateHigh: "water" },
+    "sponge": { color: "#ded147", behavior: behaviors.WALL }, 
+
+    // --- HD TEXTURE PATTERNS (8x8 Grids) ---
     "cobblestone": { 
         color: "#7a7a7a", behavior: behaviors.WALL,
         colorPattern: [ // Wavy, interlocking organic lumps
@@ -101,11 +107,27 @@ const mcBlocks = {
     },
     "stone_bricks": { 
         color: "#7d7d7d", behavior: behaviors.WALL,
-        colorPattern: [ // Clear mortar lines with staggered bricks
+        colorPattern: [ 
             "ddddeeed", "ddcdeeed", "ddecddbb", "eeeeeeee",
             "edddddde", "eddcdeee", "bbddecdd", "eeeeeeee"
         ],
         colorKey: { "b": "#7a7a7a", "c": "#6b6b6b", "d": "#7d7d7d", "e": "#5e5e5e" }
+    },
+    "deepslate": { 
+        color: "#3b3b40", behavior: behaviors.WALL,
+        colorPattern: [ // Flattened, horizontal cobble layers!
+            "ccddddee", "eeddccdd", "ddccddcc", "eeddddee",
+            "ddccddcc", "eeddccdd", "ccddddee", "ddccddcc"
+        ],
+        colorKey: { "c": "#27272b", "d": "#3b3b40", "e": "#4f4f54" }
+    },
+    "glowstone": { 
+        color: "#e0b643", behavior: behaviors.WALL,
+        colorPattern: [ // 8x8 Golden rocky noise
+            "yygoydoy", "godyyoog", "oygdggyy", "yoyoodyg",
+            "dgyyoyog", "yodygoyd", "oyggyyoo", "godyyody"
+        ],
+        colorKey: { "y": "#fceb42", "o": "#e0b643", "g": "#f2cb63", "d": "#b88a21" }
     },
     "bookshelf": {
         color: "#a18251", behavior: behaviors.WALL, burn: 80, burnTime: 40,
@@ -115,22 +137,20 @@ const mcBlocks = {
         ],
         colorKey: { "w": "#856a42", "r": "#c43c3c", "b": "#3c50c4", "g": "#459e4e", "d": "#6e522d" }
     },
+    "tnt": { 
+        color: "#d12828", behavior: behaviors.WALL, burn: 100, burnTime: 5, tempHigh: 150, stateHigh: "explosion",
+        colorPattern: [ // Fixed TNT! Red block with white label band
+            "rrrrrrrr", "rdrrdrrd", "wwwwwwww", "wbwbwwbw",
+            "wwwwwwww", "rdrrdrrd", "rrrrrrrr", "rdrrdrrd"
+        ],
+        colorKey: { "r": "#d12828", "d": "#9c1b1b", "w": "#e8e8e8", "b": "#242424" }
+    },
 
     // --- STANDARD TEXTURES (4x4 Grids) ---
     "oak_planks": { 
         color: "#a18251", behavior: behaviors.WALL, burn: 50, burnTime: 80,
         colorPattern: ["oooe", "oooe", "eeoe", "oooo"],
         colorKey: { "o": "#a18251", "e": "#856a42" } 
-    },
-    "deepslate": { 
-        color: "#3b3b40", behavior: behaviors.WALL,
-        colorPattern: ["dcdc", "cdcd", "dcdc", "cdcd"], // Layered rocky noise
-        colorKey: { "c": "#3b3b40", "d": "#27272b" }
-    },
-    "glowstone": { 
-        color: "#e0b643", behavior: behaviors.WALL,
-        colorPattern: ["yoyg", "oygy", "gyyo", "ygyo"], // Clumpy yellow/orange noise
-        colorKey: { "y": "#fceb42", "o": "#e0b643", "g": "#f2cb63" }
     },
     "amethyst_block": {
         color: "#9a5cc6", behavior: behaviors.WALL,
@@ -148,47 +168,35 @@ const mcBlocks = {
     "copper_ore": { color: ["#7a7a7a", "#e0734a", "#7a7a7a", "#5de0a1"], behavior: behaviors.WALL },
 
     // --- BEVELED SHINY BLOCKS (L-Shape, InnerColor, OuterColor, BRIGHT Highlight) ---
-    "block_of_diamond": { color: "#5de0cf", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#5de0cf", "#2da697", "#b3fffa"); } }, // Bright Cyan
-    "block_of_gold": { color: "#fceb42", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#fceb42", "#d4c533", "#ffffa1"); } },     // Bright Yellow
-    "block_of_iron": { color: "#e3e3e3", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e3e3e3", "#b0b0b0", "#ffffff"); } },      // Pure White
-    "block_of_emerald": { color: "#1fc442", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#1fc442", "#13852b", "#8aff9f"); } },   // Bright Green
-    "block_of_copper": { color: "#e0734a", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e0734a", "#a34a29", "#ffb294"); } },    // Bright Orange
+    "block_of_diamond": { color: "#5de0cf", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#5de0cf", "#2da697", "#b3fffa"); } }, 
+    "block_of_gold": { color: "#fceb42", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#fceb42", "#d4c533", "#ffffa1"); } },    
+    "block_of_iron": { color: "#e3e3e3", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e3e3e3", "#b0b0b0", "#ffffff"); } },      
+    "block_of_emerald": { color: "#1fc442", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#1fc442", "#13852b", "#8aff9f"); } },   
+    "block_of_copper": { color: "#e0734a", behavior: behaviors.WALL, tick: function(p) { shinyBlockTick(p, "#e0734a", "#a34a29", "#ffb294"); } },    
 
     // --- OUTLINED BLOCKS ---
     "glass": { color: "#a5e7e8", behavior: behaviors.WALL, tick: function(p) { outlineTick(p, "#c8fcfd", "#ffffff"); } },
     "slime_block": { color: "#6cb854", behavior: behaviors.WALL, tick: function(p) { outlineTick(p, "#7bcf61", "#5c9e47"); } },
     "honey_block": { color: "#ebad34", behavior: behaviors.WALL, tick: function(p) { outlineTick(p, "#ffc824", "#e59410"); } },
-    
-    // --- NATURE, ICE & PLANTS ---
-    "grass_block": { color: "#4B712F", behavior: behaviors.WALL, tick: grassBlockTick },
-    "oak_leaves": { color: "#296a23", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
-    "birch_leaves": { color: "#4b8c45", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
-    "spruce_leaves": { color: "#1d4d19", behavior: behaviors.WALL, burn: 80, burnTime: 20, tick: leafTick },
-    "oak_log": { color: "#362a1c", behavior: behaviors.WALL, burn: 40, burnTime: 100 },
-    "cactus": { color: "#1e5917", behavior: behaviors.WALL, burn: 20 },
-    "pumpkin": { color: "#db7a14", behavior: behaviors.WALL },
-    "ice": { color: "#a5d5e8", behavior: behaviors.WALL, tempHigh: 5, stateHigh: "water" },
-    "packed_ice": { color: "#8abde0", behavior: behaviors.WALL, tempHigh: 20, stateHigh: "water" },
-    "sponge": { color: "#ded147", behavior: behaviors.WALL }, // Added sponge
+    "concrete": { color: "#8a8a8a", behavior: behaviors.WALL, tick: function(p) { outlineTick(p, "#8a8a8a", "#6b6b6b"); } },
 
-    // --- NETHER / END ---
+    // --- NETHER / END / BEDROCK ---
     "netherrack": { color: ["#6b2626", "#591f1f"], behavior: behaviors.WALL },
     "soul_sand": { color: ["#544033", "#453429"], behavior: behaviors.POWDER },
     "ancient_debris": { color: "#5c403d", behavior: behaviors.WALL, hardness: 0.95 },
     "end_stone": { color: ["#cddb88", "#bcc97d"], behavior: behaviors.WALL },
     "purpur_block": { color: ["#a172a1", "#946394"], behavior: behaviors.WALL },
     "magma_cream": { color: ["#d98523", "#f2b055"], behavior: behaviors.POWDER },
-    "obsidian": { color: ["#151024", "#1e1633"], behavior: behaviors.WALL, hardness: 0.99 }, // Added Obsidian
-    "bedrock": { color: ["#171717", "#0a0a0a"], behavior: behaviors.WALL, hardness: 1.0 },   // Added Bedrock
+    "obsidian": { color: ["#151024", "#1e1633"], behavior: behaviors.WALL, hardness: 0.99 }, 
+    "bedrock": { color: ["#171717", "#0a0a0a"], behavior: behaviors.WALL, hardness: 1.0 },   
 
     // --- UTILITY ---
-    "tnt": { color: ["#d12828", "#e8e8e8"], behavior: behaviors.WALL, burn: 100, burnTime: 5, tempHigh: 150, stateHigh: "explosion" },
     "chest": { color: "#5e4429", behavior: behaviors.WALL },
     "furnace": { color: "#5e5e5e", behavior: behaviors.WALL },
-    "wool": { color: "#e8e8e8", behavior: behaviors.WALL, burn: 90, burnTime: 10 } // Added wool
+    "wool": { color: "#e8e8e8", behavior: behaviors.WALL, burn: 90, burnTime: 10 } 
 };
 
-// 3. SMART INJECTION ENGINE (Safely mounts arrays without overriding Sandboxels core logic)
+// 3. SMART INJECTION ENGINE (Safely mounts arrays)
 const getSafeId = (id) => elements[id] ? "mc_" + id : id;
 
 for (let id in mcBlocks) {
@@ -198,24 +206,28 @@ for (let id in mcBlocks) {
 }
 
 // 4. THE MINECRAFT REACTIONS ENGINE
-// This safely wires the elements together to create Minecraft mechanics
 let safeWater = getSafeId("water");
 let safeLava = getSafeId("lava");
 let safeDirt = getSafeId("dirt");
 let safeSand = getSafeId("sand");
 let safeSponge = getSafeId("sponge");
+let safeConcretePowder = getSafeId("concrete_powder");
 
 // Water Reactions
 if (!elements[safeWater].reactions) elements[safeWater].reactions = {};
-elements[safeWater].reactions[safeLava] = { elem1: getSafeId("obsidian"), elem2: getSafeId("cobblestone") }; // Cobble/Obsidian generator
-elements[safeWater].reactions[safeDirt] = { elem1: null, elem2: getSafeId("mud") }; // Water + Dirt = Mud
-elements[safeWater].reactions[safeSponge] = { elem1: null, elem2: null }; // Sponge deletes water
+// When Water touches Lava, it creates Cobblestone and Steam!
+elements[safeWater].reactions[safeLava] = { elem1: "steam", elem2: getSafeId("cobblestone") }; 
+elements[safeWater].reactions[safeDirt] = { elem1: null, elem2: getSafeId("mud") }; 
+elements[safeWater].reactions[safeConcretePowder] = { elem1: null, elem2: getSafeId("concrete") }; // Hardens Concrete!
+elements[safeWater].reactions[safeSponge] = { elem1: null, elem2: null }; 
 
 // Lava Reactions
 if (!elements[safeLava].reactions) elements[safeLava].reactions = {};
-elements[safeLava].reactions[safeSand] = { elem1: null, elem2: getSafeId("glass") }; // Lava smelts Sand into Glass
+// When Lava dives into Water, it cools into Obsidian!
+elements[safeLava].reactions[safeWater] = { elem1: getSafeId("obsidian"), elem2: "steam" }; 
+elements[safeLava].reactions[safeSand] = { elem1: null, elem2: getSafeId("glass") }; // Smelts Sand
 
-// Fire Reactions (Safely attach to Sandboxels default fire)
+// Fire Reactions
 if (elements.fire) {
     if (!elements.fire.reactions) elements.fire.reactions = {};
     elements.fire.reactions[getSafeId("oak_planks")] = { elem1: getSafeId("smoke"), elem2: getSafeId("ash") };
