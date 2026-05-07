@@ -1,8 +1,9 @@
-// Sandboxels AI Mod - Master Engineer Edition (BYOK)
-// Uses openai/gpt-oss-120b:free with an exhaustive technical schematic.
+// Sandboxels AI Mod - Bulletproof Edition (BYOK)
+// Robust code extraction, loading alerts, and error trapping.
 
 let isGeneratingElement = false;
 
+// 1. API Key Management
 function getOrPromptApiKey() {
     let savedKey = localStorage.getItem("sandboxels_openrouter_key");
     if (!savedKey) {
@@ -10,7 +11,7 @@ function getOrPromptApiKey() {
         if (savedKey && savedKey.trim() !== "") {
             localStorage.setItem("sandboxels_openrouter_key", savedKey.trim());
         } else {
-            alert("Generation cancelled. API key required.");
+            alert("Generation cancelled. You need an API key to use this.");
             return null;
         }
     }
@@ -24,102 +25,70 @@ if (!elements.reset_ai_key) {
         desc: "Click to DELETE your saved OpenRouter API Key.",
         tool: function(pixel) {
             localStorage.removeItem("sandboxels_openrouter_key");
-            alert("API key deleted.");
+            alert("API key successfully deleted from this browser.");
         }
     };
 }
 
+// 2. The AI Tool Definition
 if (!elements.ai_maker) {
     elements.ai_maker = {
         color: ["#ffffff", "#00ff00", "#ff00ff"],
         category: "tools",
         state: "solid",
-        desc: "Click to prompt GPT-OSS-120B with the Master Sandboxels Schematic.",
+        desc: "Click the canvas to describe an element and inject it into the game.",
         tool: function(pixel) {} 
     };
 }
 
+// 3. Canvas Click Listener
 document.addEventListener("mousedown", function(e) {
     if (currentElement === "ai_maker" && !isGeneratingElement) {
         if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
-            handleMasterAIGeneration();
+            handleBulletproofGeneration();
         }
     }
 });
 
-async function handleMasterAIGeneration() {
+// 4. Core Generation & Extraction Logic
+async function handleBulletproofGeneration() {
     const apiKey = getOrPromptApiKey();
     if (!apiKey) return; 
 
-    let userIdea = prompt("What hyper-advanced element should GPT-OSS-120B create?\n(e.g., 'A virus that eats sand, conducts electricity, and turns into an explosion at 50 degrees')");
+    let userIdea = prompt("What hyper-advanced element should the AI create?\n(e.g., 'A liquid that burns steel and freezes into glass')");
     if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
     document.body.style.cursor = "wait"; 
-    console.log(`[AI Mod] Transmitting Master Schematic to GPT-OSS-120B...`);
+    
+    // VISUAL FEEDBACK: Let the user know the API is working
+    console.log(`[AI Mod] Transmitting idea: "${userIdea}"...`);
+    alert("Transmitting your idea to the AI! \n\nPlease wait 10 to 20 seconds. You will get another popup when the code is ready.");
 
-    // THE MASTER SCHEMATIC PROMPT
-    const systemPrompt = `You are the Master Sandboxels Element Engineer.
-Your ONLY output must be valid, raw JavaScript code that appends ONE new element to the 'elements' object.
-NO MARKDOWN. NO BACKTICKS. NO EXPLANATIONS.
+    const systemPrompt = `You are a Sandboxels Element Engine.
+Output ONE valid JavaScript assignment appending to the 'elements' object.
+CRITICAL: Put your code inside a standard markdown code block.
 
-### 1. CORE PROPERTIES SCHEMA
-- 'color': Hex string or Array of hex strings (e.g., ["#ff0000", "#aa0000"]).
-- 'category': "solids", "liquids", "gases", "powders", "weapons", "life", or custom.
-- 'state': "solid", "liquid", "gas".
-- 'density': Float (Water is 1000). Denser objects sink.
-- 'hardness': Float (Resistance to shattering).
-- 'insulate': Boolean (true disables heat transfer).
+SCHEMA RULES:
+- behavior: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
+- Or Custom Matrix: [ "XX|M1|XX", "M1|XX|M1", "XX|M1|XX" ]
+- reactions: {"water": { elem1: null, elem2: "ice" }}
+- Properties: color, category, state, density, tempHigh, stateHigh, tempLow, stateLow.
 
-### 2. THERMODYNAMICS
-- 'tempHigh': Celsius trigger for ascending phase.
-- 'stateHigh': Element name it morphs into at tempHigh.
-- 'tempLow' / 'stateLow': Descending/freezing phase transition.
-
-### 3. KINEMATIC BEHAVIORS
-Option A: Predefined -> behavior: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
-Option B: Custom Matrix -> Array of 3 strings (Top, Middle, Bottom). Pixel is center.
-Codes: M1 (primary move), M2 (secondary), SW (swap), CR (create), DL (delete), CH (change), HT (heat), CO (cool), XX (null).
-Example Gravity Powder: [ "XX|XX|XX", "XX|XX|XX", "M2|M1|M2" ].
-
-### 4. REACTION DICTIONARY STOICHIOMETRY
-Nested object mapping foreign contact elements to results. 'elem1' is the host, 'elem2' is the foreign pixel. null = delete.
-Format: "water": { elem1: "sugar_water", elem2: null }.
-Conditionals: 
-- 'chance': Float 0.0 to 1.0 (execution probability).
-- 'tempMin', 'tempMax': Restricts reaction to temperature range.
-- 'charged': true (requires electricity).
-- 'burning1', 'burning2': true (requires fire state).
-Attribute mapping: 'temp1'/'temp2' applies heat spikes, 'color1'/'color2' tints products.
-
-### 5. ADVANCED TICK FUNCTIONS (OPTIONAL)
-Use 'tick: function(pixel) {}' for complex logic.
-Pixel properties: pixel.x, pixel.y, pixel.temp, pixel.element, pixel.charge, pixel.burning.
-API Helpers:
-- getPixel(x, y)
-- tryCreate(element, x, y)
-- tryDelete(x, y)
-- changePixel(element, x, y)
-
-EXAMPLE OUTPUT FORMAT:
-elements.super_virus = {
-    color: ["#00ff00", "#00aa00"],
-    behavior: [ "XX|M1|XX", "M1|XX|M1", "XX|M1|XX" ],
-    category: "life",
+EXAMPLE:
+\`\`\`javascript
+elements.acid_bomb = {
+    color: "#00ff00",
+    behavior: behaviors.POWDER,
+    category: "weapons",
     state: "solid",
-    density: 1200,
-    tempHigh: 100,
-    stateHigh: "fire",
+    density: 2000,
     reactions: {
-        "sand": { elem1: null, elem2: "super_virus", chance: 0.1 },
-        "water": { elem1: "super_virus", elem2: "acid", temp1: 50 }
-    },
-    tick: function(pixel) {
-        if (pixel.temp > 50 && Math.random() < 0.05) {
-            tryCreate("explosion", pixel.x, pixel.y);
-        }
+        "metal": { elem1: "fire", elem2: null }
     }
-};`;
+};
+\`\`\`
+`;
 
     try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -128,51 +97,37 @@ elements.super_virus = {
                 "Authorization": `Bearer ${apiKey}`,
                 "Content-Type": "application/json",
                 "HTTP-Referer": "https://sandboxels.r74n.com/",
-                "X-Title": "Sandboxels Master AI Mod"
+                "X-Title": "Sandboxels AI Mod"
             },
             body: JSON.stringify({
                 model: "openai/gpt-oss-120b:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
-                    { role: "user", content: `GENERATE: ${userIdea}` }
+                    { role: "user", content: `GENERATE THIS ELEMENT: ${userIdea}` }
                 ],
                 temperature: 0.2 
             })
         });
 
+        // Handle bad keys
         if (response.status === 401) {
             localStorage.removeItem("sandboxels_openrouter_key");
-            throw new Error("401 Unauthorized: Your API key was rejected. It has been removed. Try a new one.");
+            throw new Error("401 Unauthorized: Your API key was rejected. It has been deleted so you can enter a fresh one.");
         }
 
         const data = await response.json();
-        
-        if (data.error) {
-            console.error("[AI Mod] Server Error:", data.error);
-            alert(`API Error: ${data.error.message}`);
-            return;
-        }
+        if (data.error) throw new Error(data.error.message);
 
-        let code = data.choices[0].message.content.trim();
-        
-        // Strip markdown blocks if the AI includes them
-        code = code.replace(/```javascript/gi, "").replace(/```js/gi, "").replace(/```/gi, "").trim();
+        const rawOutput = data.choices[0].message.content;
+        console.log("[AI Mod] Raw AI Output Received:\n", rawOutput);
 
-        console.log("[AI Mod] Master Code Output:\n", code);
+        // --- THE BULLETPROOF EXTRACTION ---
+        // This regex looks for ```javascript ... ``` and pulls ONLY the code inside.
+        let executableCode = rawOutput;
+        const codeBlockRegex = /
+http://googleusercontent.com/immersive_entry_chip/0
 
-        if (code.includes("elements.")) {
-            window.eval(code);
-            alert("Master Element Synthesized successfully!");
-        } else {
-            console.error("[AI Mod] Invalid logic generated:", code);
-            alert("The AI generated invalid syntax. Check the F12 console.");
-        }
-
-    } catch (error) {
-        console.error("[AI Mod] Execution Error:", error);
-        alert(error.message);
-    } finally {
-        isGeneratingElement = false;
-        document.body.style.cursor = "default";
-    }
-}
+### What specifically changed here?
+1. **The Loading Alert:** As soon as you hit enter on your idea, it pops up an alert saying *"Please wait 10 to 20 seconds."* This stops the game from feeling "dead" while the API connects. 
+2. **The Code Extractor:** I added a specialized block of code (`codeBlockRegex`) that hunts through whatever text the AI writes. Even if the AI says, *"Hello! I am GPT! Here is your cool Sandboxels mod! ```javascript [code] ``` Isn't that neat?!"*, the mod will surgically extract just the `[code]` part and inject it, ignoring the conversational garbage.
+3. **Success Detection:** If it successfully injects, it scans the AI's code to find the name of the element (e.g., `elements.acid_bomb = ...`) and pops up an alert telling you exactly what name to search for in your Sandboxels menu.
