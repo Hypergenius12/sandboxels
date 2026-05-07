@@ -1,101 +1,124 @@
-// Sandboxels AI Mod - Bring Your Own Key (BYOK) Edition
-// Uses the Arcee Trinity Large model via OpenRouter to generate elements dynamically.
+// Sandboxels AI Mod - Master Engineer Edition (BYOK)
+// Uses Arcee Trinity Large with an exhaustive technical schematic of the Sandboxels engine.
 
 let isGeneratingElement = false;
 
-// ==========================================
-// 1. API Key Management (BYOK System)
-// ==========================================
 function getOrPromptApiKey() {
-    // Attempt to load the key from the browser's local storage
     let savedKey = localStorage.getItem("sandboxels_openrouter_key");
-    
     if (!savedKey) {
-        // If not found, prompt the user to provide their own key
-        savedKey = prompt("Welcome to the AI Mod!\n\nTo use this tool, you must provide your own OpenRouter API key. Please paste it below:\n(It will be safely saved locally in your browser.)");
-        
+        savedKey = prompt("Welcome to the AI Mod!\n\nPlease paste your OpenRouter API key below:");
         if (savedKey && savedKey.trim() !== "") {
             localStorage.setItem("sandboxels_openrouter_key", savedKey.trim());
         } else {
-            alert("Generation cancelled. You need an API key to use the AI tool.");
+            alert("Generation cancelled. API key required.");
             return null;
         }
     }
     return savedKey;
 }
 
-// Tool to allow the user to delete/change their saved API key
 if (!elements.reset_ai_key) {
     elements.reset_ai_key = {
         color: "#ff0000",
         category: "tools",
-        state: "solid",
-        desc: "Click the canvas to DELETE your saved OpenRouter API Key from this browser.",
+        desc: "Click to DELETE your saved OpenRouter API Key.",
         tool: function(pixel) {
             localStorage.removeItem("sandboxels_openrouter_key");
-            alert("Your AI API key has been securely deleted. The next time you use the AI Maker, you will be asked to enter a new one.");
+            alert("API key deleted.");
         }
     };
 }
 
-
-// ==========================================
-// 2. The AI Maker Tool Definition
-// ==========================================
 if (!elements.ai_maker) {
     elements.ai_maker = {
         color: ["#ffffff", "#00ff00", "#ff00ff"],
         category: "tools",
         state: "solid",
-        desc: "Click the canvas to prompt Trinity AI to code a new element.",
+        desc: "Click to prompt Trinity AI with the Master Sandboxels Schematic.",
         tool: function(pixel) {} 
     };
 }
 
-// Intercept mouse clicks on the canvas
 document.addEventListener("mousedown", function(e) {
     if (currentElement === "ai_maker" && !isGeneratingElement) {
-        // Ensure they are clicking the actual game canvas and not the UI
         if (e.target.id === "gameCanvas" || e.target.tagName.toUpperCase() === "CANVAS") {
-            handleTrinityGeneration();
+            handleMasterAIGeneration();
         }
     }
 });
 
-
-// ==========================================
-// 3. Core Generation Logic
-// ==========================================
-async function handleTrinityGeneration() {
-    // Safely get the API key using our BYOK function
+async function handleMasterAIGeneration() {
     const apiKey = getOrPromptApiKey();
-    if (!apiKey) return; // Stop if the user cancelled the prompt
+    if (!apiKey) return; 
 
-    let userIdea = prompt("What element should Trinity AI create?\n(e.g., 'A liquid that creates electricity when it touches water')");
+    let userIdea = prompt("What hyper-advanced element should the AI create?\n(e.g., 'A virus that eats sand, conducts electricity, and turns into an explosion at 50 degrees')");
     if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
     document.body.style.cursor = "wait"; 
-    console.log(`[AI Mod] Requesting Trinity-Large to create: ${userIdea}`);
+    console.log(`[AI Mod] Transmitting Master Schematic to Trinity-Large...`);
 
-    const systemPrompt = `You are a professional Sandboxels mod developer. 
-Your task is to output ONLY raw JavaScript code to add a new element to the global 'elements' object. 
+    // THE MASTER SCHEMATIC PROMPT
+    const systemPrompt = `You are the Master Sandboxels Element Engineer.
+Your ONLY output must be valid, raw JavaScript code that appends ONE new element to the 'elements' object[cite: 64, 65].
+NO MARKDOWN. NO BACKTICKS. NO EXPLANATIONS.
 
-RULES:
-1. No markdown, no backticks, no text explanations.
-2. Use 'behaviors.POWDER', 'behaviors.LIQUID', 'behaviors.GAS', or 'behaviors.WALL'.
-3. Include 'reactions' if the idea suggests interactions (e.g., "water": { elem1: null, elem2: "ice" }).
-4. Use 'tempHigh/stateHigh' for melting or 'tempLow/stateLow' for freezing.
-5. Use 'density' (Water is 1000).
+### 1. CORE PROPERTIES SCHEMA
+- 'color': Hex string or Array of hex strings (e.g., ["#ff0000", "#aa0000"])[cite: 69].
+- 'category': "solids", "liquids", "gases", "powders", "weapons", "life", or custom[cite: 70].
+- 'state': "solid", "liquid", "gas"[cite: 71].
+- 'density': Float (Water is 1000). Denser objects sink[cite: 71].
+- 'hardness': Float (Resistance to shattering)[cite: 73].
+- 'insulate': Boolean (true disables heat transfer)[cite: 73].
 
-TEMPLATE:
-elements.element_name = {
-    color: "#hex",
-    behavior: behaviors.TYPE,
-    category: "category_name",
-    state: "liquid/solid/gas",
-    density: 1000,
-    reactions: {}
+### 2. THERMODYNAMICS
+- 'tempHigh': Celsius trigger for ascending phase[cite: 73].
+- 'stateHigh': Element name it morphs into at tempHigh[cite: 73].
+- 'tempLow' / 'stateLow': Descending/freezing phase transition[cite: 73].
+
+### 3. KINEMATIC BEHAVIORS
+Option A: Predefined -> behavior: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL[cite: 81].
+Option B: Custom Matrix -> Array of 3 strings (Top, Middle, Bottom). Pixel is center.
+Codes: M1 (primary move), M2 (secondary), SW (swap), CR (create), DL (delete), CH (change), HT (heat), CO (cool), XX (null).
+Example Gravity Powder: [ "XX|XX|XX", "XX|XX|XX", "M2|M1|M2" ][cite: 82, 85, 88].
+
+### 4. REACTION DICTIONARY STOICHIOMETRY
+Nested object mapping foreign contact elements to results. 'elem1' is the host, 'elem2' is the foreign pixel. null = delete.
+Format: "water": { elem1: "sugar_water", elem2: null }[cite: 145, 148].
+Conditionals: 
+- 'chance': Float 0.0 to 1.0 (execution probability)[cite: 152].
+- 'tempMin', 'tempMax': Restricts reaction to temperature range[cite: 153, 154].
+- 'charged': true (requires electricity)[cite: 156].
+- 'burning1', 'burning2': true (requires fire state)[cite: 158].
+Attribute mapping: 'temp1'/'temp2' applies heat spikes, 'color1'/'color2' tints products[cite: 163, 164].
+
+### 5. ADVANCED TICK FUNCTIONS (OPTIONAL)
+Use 'tick: function(pixel) {}' for complex logic[cite: 112].
+Pixel properties: pixel.x, pixel.y, pixel.temp, pixel.element, pixel.charge, pixel.burning[cite: 114].
+API Helpers:
+- getPixel(x, y) [cite: 132]
+- tryCreate(element, x, y) [cite: 133]
+- tryDelete(x, y) [cite: 135]
+- changePixel(element, x, y) [cite: 136]
+
+EXAMPLE OUTPUT FORMAT:
+elements.super_virus = {
+    color: ["#00ff00", "#00aa00"],
+    behavior: [ "XX|M1|XX", "M1|XX|M1", "XX|M1|XX" ],
+    category: "life",
+    state: "solid",
+    density: 1200,
+    tempHigh: 100,
+    stateHigh: "fire",
+    reactions: {
+        "sand": { elem1: null, elem2: "super_virus", chance: 0.1 },
+        "water": { elem1: "super_virus", elem2: "acid", temp1: 50 }
+    },
+    tick: function(pixel) {
+        if (pixel.temp > 50 && Math.random() < 0.05) {
+            tryCreate("explosion", pixel.x, pixel.y);
+        }
+    }
 };`;
 
     try {
@@ -104,55 +127,49 @@ elements.element_name = {
             headers: {
                 "Authorization": `Bearer ${apiKey}`,
                 "Content-Type": "application/json",
-                "HTTP-Referer": "https://sandboxels.r74n.com/", // Required by free OpenRouter models
-                "X-Title": "Sandboxels AI Mod"
+                "HTTP-Referer": "https://sandboxels.r74n.com/",
+                "X-Title": "Sandboxels Master AI Mod"
             },
             body: JSON.stringify({
                 model: "arcee-ai/trinity-large-preview:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
-                    { role: "user", content: `Create this element: ${userIdea}` }
+                    { role: "user", content: `GENERATE: ${userIdea}` }
                 ],
-                temperature: 0.2 // Strict temperature for valid coding syntax
+                temperature: 0.2 
             })
         });
 
-        // Handle invalid API keys specifically
         if (response.status === 401) {
-            localStorage.removeItem("sandboxels_openrouter_key"); // Automatically delete the bad key
-            throw new Error("401 Unauthorized: Your API key was rejected. It has been removed from your browser. Please generate a new one and try again.");
+            localStorage.removeItem("sandboxels_openrouter_key");
+            throw new Error("401 Unauthorized: Your API key was rejected. It has been removed. Try a new one.");
         }
 
         const data = await response.json();
         
-        // Handle other API errors (like rate limits)
         if (data.error) {
-            console.error("[AI Mod] OpenRouter Error:", data.error);
+            console.error("[AI Mod] Server Error:", data.error);
             alert(`API Error: ${data.error.message}`);
             return;
         }
 
         let code = data.choices[0].message.content.trim();
         
-        // Aggressively clean up markdown if the AI includes it
-        code = code.replace(/```javascript/gi, "")
-                   .replace(/```js/gi, "")
-                   .replace(/```/gi, "")
-                   .trim();
+        // Strip markdown
+        code = code.replace(/```javascript/gi, "").replace(/```js/gi, "").replace(/```/gi, "").trim();
 
-        console.log("[AI Mod] Trinity Generated Code:\n", code);
+        console.log("[AI Mod] Master Code Output:\n", code);
 
-        // Security / Sanity check before executing
         if (code.includes("elements.")) {
             window.eval(code);
-            alert("Success! The AI has added the element to your game. Check the categories or search bar.");
+            alert("Master Element Synthesized successfully!");
         } else {
-            console.error("[AI Mod] AI returned text instead of code:", code);
-            alert("The AI failed to generate valid JavaScript code. Please try rephrasing your prompt.");
+            console.error("[AI Mod] Invalid logic generated:", code);
+            alert("The AI generated invalid syntax. Check the F12 console.");
         }
 
     } catch (error) {
-        console.error("[AI Mod] Connection Error:", error);
+        console.error("[AI Mod] Execution Error:", error);
         alert(error.message);
     } finally {
         isGeneratingElement = false;
