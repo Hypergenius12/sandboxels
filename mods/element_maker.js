@@ -1,5 +1,5 @@
 // Sandboxels AI Mod - Master Engineer Edition (BYOK)
-// Uses Arcee Trinity Large with an exhaustive technical schematic of the Sandboxels engine.
+// Uses openai/gpt-oss-120b:free with an exhaustive technical schematic.
 
 let isGeneratingElement = false;
 
@@ -34,7 +34,7 @@ if (!elements.ai_maker) {
         color: ["#ffffff", "#00ff00", "#ff00ff"],
         category: "tools",
         state: "solid",
-        desc: "Click to prompt Trinity AI with the Master Sandboxels Schematic.",
+        desc: "Click to prompt GPT-OSS-120B with the Master Sandboxels Schematic.",
         tool: function(pixel) {} 
     };
 }
@@ -51,55 +51,55 @@ async function handleMasterAIGeneration() {
     const apiKey = getOrPromptApiKey();
     if (!apiKey) return; 
 
-    let userIdea = prompt("What hyper-advanced element should the AI create?\n(e.g., 'A virus that eats sand, conducts electricity, and turns into an explosion at 50 degrees')");
+    let userIdea = prompt("What hyper-advanced element should GPT-OSS-120B create?\n(e.g., 'A virus that eats sand, conducts electricity, and turns into an explosion at 50 degrees')");
     if (!userIdea || userIdea.trim() === "") return;
 
     isGeneratingElement = true;
     document.body.style.cursor = "wait"; 
-    console.log(`[AI Mod] Transmitting Master Schematic to Trinity-Large...`);
+    console.log(`[AI Mod] Transmitting Master Schematic to GPT-OSS-120B...`);
 
     // THE MASTER SCHEMATIC PROMPT
     const systemPrompt = `You are the Master Sandboxels Element Engineer.
-Your ONLY output must be valid, raw JavaScript code that appends ONE new element to the 'elements' object[cite: 64, 65].
+Your ONLY output must be valid, raw JavaScript code that appends ONE new element to the 'elements' object.
 NO MARKDOWN. NO BACKTICKS. NO EXPLANATIONS.
 
 ### 1. CORE PROPERTIES SCHEMA
-- 'color': Hex string or Array of hex strings (e.g., ["#ff0000", "#aa0000"])[cite: 69].
-- 'category': "solids", "liquids", "gases", "powders", "weapons", "life", or custom[cite: 70].
-- 'state': "solid", "liquid", "gas"[cite: 71].
-- 'density': Float (Water is 1000). Denser objects sink[cite: 71].
-- 'hardness': Float (Resistance to shattering)[cite: 73].
-- 'insulate': Boolean (true disables heat transfer)[cite: 73].
+- 'color': Hex string or Array of hex strings (e.g., ["#ff0000", "#aa0000"]).
+- 'category': "solids", "liquids", "gases", "powders", "weapons", "life", or custom.
+- 'state': "solid", "liquid", "gas".
+- 'density': Float (Water is 1000). Denser objects sink.
+- 'hardness': Float (Resistance to shattering).
+- 'insulate': Boolean (true disables heat transfer).
 
 ### 2. THERMODYNAMICS
-- 'tempHigh': Celsius trigger for ascending phase[cite: 73].
-- 'stateHigh': Element name it morphs into at tempHigh[cite: 73].
-- 'tempLow' / 'stateLow': Descending/freezing phase transition[cite: 73].
+- 'tempHigh': Celsius trigger for ascending phase.
+- 'stateHigh': Element name it morphs into at tempHigh.
+- 'tempLow' / 'stateLow': Descending/freezing phase transition.
 
 ### 3. KINEMATIC BEHAVIORS
-Option A: Predefined -> behavior: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL[cite: 81].
+Option A: Predefined -> behavior: behaviors.POWDER, behaviors.LIQUID, behaviors.GAS, behaviors.WALL.
 Option B: Custom Matrix -> Array of 3 strings (Top, Middle, Bottom). Pixel is center.
 Codes: M1 (primary move), M2 (secondary), SW (swap), CR (create), DL (delete), CH (change), HT (heat), CO (cool), XX (null).
-Example Gravity Powder: [ "XX|XX|XX", "XX|XX|XX", "M2|M1|M2" ][cite: 82, 85, 88].
+Example Gravity Powder: [ "XX|XX|XX", "XX|XX|XX", "M2|M1|M2" ].
 
 ### 4. REACTION DICTIONARY STOICHIOMETRY
 Nested object mapping foreign contact elements to results. 'elem1' is the host, 'elem2' is the foreign pixel. null = delete.
-Format: "water": { elem1: "sugar_water", elem2: null }[cite: 145, 148].
+Format: "water": { elem1: "sugar_water", elem2: null }.
 Conditionals: 
-- 'chance': Float 0.0 to 1.0 (execution probability)[cite: 152].
-- 'tempMin', 'tempMax': Restricts reaction to temperature range[cite: 153, 154].
-- 'charged': true (requires electricity)[cite: 156].
-- 'burning1', 'burning2': true (requires fire state)[cite: 158].
-Attribute mapping: 'temp1'/'temp2' applies heat spikes, 'color1'/'color2' tints products[cite: 163, 164].
+- 'chance': Float 0.0 to 1.0 (execution probability).
+- 'tempMin', 'tempMax': Restricts reaction to temperature range.
+- 'charged': true (requires electricity).
+- 'burning1', 'burning2': true (requires fire state).
+Attribute mapping: 'temp1'/'temp2' applies heat spikes, 'color1'/'color2' tints products.
 
 ### 5. ADVANCED TICK FUNCTIONS (OPTIONAL)
-Use 'tick: function(pixel) {}' for complex logic[cite: 112].
-Pixel properties: pixel.x, pixel.y, pixel.temp, pixel.element, pixel.charge, pixel.burning[cite: 114].
+Use 'tick: function(pixel) {}' for complex logic.
+Pixel properties: pixel.x, pixel.y, pixel.temp, pixel.element, pixel.charge, pixel.burning.
 API Helpers:
-- getPixel(x, y) [cite: 132]
-- tryCreate(element, x, y) [cite: 133]
-- tryDelete(x, y) [cite: 135]
-- changePixel(element, x, y) [cite: 136]
+- getPixel(x, y)
+- tryCreate(element, x, y)
+- tryDelete(x, y)
+- changePixel(element, x, y)
 
 EXAMPLE OUTPUT FORMAT:
 elements.super_virus = {
@@ -131,7 +131,7 @@ elements.super_virus = {
                 "X-Title": "Sandboxels Master AI Mod"
             },
             body: JSON.stringify({
-                model: "arcee-ai/trinity-large-preview:free", 
+                model: "openai/gpt-oss-120b:free", 
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: `GENERATE: ${userIdea}` }
@@ -155,7 +155,7 @@ elements.super_virus = {
 
         let code = data.choices[0].message.content.trim();
         
-        // Strip markdown
+        // Strip markdown blocks if the AI includes them
         code = code.replace(/```javascript/gi, "").replace(/```js/gi, "").replace(/```/gi, "").trim();
 
         console.log("[AI Mod] Master Code Output:\n", code);
